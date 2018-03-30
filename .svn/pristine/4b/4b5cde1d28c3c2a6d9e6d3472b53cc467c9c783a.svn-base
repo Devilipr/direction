@@ -1,0 +1,206 @@
+package com.thinkgem.jeesite.modules.liux.lxcxxsmxsy.entity;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
+
+public class LxcxXsmxsy extends DataEntity<LxcxXsmxsy>{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String rq;
+	private String djbh;
+	private String danwbh;
+	private String dwmch;
+	private String leibie;
+	private String spbh;
+	private String spmch;
+	private Integer jlgg;
+	private String shengccj;
+	private String shpgg;
+	private BigDecimal shl;
+	private BigDecimal hshj;
+	private BigDecimal hsje;
+	private String pihao;
+	private String sxrq;
+	private String baozhiqi;
+	private String zhy;
+	private String kehulb;
+	private String jajPzsqr;
+	private String dzhdh;
+	private Date beginOppDate;
+	private Date endOppDate;
+	@ExcelField(title="日期", align=2, sort=1)
+	public String getRq() {
+		return rq;
+	}
+	public void setRq(String rq) {
+		this.rq = rq;
+	}
+	@ExcelField(title="单据编号", align=2, sort=19)
+	public String getDjbh() {
+		return djbh;
+	}
+	public void setDjbh(String djbh) {
+		this.djbh = djbh;
+	}
+	@ExcelField(title="单位编号", align=2, sort=18)
+	public String getDanwbh() {
+		return danwbh;
+	}
+	public void setDanwbh(String danwbh) {
+		this.danwbh = danwbh;
+	}
+	@ExcelField(title="单位名称", align=2, sort=2)
+	public String getDwmch() {
+		return dwmch;
+	}
+	public void setDwmch(String dwmch) {
+		this.dwmch = dwmch;
+	}
+	@ExcelField(title="类别", align=2, sort=10)
+	public String getLeibie() {
+		return leibie;
+	}
+	public void setLeibie(String leibie) {
+		this.leibie = leibie;
+	}
+	@ExcelField(title="商品编号", align=2, sort=17)
+	public String getSpbh() {
+		return spbh;
+	}
+	public void setSpbh(String spbh) {
+		this.spbh = spbh;
+	}
+	@ExcelField(title="商品名称", align=2, sort=3)
+	public String getSpmch() {
+		return spmch;
+	}
+	public void setSpmch(String spmch) {
+		this.spmch = spmch;
+	}
+	@ExcelField(title="件比", align=2, sort=11)
+	public Integer getJlgg() {
+		return jlgg;
+	}
+	public void setJlgg(Integer jlgg) {
+		this.jlgg = jlgg;
+	}
+	@ExcelField(title="生产厂商", align=2, sort=9)
+	public String getShengccj() {
+		return shengccj;
+	}
+	public void setShengccj(String shengccj) {
+		this.shengccj = shengccj;
+	}
+	@ExcelField(title="规格", align=2, sort=4)
+	public String getShpgg() {
+		return shpgg;
+	}
+	public void setShpgg(String shpgg) {
+		this.shpgg = shpgg;
+	}
+	@ExcelField(title="数量", align=2, sort=5)
+	public BigDecimal getShl() {
+		return shl;
+	}
+	public void setShl(BigDecimal shl) {
+		this.shl = shl;
+	}
+	@ExcelField(title="含税价", align=2, sort=6)
+	public BigDecimal getHshj() {
+		return hshj;
+	}
+	public void setHshj(BigDecimal hshj) {
+		this.hshj = hshj;
+	}
+	@ExcelField(title="含税金额", align=2, sort=7)
+	public BigDecimal getHsje() {
+		return hsje;
+	}
+	public void setHsje(BigDecimal hsje) {
+		this.hsje = hsje;
+	}
+	@ExcelField(title="批号", align=2, sort=12)
+	public String getPihao() {
+		return pihao;
+	}
+	public void setPihao(String pihao) {
+		this.pihao = pihao;
+	}
+	@ExcelField(title="生产日期", align=2, sort=13)
+	public String getSxrq() {
+		return sxrq;
+	}
+	public void setSxrq(String sxrq) {
+		this.sxrq = sxrq;
+	}
+	@ExcelField(title="有效期至", align=2, sort=14)
+	public String getBaozhiqi() {
+		return baozhiqi;
+	}
+	public void setBaozhiqi(String baozhiqi) {
+		this.baozhiqi = baozhiqi;
+	}
+	@ExcelField(title="摘要", align=2, sort=15)
+	public String getZhy() {
+		return zhy;
+	}
+	public void setZhy(String zhy) {
+		this.zhy = zhy;
+	}
+	@ExcelField(title="客户类别", align=2, sort=16)
+	public String getKehulb() {
+		return kehulb;
+	}
+	public void setKehulb(String kehulb) {
+		this.kehulb = kehulb;
+	}
+	@ExcelField(title="送货地址", align=2, sort=8)
+	public String getDzhdh() {
+		return dzhdh;
+	}
+	public void setDzhdh(String dzhdh) {
+		this.dzhdh = dzhdh;
+	}
+	@ExcelField(title="名字", align=2, sort=2)
+	public String getJajPzsqr() {
+		return jajPzsqr;
+	}
+	public void setJajPzsqr(String jajPzsqr) {
+		this.jajPzsqr = jajPzsqr;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	public Date getBeginOppDate() {
+		return beginOppDate;
+	}
+	public void setBeginOppDate(Date beginOppDate) {
+		this.beginOppDate = beginOppDate;
+	}
+	public Date getEndOppDate() {
+		return endOppDate;
+	}
+	public void setEndOppDate(Date endOppDate) {
+		this.endOppDate = endOppDate;
+	}
+	@Override
+	public String toString() {
+		return "LxcxXsmxsy [rq=" + rq + ", djbh=" + djbh + ", danwbh=" + danwbh
+				+ ", dwmch=" + dwmch + ", leibie=" + leibie + ", spbh=" + spbh
+				+ ", spmch=" + spmch + ", jlgg=" + jlgg + ", shengccj="
+				+ shengccj + ", shpgg=" + shpgg + ", shl=" + shl + ", hshj="
+				+ hshj + ", hsje=" + hsje + ", pihao=" + pihao + ", sxrq="
+				+ sxrq + ", baozhiqi=" + baozhiqi + ", zhy=" + zhy
+				+ ", kehulb=" + kehulb + ", jajPzsqr=" + jajPzsqr + ", dzhdh="
+				+ dzhdh + ", beginOppDate=" + beginOppDate + ", endOppDate="
+				+ endOppDate + "]";
+	}
+	
+}

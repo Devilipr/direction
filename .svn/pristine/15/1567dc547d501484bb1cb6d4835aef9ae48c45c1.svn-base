@@ -1,0 +1,51 @@
+package com.thinkgem.jeesite.modules.liux.clean;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.ContextLoader;
+
+import java.io.File;
+
+/**
+ * Author: lyp
+ * Create Date: 2018/1/31
+ * Description:
+ */
+@Service
+@Lazy(false)
+public class ClearZipFilesService {
+
+    private static Logger logger = LoggerFactory.getLogger(ClearZipFilesService.class);
+
+    @Autowired
+    @Scheduled(cron = "0 0 0 * * ?")//每隔10分钟执行一次
+    public static void deleteFiles(){
+        logger.info("==》删除zip文件定时任务开始。。。");
+        String contextPath = ContextLoader.getCurrentWebApplicationContext().getServletContext().getRealPath("/");
+        String path = contextPath + "zipfiles";
+        logger.info("==》zip文件夹路径为：{}", path);
+        File file = new File(path);
+        String[] content = file.list();//取得当前目录下所有文件和文件夹
+        for(String name : content){
+            File temp = new File(path, name);
+            if(temp.isDirectory()){//判断是否是目录
+                if (content.length > 0) {
+                    deleteFiles();//递归调用，删除目录里的内容
+                }
+            }else{
+                if(!temp.delete()){//直接删除文件
+                    System.err.println("Failed to delete " + name);
+                }
+            }
+        }
+        logger.info("==》删除zip文件定时任务结束。。。");
+    }
+
+    public static void main(String[] args) {
+        deleteFiles();
+    }
+}

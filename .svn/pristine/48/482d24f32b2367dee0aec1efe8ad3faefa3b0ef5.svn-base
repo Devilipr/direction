@@ -1,0 +1,137 @@
+package com.thinkgem.jeesite.modules.liux.vpfckmx.entity;
+
+import java.math.BigDecimal;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+public class Vpfckmx  extends DataEntity<Vpfckmx>{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String djbh;
+	private String dwbh;
+	private String danwbh;
+	private String dwmch;
+	private String rq;
+	private String spid;
+	private String spbh;
+	private String spmch;
+	private String zjm;
+	private String shpgg;
+	private String shengccj;
+	private String pici;
+	private String pihao;
+	private BigDecimal shl;
+	private String hsje;
+	private String storerkey;
+	public String getDjbh() {
+		return djbh;
+	}
+	public void setDjbh(String djbh) {
+		this.djbh = djbh;
+	}
+	public String getDwbh() {
+		return dwbh;
+	}
+	public void setDwbh(String dwbh) {
+		this.dwbh = dwbh;
+	}
+	public String getDanwbh() {
+		return danwbh;
+	}
+	public void setDanwbh(String danwbh) {
+		this.danwbh = danwbh;
+	}
+	public String getDwmch() {
+		return dwmch;
+	}
+	public void setDwmch(String dwmch) {
+		this.dwmch = dwmch;
+	}
+	public String getRq() {
+		return rq;
+	}
+	public void setRq(String rq) {
+		this.rq = rq;
+	}
+	public String getSpid() {
+		return spid;
+	}
+	public void setSpid(String spid) {
+		this.spid = spid;
+	}
+	public String getSpbh() {
+		return spbh;
+	}
+	public void setSpbh(String spbh) {
+		this.spbh = spbh;
+	}
+	public String getSpmch() {
+		return spmch;
+	}
+	public void setSpmch(String spmch) {
+		this.spmch = spmch;
+	}
+	public String getZjm() {
+		return zjm;
+	}
+	public void setZjm(String zjm) {
+		this.zjm = zjm;
+	}
+	public String getShpgg() {
+		return shpgg;
+	}
+	public void setShpgg(String shpgg) {
+		this.shpgg = shpgg;
+	}
+	public String getShengccj() {
+		return shengccj;
+	}
+	public void setShengccj(String shengccj) {
+		this.shengccj = shengccj;
+	}
+	public String getPici() {
+		return pici;
+	}
+	public void setPici(String pici) {
+		this.pici = pici;
+	}
+	public String getPihao() {
+		return pihao;
+	}
+	public void setPihao(String pihao) {
+		this.pihao = pihao;
+	}
+	public BigDecimal getShl() {
+		return shl;
+	}
+	public void setShl(BigDecimal shl) {
+		this.shl = shl;
+	}
+	public String getHsje() {
+		return hsje;
+	}
+	public void setHsje(String hsje) {
+		this.hsje = hsje;
+	}
+	public String getStorerkey() {
+		return storerkey;
+	}
+	public void setStorerkey(String storerkey) {
+		this.storerkey = storerkey;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	@Override
+	public String toString() {
+		return "Vpfckmx [djbh=" + djbh + ", dwbh=" + dwbh + ", danwbh="
+				+ danwbh + ", dwmch=" + dwmch + ", rq=" + rq + ", spid=" + spid
+				+ ", spbh=" + spbh + ", spmch=" + spmch + ", zjm=" + zjm
+				+ ", shpgg=" + shpgg + ", shengccj=" + shengccj + ", pici="
+				+ pici + ", pihao=" + pihao + ", shl=" + shl + ", hsje=" + hsje
+				+ ", storerkey=" + storerkey + "]";
+	}
+}

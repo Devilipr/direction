@@ -1,0 +1,14 @@
+package com.thinkgem.jeesite.modules.liux.lxcxxsmxsy.dao;
+
+import com.thinkgem.jeesite.common.persistence.CrudDao;
+import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+import com.thinkgem.jeesite.modules.liux.lxcxxsmxsy.entity.LxcxXsmxsy;
+/**
+ * 销售明细（商业）
+ * @author zhao
+ * @version 2017-03-26
+ */
+@MyBatisDao
+public interface LxcxXsmxsyDao extends CrudDao<LxcxXsmxsy> {
+
+}

@@ -1,0 +1,130 @@
+package com.thinkgem.jeesite.modules.liux.high.entity;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+/**
+ * 高拍仪Entity
+ * @author zyb
+ * @version 2017-11-23
+ */
+public class HighDes extends DataEntity<HighDes> {
+	
+	private static final long serialVersionUID = 1L;
+	private High spbh;		// spbh 父类
+	private String spmch;		// spmch
+	private String shpgg;		// shpgg
+	private String zjm;		// zjm
+	private String beactive;		// beactive
+	private String shengccj;		// shengccj
+	private String pizhwn;		// pizhwn
+	private String storerkey;		// storerkey
+	private String imgUrl;
+	private String drugType;
+	
+	public HighDes() {
+		super();
+	}
+
+	public HighDes(String id){
+		super(id);
+	}
+
+	public HighDes(High spbh){
+		this.spbh = spbh;
+	}
+
+	@Length(min=0, max=100, message="spbh长度必须介于 0 和 100 之间")
+	public High getSpbh() {
+		return spbh;
+	}
+
+	public void setSpbh(High spbh) {
+		this.spbh = spbh;
+	}
+	
+	@Length(min=0, max=200, message="spmch长度必须介于 0 和 200 之间")
+	public String getSpmch() {
+		return spmch;
+	}
+
+	public void setSpmch(String spmch) {
+		this.spmch = spmch;
+	}
+	
+	@Length(min=0, max=100, message="shpgg长度必须介于 0 和 100 之间")
+	public String getShpgg() {
+		return shpgg;
+	}
+
+	public void setShpgg(String shpgg) {
+		this.shpgg = shpgg;
+	}
+	
+	@Length(min=0, max=100, message="zjm长度必须介于 0 和 100 之间")
+	public String getZjm() {
+		return zjm;
+	}
+
+	public void setZjm(String zjm) {
+		this.zjm = zjm;
+	}
+	
+	@Length(min=0, max=100, message="beactive长度必须介于 0 和 100 之间")
+	public String getBeactive() {
+		return beactive;
+	}
+
+	public void setBeactive(String beactive) {
+		this.beactive = beactive;
+	}
+	
+	@Length(min=0, max=200, message="shengccj长度必须介于 0 和 200 之间")
+	public String getShengccj() {
+		return shengccj;
+	}
+
+	public void setShengccj(String shengccj) {
+		this.shengccj = shengccj;
+	}
+	
+	@Length(min=0, max=100, message="pizhwn长度必须介于 0 和 100 之间")
+	public String getPizhwn() {
+		return pizhwn;
+	}
+
+	public void setPizhwn(String pizhwn) {
+		this.pizhwn = pizhwn;
+	}
+	
+	@Length(min=0, max=100, message="storerkey长度必须介于 0 和 100 之间")
+	public String getStorerkey() {
+		return storerkey;
+	}
+
+	public void setStorerkey(String storerkey) {
+		this.storerkey = storerkey;
+	}
+
+	public String getImgUrl() {
+		return imgUrl;
+	}
+
+	public void setImgUrl(String imgUrl) {
+		this.imgUrl = imgUrl;
+	}
+
+	public String getDrugType() {
+		return drugType;
+	}
+
+	public void setDrugType(String drugType) {
+		this.drugType = drugType;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+}

@@ -1,0 +1,177 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+<title>高拍仪管理</title>
+<meta name="decorator" content="default" />
+<link rel="stylesheet" type="text/css"
+	href="${ctxStatic}/css/highForm.css">
+<script type="text/javascript">
+		$(document).ready(function() {
+			//$("#name").focus();
+			$("#inputForm").validate({
+				submitHandler: function(form){
+					loading('正在提交，请稍等...');
+					form.submit();
+				},
+				errorContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					$("#messageBox").text("输入有误，请先更正。");
+					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+						error.appendTo(element.parent().parent());
+					} else {
+						error.insertAfter(element);
+					}
+				}
+			});	
+		});
+		function addRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			$(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			});	
+			
+		}
+		function delRow(obj, prefix){
+			var id = $(prefix+"_id");
+			var delFlag = $(prefix+"_delFlag");
+			if (id.val() == ""){
+				$(obj).parent().parent().remove();
+			}else if(delFlag.val() == "0"){
+				delFlag.val("1");
+				$(obj).html("&divide;").attr("title", "撤销删除");
+				$(obj).parent().parent().addClass("error");
+			}else if(delFlag.val() == "1"){
+				delFlag.val("0");
+				$(obj).html("&times;").attr("title", "删除");
+				$(obj).parent().parent().removeClass("error");
+			} 
+		}
+		function shot(){
+			 $("#inputForm").attr('action',"${ctx}/vjhrkmx/vjhrkmx/form?id=${delivery.djbh}");    //通过jquery为action属性赋值
+		     $("#inputForm").submit();    //提交ID为inputForm的表单
+		}
+		function findImg(){
+			 $("#inputForm").attr('action',"${ctx}/delivery/delivery/form");    //通过jquery为action属性赋值
+		     $("#inputForm").submit();    //提交ID为inputForm的表单
+		}
+		function localUpad(){
+			$("#inputForm").submit(); 
+		}
+	</script>
+</head>
+<body>
+	<ul class="nav nav-tabs">
+	</ul>
+	<br />
+	<form:form id="inputForm" modelAttribute="delivery"
+		action="${ctx}/delivery/delivery/localUpload" method="post"
+		class="form-horizontal">
+		<form:hidden path="id" />
+		<form:hidden path="djbh" />
+		<sys:message content="${message}" />
+		<table id="contentTable"
+			class="table table-striped table-bordered table-condensed">
+			<thead>
+				<th>单位编号</th>
+				<th>商品编号</th>
+				<th>单位名称</th>
+				<th>商品名称</th>
+				<th>日期</th>
+				<th>助记码</th>
+				<th>规格</th>
+				<th>生产厂商</th>
+				<th>批次</th>
+				<th>批号</th>
+				<th>数量</th>
+				<th>含税价</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td><input name="dwbh" id="dwbh" value="${vjhrkmx.dwbh }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="spbh" id="spbh" value="${vjhrkmx.spbh }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="dwmch" id="dwmch" value="${vjhrkmx.dwmch }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="spmch" id="spmch" value="${vjhrkmx.spmch }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="rq" id="rq" value="${vjhrkmx.rq }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="zjm" id="zjm" value="${vjhrkmx.zjm }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="shpgg" id="shpgg" value="${vjhrkmx.shpgg }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="shengccj" id="shengccj"
+						value="${vjhrkmx.shengccj }" htmlEscape="false" maxlength="100"
+						class="input-xlarge" /></td>
+					<td><input name="pici" id="pici" value="${vjhrkmx.pici }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="pihao" id="pihao" value="${vjhrkmx.pihao }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="shl" id="shl" value="${vjhrkmx.shl }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+					<td><input name="hsje" id="hsje" value="${vjhrkmx.hsje }"
+						htmlEscape="false" maxlength="100" class="input-xlarge" /></td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="form-actions" style="padding-left: 0;">
+			<label class="control-label">药品资质：</label>
+			<form:select path="drugType" class="input-medium">
+				<form:option value="2">药品检验报告</form:option>
+<%-- 				<form:options
+					items="${fns:getDictList('qualification_warehousing')}"
+					itemLabel="label" itemValue="value" htmlEscape="false" />
+ --%>			</form:select>
+			<input type="file" class="form-control-input" name="captureUrl"
+				id="captureUrl" value="" onchange="localUpad();"
+				accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" /> <input
+				id="btnCancel" class="btn" type="button" value="拍摄"
+				onclick="shot();" /> <input id="btnCancel" class="btn" type="button"
+				value="查询" onclick="findImg();" />
+		</div>
+		<ul class="clearfix img-list" id="deliveryDesList">
+		</ul>
+		<script type="text/template" id="deliveryDesTpl">//<!--
+						<li id="deliveryDesList{{idx}}">
+							<a href="${ctxUpload}/{{row.imgurl}}" style="background-image:url(${ctxUpload}/{{row.imgurl}})"></a>
+						</li>//-->
+				 </script>
+		<script type="text/javascript">
+						var deliveryDesRowIdx = 0, deliveryDesTpl = $("#deliveryDesTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+						$(document).ready(function() {
+							var data = ${fns:toJson(deliveryDesList)};
+							for (var i=0; i<data.length; i++){
+								addRow('#deliveryDesList', deliveryDesRowIdx, deliveryDesTpl, data[i]);
+								deliveryDesRowIdx = deliveryDesRowIdx + 1;
+							}
+						});
+					</script>
+		<div class="form-actions text-center" style="padding-left: 0;">
+			<%-- 			<shiro:hasPermission name="high:high:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+ --%>
+			<input id="btnCancel" class="btn" type="button" value="返 回"
+				onclick="history.go(-1)" />
+		</div>
+	</form:form>
+
+	<script src="${ctxStatic}/imgResize/touchTouch.jquery.js"></script>
+	<script>
+		$(function(){
+	        // Initialize the gallery
+	        $('#deliveryDesList a').touchTouch();      
+	   });
+	</script>
+</body>
+</html>

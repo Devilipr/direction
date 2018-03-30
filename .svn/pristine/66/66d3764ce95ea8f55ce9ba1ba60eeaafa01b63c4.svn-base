@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.lxcxsskc.dao.LxcxSskcDao">
+    
+	<sql id="areaDetailColumns">
+		a.spbh AS "spbh",
+		a.huowname AS "huowname",
+		a.spmch AS "spmch",
+		a.shpgg AS "shpgg",
+		a.shengccj AS "shengccj",
+		a.pihao AS "pihao",
+		a.baozhiqi AS "baozhiqi",
+		a.sxrq AS "sxrq",
+		a.shl AS "shl",
+		a.pici AS "pici",
+		a.jaj_pzsqr AS "jajpzsqr"
+	</sql>
+	
+	<sql id="areaDetailJoins">
+	</sql>
+    
+	
+	<select id="findList" resultType="LxcxSskc">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM lxcx_sskc a
+		<include refid="areaDetailJoins"/>
+		<where>
+			<if test="spbh != null and spbh != ''">
+				AND  a.spbh like
+					<if test="dbName == 'oracle'">'%'||#{spbh}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spbh}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spbh},'%')</if>
+				
+			</if> 
+			<if test="spmch != null and spmch != ''">
+				AND a.spmch like
+					<if test="dbName == 'oracle'">'%'||#{spmch}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spmch}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spmch},'%')</if>
+				
+			</if> 
+				and a.shl>0
+				AND a.jaj_pzsqr=#{jajpzsqr}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="LxcxSskc">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM lxcx_sskc a
+		<include refid="areaDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		DELETE FROM lxcx_sskc
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,82 @@
+package com.thinkgem.jeesite.modules.liux.useroper.web;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import com.thinkgem.jeesite.modules.liux.useroper.entity.UserOperation;
+import com.thinkgem.jeesite.modules.liux.useroper.service.UserOperationService;
+import com.thinkgem.jeesite.modules.sys.entity.Office;
+import com.thinkgem.jeesite.modules.sys.entity.Role;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
+
+@Service
+@Lazy(false)
+public class UserOperationController {
+	@Autowired
+	private UserOperationService userOpertionService;
+	@Autowired
+	private SystemService systemService;
+	@Autowired
+	@Scheduled(cron = "0 0/10 * * * ?")//每隔10分钟执行一次    
+	public void syn() throws Exception{
+		UserOperation userOper=null;
+		User newUser=new User();
+		Role role=new Role();
+		List<Role> role1List=new ArrayList<Role>();
+		List<UserOperation> userList=userOpertionService.findList(userOper);
+		for (int i = 0; i < userList.size(); i++) {
+			UserOperation user=userList.get(i);
+			User uu=systemService.getUserByLoginName(user.getLgnname());
+			if(uu==null){
+				newUser.setPassword(SystemService.entryptPassword("1234"));
+				newUser.setLoginName(user.getLgnname());
+				newUser.setNo(String.valueOf((int)((Math.random()*9+1)*1000)));
+				newUser.setDelFlag("0");
+				newUser.setLoginFlag("1");
+				newUser.setCompany(new Office("1"));
+				newUser.setOffice(new Office("2"));
+				newUser.setName(user.getDzyname());
+				newUser.setCreateBy(new User("1"));
+				newUser.setId("");
+				newUser.setUpdateBy(new User("1"));
+				role.setId("6");
+				role.setDelFlag("0");
+				role.setDataScope("8");
+				role.setName("普通用户");
+				role.setEnname("d");
+				role.setRoleType("assignment");
+				role.setSysData("1");
+				role.setUseable("1");
+				role.setIsNewRecord(false);
+				role1List.add(role);
+				newUser.setRoleList(role1List);
+				systemService.saveUser(newUser);
+			}
+		}
+	}
+	@Autowired
+	@Scheduled(cron = "0 0/10 * * * ?")//每隔10分钟执行一次 
+	public void updatePass() throws Exception{
+		UserOperation userOper=null;
+		List<UserOperation> userList=userOpertionService.findList(userOper);
+		for (int i = 0; i < userList.size(); i++) {
+			UserOperation user=userList.get(i);
+			if(user.getNiming()!=null){
+				if(!user.getNiming().equals("1234")){
+					User users =new User();
+					users.setLoginName(user.getLgnname());
+					User user1=systemService.getByLoginNameUser(users);
+					systemService.updatePasswordById(user1.getId(), user1.getLoginName(), user.getNiming());
+				}
+			}
+				
+		}
+	}
+	
+}

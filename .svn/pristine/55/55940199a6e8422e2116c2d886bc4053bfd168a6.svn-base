@@ -1,0 +1,14 @@
+package com.thinkgem.jeesite.modules.liux.factory.dao;
+
+import com.thinkgem.jeesite.common.persistence.CrudDao;
+import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+import com.thinkgem.jeesite.modules.liux.factory.entity.Factory;
+/**
+ * 厂家库存查询
+ * @author zhao
+ * @version 2017-03-26
+ */
+@MyBatisDao
+public interface FactoryDao extends CrudDao<Factory> {
+
+}

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.vpfckmx.dao.VpfckmxDao">
+    
+	<sql id="areaDetailColumns">
+			a.djbh AS "djbh",
+			a.dwbh AS "dwbh",
+			a.danwbh AS "danwbh",
+			a.dwmch AS "dwmch",
+			a.rq AS "rq",
+			a.spid AS "spid",
+			a.spbh AS "spbh",
+			a.spmch AS "spmch",
+			a.zjm AS "zjm",
+			a.shpgg AS "shpgg",
+			a.shengccj AS "shengccj",
+			a.pici AS "pici",
+			a.pihao AS "pihao",
+			a.shl AS "shl",
+			a.hsje AS "hsje",
+			a.storerkey AS "storerkey"
+	</sql>
+	
+	<sql id="areaDetailJoins">
+	</sql>
+    
+	
+	<select id="findList" resultType="Vpfckmx">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM v_pfckmx a
+		<include refid="areaDetailJoins"/>
+		<where>
+			<if test="spmch != null and spmch != ''">
+				a.spmch like
+					<if test="dbName == 'oracle'">'%'||#{spmch}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spmch}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spmch},'%')</if>
+				
+			</if>
+			<if test="pici != null and pici != ''">
+				a.pici like
+					<if test="dbName == 'oracle'">'%'||#{pici}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{pici}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{pici},'%')</if>
+				
+			</if>
+			<if test="djbh != null and djbh != ''">
+				AND a.djbh = #{djbh}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findCkmxList" resultType="Vpfckmx">
+		SELECT
+			<include refid="areaDetailColumns"/>
+		FROM v_pfckmx a
+		<include refid="areaDetailJoins"/>
+		<where>
+			a.pici in
+			<foreach collection="array" item="piciArray" index="index" open="(" close=")" separator=",">
+				#{piciArray}
+			</foreach>
+			AND a.djbh = #{djbh}
+		</where>
+	</select>
+	
+	<select id="findAllList" resultType="Vpfckmx">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM v_pfckmx a
+		<include refid="areaDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	<select id="get" resultType="Vpfckmx">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM v_pfckmx a
+		<include refid="areaDetailJoins"/>
+		WHERE a.pici = #{id}
+	</select>
+	<update id="delete">
+		DELETE FROM v_pfckmx
+		WHERE id = #{id}
+	</update>
+
+</mapper>

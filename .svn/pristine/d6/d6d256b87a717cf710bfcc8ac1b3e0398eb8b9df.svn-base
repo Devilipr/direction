@@ -1,0 +1,85 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.modules.liux.delivery.web;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.Delivery;
+import com.thinkgem.jeesite.modules.liux.delivery.service.DeliveryService;
+
+/**
+ * 入库信息Controller
+ * @author zyb
+ * @version 2017-12-01
+ */
+@Controller
+@RequestMapping(value = "${adminPath}/delivery/delivery")
+public class DeliveryController extends BaseController {
+
+	@Autowired
+	private DeliveryService deliveryService;
+	
+	@ModelAttribute
+	public Delivery get(@RequestParam(required=false) String id) {
+		Delivery entity = null;
+		Delivery di=new Delivery();
+		if (StringUtils.isNotBlank(id)){
+			di.setPici(id);
+			entity = deliveryService.get(di);
+		}
+		if (entity == null){
+			entity = new Delivery();
+		}
+		return entity;
+	}
+	
+	@RequiresPermissions("delivery:delivery:view")
+	@RequestMapping(value = {"list", ""})
+	public String list(Delivery delivery, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<Delivery> page = deliveryService.findPage(new Page<Delivery>(request, response), delivery); 
+		model.addAttribute("page", page);
+		return "modules/liuxxt/deliveryList";
+	}
+
+	@RequiresPermissions("delivery:delivery:view")
+	@RequestMapping(value = "form")
+	public String form(Delivery delivery, Model model) {
+		model.addAttribute("delivery", delivery);
+		return "modules/liuxxt/deliveryForm";
+	}
+
+	@RequiresPermissions("delivery:delivery:edit")
+	@RequestMapping(value = "save")
+	public String save(Delivery delivery, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, delivery)){
+			return form(delivery, model);
+		}
+		deliveryService.save(delivery);
+		addMessage(redirectAttributes, "保存入库信息成功");
+		return "redirect:"+Global.getAdminPath()+"/delivery/delivery/?repage";
+	}
+	
+	@RequiresPermissions("delivery:delivery:edit")
+	@RequestMapping(value = "delete")
+	public String delete(Delivery delivery, RedirectAttributes redirectAttributes) {
+		deliveryService.delete(delivery);
+		addMessage(redirectAttributes, "删除入库信息成功");
+		return "redirect:"+Global.getAdminPath()+"/delivery/delivery/?repage";
+	}
+
+}

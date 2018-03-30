@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.vmchk.dao.VmchkDao">
+    
+	<sql id="areaDetailColumns">
+		 a.dwbh AS "dwbh",
+		 a.danwbh AS "danwbh",
+		 a.dwmch AS "dwmch",
+		 a.zjm AS "zjm",
+		 a.beactive AS "beactive",
+		 a.shh AS "shh",
+		 a.dzhdh AS "dzhdh",
+		 a.storerkey AS "storerkey"
+	</sql>
+	
+	<sql id="areaDetailJoins">
+	</sql>
+    
+	
+	<select id="findList" resultType="Vmchk">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM v_mchk a
+		<include refid="areaDetailJoins"/>
+		<where>
+			<if test="dwbh != null and dwbh != ''">
+				AND a.dwbh LIKE 
+					<if test="dbName == 'oracle'">'%'||#{dwbh}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{dwbh}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{dwbh},'%')</if>
+			</if>
+			<if test="dwmch != null and dwmch != ''">
+				AND a.dwmch LIKE 
+					<if test="dbName == 'oracle'">'%'||#{dwmch}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{dwmch}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{dwmch},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Vmchk">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM v_mchk a
+		<include refid="areaDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	<select id="get" resultType="Vmchk">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM v_mchk a
+		<include refid="areaDetailJoins"/>
+		WHERE a.dwbh = #{id}
+	</select>
+	<update id="delete">
+		DELETE FROM v_mchk
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

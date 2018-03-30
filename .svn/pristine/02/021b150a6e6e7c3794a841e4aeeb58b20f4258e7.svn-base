@@ -1,0 +1,38 @@
+package com.thinkgem.jeesite.modules.liux.vspkfk.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.liux.vspkfk.dao.VspkfkDao;
+import com.thinkgem.jeesite.modules.liux.vspkfk.entity.Vspkfk;
+
+
+@Service
+@Transactional(readOnly = true)
+public class VspkfkService extends CrudService<VspkfkDao, Vspkfk> {
+	public Vspkfk get(String id) {
+		return super.get(id);
+	}
+	
+	public List<Vspkfk> findList(Vspkfk vspkfk) {
+		return super.findList(vspkfk);
+	}
+	
+	public Page<Vspkfk> findPage(Page<Vspkfk> page, Vspkfk vspkfk) {
+		return super.findPage(page, vspkfk);
+	}
+	
+	@Transactional(readOnly = false)
+	public void save(Vspkfk vspkfk) {
+		super.save(vspkfk);
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(Vspkfk vspkfk) {
+		super.delete(vspkfk);
+	}
+}

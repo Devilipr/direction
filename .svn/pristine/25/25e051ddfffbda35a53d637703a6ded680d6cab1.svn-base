@@ -1,0 +1,38 @@
+package com.thinkgem.jeesite.modules.liux.vmchk.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.liux.vmchk.dao.VmchkDao;
+import com.thinkgem.jeesite.modules.liux.vmchk.entity.Vmchk;
+
+
+@Service
+@Transactional(readOnly = true)
+public class VmchkService extends CrudService<VmchkDao, Vmchk> {
+	public Vmchk get(String id) {
+		return super.get(id);
+	}
+	
+	public List<Vmchk> findList(Vmchk lxcxXsmxyl) {
+		return super.findList(lxcxXsmxyl);
+	}
+	
+	public Page<Vmchk> findPage(Page<Vmchk> page, Vmchk vmchk) {
+		return super.findPage(page, vmchk);
+	}
+	
+	@Transactional(readOnly = false)
+	public void save(Vmchk vmchk) {
+		super.save(vmchk);
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(Vmchk vmchk) {
+		super.delete(vmchk);
+	}
+}

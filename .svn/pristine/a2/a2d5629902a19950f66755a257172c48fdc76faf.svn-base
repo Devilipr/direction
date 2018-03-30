@@ -1,0 +1,129 @@
+package com.thinkgem.jeesite.modules.liux.factory.entity;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+public class Factory extends DataEntity<Factory> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String spbh;
+	private String spmch;
+	private String shengccj;
+	private String shpgg;
+	private String shpchd;
+	private String dw;
+	private String shl;
+	private String rkshl;
+	private String chkshl;
+	private String jcshl;
+	private String startRq;
+	private String endRq;
+	private String isTqfca;
+	private String aspbh;
+	private String pCaozy;
+	public String getSpbh() {
+		return spbh;
+	}
+	public void setSpbh(String spbh) {
+		this.spbh = spbh;
+	}
+	public String getSpmch() {
+		return spmch;
+	}
+	public void setSpmch(String spmch) {
+		this.spmch = spmch;
+	}
+	public String getShengccj() {
+		return shengccj;
+	}
+	public void setShengccj(String shengccj) {
+		this.shengccj = shengccj;
+	}
+	public String getShpgg() {
+		return shpgg;
+	}
+	public void setShpgg(String shpgg) {
+		this.shpgg = shpgg;
+	}
+	public String getShl() {
+		return shl;
+	}
+	public void setShl(String shl) {
+		this.shl = shl;
+	}
+	public String getRkshl() {
+		return rkshl;
+	}
+	public void setRkshl(String rkshl) {
+		this.rkshl = rkshl;
+	}
+	public String getChkshl() {
+		return chkshl;
+	}
+	public void setChkshl(String chkshl) {
+		this.chkshl = chkshl;
+	}
+	public String getJcshl() {
+		return jcshl;
+	}
+	public void setJcshl(String jcshl) {
+		this.jcshl = jcshl;
+	}
+	public String getStartRq() {
+		return startRq;
+	}
+	public void setStartRq(String startRq) {
+		this.startRq = startRq;
+	}
+	public String getEndRq() {
+		return endRq;
+	}
+	public void setEndRq(String endRq) {
+		this.endRq = endRq;
+	}
+	public String getIsTqfca() {
+		return isTqfca;
+	}
+	public void setIsTqfca(String isTqfca) {
+		this.isTqfca = isTqfca;
+	}
+	public String getAspbh() {
+		return aspbh;
+	}
+	public void setAspbh(String aspbh) {
+		this.aspbh = aspbh;
+	}
+	public String getpCaozy() {
+		return pCaozy;
+	}
+	public void setpCaozy(String pCaozy) {
+		this.pCaozy = pCaozy;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public String getShpchd() {
+		return shpchd;
+	}
+	public void setShpchd(String shpchd) {
+		this.shpchd = shpchd;
+	}
+	public String getDw() {
+		return dw;
+	}
+	public void setDw(String dw) {
+		this.dw = dw;
+	}
+	@Override
+	public String toString() {
+		return "Factory [spbh=" + spbh + ", spmch=" + spmch + ", shengccj="
+				+ shengccj + ", shpgg=" + shpgg + ", shpchd=" + shpchd
+				+ ", dw=" + dw + ", shl=" + shl + ", rkshl=" + rkshl
+				+ ", chkshl=" + chkshl + ", jcshl=" + jcshl + ", startRq="
+				+ startRq + ", endRq=" + endRq + ", isTqfca=" + isTqfca
+				+ ", aspbh=" + aspbh + ", pCaozy=" + pCaozy + "]";
+	}
+	
+}

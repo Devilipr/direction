@@ -1,0 +1,92 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.modules.liux.delivery.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.Delivery;
+import com.thinkgem.jeesite.modules.liux.delivery.dao.DeliveryDao;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.DeliveryDes;
+import com.thinkgem.jeesite.modules.liux.delivery.dao.DeliveryDesDao;
+
+/**
+ * 入库信息Service
+ * @author zyb
+ * @version 2017-12-01
+ */
+@Service
+@Transactional(readOnly = true)
+public class DeliveryService extends CrudService<DeliveryDao, Delivery> {
+
+	@Autowired
+	private DeliveryDesDao deliveryDesDao;
+	
+	public Delivery get(String id) {
+		Delivery delivery = super.get(id);
+		delivery.setDeliveryDesList(deliveryDesDao.findList(new DeliveryDes(delivery)));
+		return delivery;
+	}
+	public Delivery get(Delivery delivery) {
+		Delivery delivery1 = super.get(delivery);
+		if(delivery1!=null){
+			delivery1.setDeliveryDesList(deliveryDesDao.findList(new DeliveryDes(delivery1)));
+		}
+		return delivery1;
+	}
+	public List<Delivery> findList(Delivery delivery) {
+		return super.findList(delivery);
+	}
+	
+	public Page<Delivery> findPage(Page<Delivery> page, Delivery delivery) {
+		return super.findPage(page, delivery);
+	}
+	public List<DeliveryDes> findDeliveryDesList(DeliveryDes deliveryDes) {
+		return deliveryDesDao.findList(deliveryDes);
+	}
+	@Transactional(readOnly = false)
+	public void save(Delivery delivery) {
+		Delivery di=new Delivery();
+		if(di!=null){
+			di=super.get(delivery);
+		}
+		if(di==null){
+			delivery.setId("");
+			super.save(delivery);
+		}
+		for (DeliveryDes deliveryDes : delivery.getDeliveryDesList()){
+			/*if (deliveryDes.getId() == null){
+				continue;
+			}*/
+			if (DeliveryDes.DEL_FLAG_NORMAL.equals(deliveryDes.getDelFlag())){
+				if (StringUtils.isBlank(deliveryDes.getId())){
+					deliveryDes.setPici(delivery);
+					deliveryDes.preInsert();
+					deliveryDesDao.insert(deliveryDes);
+				}else{
+					deliveryDes.preUpdate();
+					deliveryDesDao.update(deliveryDes);
+				}
+			}else{
+				deliveryDesDao.delete(deliveryDes);
+			}
+		}
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(Delivery delivery) {
+		super.delete(delivery);
+		deliveryDesDao.delete(new DeliveryDes(delivery));
+	}
+	@Transactional(readOnly = false)
+	public void deleteImg(DeliveryDes deliveryDes) {
+		deliveryDesDao.delete(deliveryDes);
+	}
+}

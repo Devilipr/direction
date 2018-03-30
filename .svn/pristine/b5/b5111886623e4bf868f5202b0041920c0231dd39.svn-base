@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.factory.dao.FactoryDao">
+    
+	<!-- <sql id="areaDetailColumns">
+		 a.rq AS "rq",
+		 a.djbh AS "djbh",
+		 a.danwbh AS "danwbh",
+		 a.dwmch AS "dwmch",
+	  	 a.leibie AS "leibie",
+		 a.spbh AS "spbh",
+		 a.spmch AS "spmch",
+		 a.jlgg AS "jlgg",
+		 a.shengccj AS "shengccj",
+		 a.shpgg AS "shpgg",
+		 a.shl AS "shl",
+		 a.jaj_Pzsqr AS "jajPzsqr"
+	</sql>
+	
+	<sql id="areaDetailJoins">
+	</sql> -->
+    
+	
+	<select id="findList" resultType="Factory" statementType="CALLABLE">
+		{call sbp_lskc_gys(
+		<choose>
+			<when  test="startRq != null and startRq != ''">
+				#{startRq,mode=IN,jdbcType=VARCHAR},
+			</when >
+			<otherwise>
+				'',
+	    	</otherwise>
+	    </choose>	
+	    <choose>
+			<when test="endRq != null and endRq != ''">
+				#{endRq,mode=IN,jdbcType=VARCHAR},
+			</when>
+			<otherwise>
+				'',
+	    	</otherwise>
+	    </choose>
+	    <choose>
+			<when test="isTqfca != null and isTqfca != ''">
+				#{isTqfca,mode=IN,jdbcType=VARCHAR},
+			</when>
+			<otherwise>
+				'',
+	    	</otherwise>
+	    </choose>
+	    <choose>
+			<when test="spbh != null and spbh != ''">
+				#{spbh,mode=IN,jdbcType=VARCHAR},
+			</when>
+			<otherwise>
+				'',
+	    	</otherwise>
+	    </choose>	
+	    <choose>
+			<when test="pCaozy != null and pCaozy != ''">
+				#{pCaozy,mode=IN,jdbcType=VARCHAR}
+			</when>
+			<otherwise>
+			''
+    		</otherwise>
+    	</choose>
+		)}
+	</select>
+	
+	
+	<select id="findListMap" parameterType="map" statementType="CALLABLE">
+		<!-- SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM lxcx_Cgjhmx a
+		<include refid="areaDetailJoins"/>
+		<where>
+			<if test="spbh != null and spbh != ''">
+				a.spbh like
+					<if test="dbName == 'oracle'">'%'||#{spbh}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spbh}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spbh},'%')</if>
+				
+			</if>
+			<if test="spmch != null and spmch != ''">
+				a.spmch like
+					<if test="dbName == 'oracle'">'%'||#{spmch}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spmch}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spmch},'%')</if>
+				
+			</if>
+			<if test="beginOppDate != null and beginOppDate != ''">
+				AND a.rq &gt;= #{beginOppDate}
+			</if>
+			<if test="endOppDate != null and endOppDate != ''">
+				AND a.rq &lt;= #{endOppDate}
+			</if>
+		</where>
+		order by a.rq desc
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose> -->
+		{call sbp_lskc_gys(
+		<choose>
+			<when  test="startRq != null and startRq != ''">
+				#{startRq,mode=IN,jdbcType=VARCHAR},
+			</when >
+			<otherwise>
+				'',
+	    	</otherwise>
+	    </choose>	
+	    <choose>
+			<when test="endRq != null and endRq != ''">
+				#{endRq,mode=IN,jdbcType=VARCHAR},
+			</when>
+			<otherwise>
+				'',
+	    	</otherwise>
+	    </choose>
+	    <choose>
+			<when test="isTqfca != null and isTqfca != ''">
+				#{isTqfca,mode=IN,jdbcType=VARCHAR},
+			</when>
+			<otherwise>
+				'',
+	    	</otherwise>
+	    </choose>
+	    <choose>
+			<when test="aspbh != null and aspbh != ''">
+				#{aspbh,mode=IN,jdbcType=VARCHAR},
+			</when>
+			<otherwise>
+				'',
+	    	</otherwise>
+	    </choose>	
+	    <choose>
+			<when test="pCaozy != null and pCaozy != ''">
+				#{pCaozy,mode=IN,jdbcType=VARCHAR}
+			</when>
+			<otherwise>
+			''
+    		</otherwise>
+    	</choose>
+		)}
+	</select>
+	
+	<!-- <select id="findAllList" resultType="LxcxCgjhmx">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM lxcx_Cgjhmx a
+		<include refid="areaDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		DELETE FROM lxcx_Cgjhmx
+		WHERE id = #{id}
+	</update> -->
+	
+</mapper>

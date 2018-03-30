@@ -1,0 +1,38 @@
+package com.thinkgem.jeesite.modules.liux.useroper.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.liux.useroper.dao.UserOperationDao;
+import com.thinkgem.jeesite.modules.liux.useroper.entity.UserOperation;
+
+
+@Service
+@Transactional(readOnly = true)
+public class UserOperationService extends CrudService<UserOperationDao, UserOperation> {
+	public UserOperation get(String id) {
+		return super.get(id);
+	}
+	
+	public List<UserOperation> findList(UserOperation userOperation) {
+		return super.findList(userOperation);
+	}
+	
+	public Page<UserOperation> findPage(Page<UserOperation> page, UserOperation userOperation) {
+		return super.findPage(page, userOperation);
+	}
+	
+	@Transactional(readOnly = false)
+	public void save(UserOperation userOperation) {
+		super.save(userOperation);
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(UserOperation userOperation) {
+		super.delete(userOperation);
+	}
+}

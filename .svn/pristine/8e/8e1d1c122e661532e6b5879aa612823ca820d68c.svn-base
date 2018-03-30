@@ -1,0 +1,233 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.modules.liux.delivery.web;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.Delivery;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.DeliveryDes;
+import com.thinkgem.jeesite.modules.liux.delivery.service.DeliveryService;
+import com.thinkgem.jeesite.modules.liux.vjhrkmx.entity.Vjhrkmx;
+import com.thinkgem.jeesite.modules.liux.vjhrkmx.service.VjhrkmxService;
+
+/**
+ * 入库信息Controller
+ * @author zyb
+ * @version 2017-12-01
+ */
+@Controller
+@RequestMapping(value = "${adminPath}/delivery/delivery")
+public class DeliveryController extends BaseController {
+
+	@Autowired
+	private DeliveryService deliveryService;
+	@Autowired
+	private VjhrkmxService vjhrkmxService;
+	@ModelAttribute
+	public Delivery get(@RequestParam(required=false) String id) {
+		Delivery entity = null;
+		Delivery di=new Delivery();
+		if (StringUtils.isNotBlank(id)){
+			di.setPici(id);
+			entity = deliveryService.get(di);
+		}
+		if (entity == null){
+			entity = new Delivery();
+		}
+		return entity;
+	}
+	
+	@RequiresPermissions("delivery:delivery:view")
+	@RequestMapping(value = {"list", ""})
+	public String list(Delivery delivery, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<Delivery> page = deliveryService.findPage(new Page<Delivery>(request, response), delivery); 
+		model.addAttribute("page", page);
+		return "modules/liuxxt/deliveryList";
+	}
+
+	@RequiresPermissions("delivery:delivery:view")
+	@RequestMapping(value = "form")
+	public String form(Delivery delivery, Model model) {
+		if(delivery.getDrugType()==null){
+			delivery.setDrugType("2");
+		}
+		Vjhrkmx vjh=new Vjhrkmx();
+		vjh.setDjbh(delivery.getDjbh());
+		vjh.setPici(delivery.getPici());
+		Vjhrkmx vjhrkmx=vjhrkmxService.get(vjh);
+		DeliveryDes deliveryDes = new DeliveryDes();
+		deliveryDes.setDrugType(delivery.getDrugType());
+		deliveryDes.setDjbh(delivery.getDjbh());
+		deliveryDes.setPici(delivery);
+		List<DeliveryDes> deliveryDesList =deliveryService.findDeliveryDesList(deliveryDes);
+		model.addAttribute("vjhrkmx", vjhrkmx);
+		model.addAttribute("delivery", delivery);
+		model.addAttribute("deliveryDesList", deliveryDesList);
+		return "modules/liuxxt/deliveryForm";
+	}
+
+	@RequiresPermissions("delivery:delivery:edit")
+	@RequestMapping(value = "save")
+	public String save(Delivery delivery, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, delivery)){
+			return form(delivery, model);
+		}
+		deliveryService.save(delivery);
+		addMessage(redirectAttributes, "保存入库信息成功");
+		return "redirect:"+Global.getAdminPath()+"/delivery/delivery/?repage";
+	}
+	@RequiresPermissions("high:high:edit")
+	@RequestMapping(value = {"localUpload"})
+	public String localUpload(Delivery delivery,String captureUrl,HttpServletRequest request,@RequestParam("file") CommonsMultipartFile file, HttpServletResponse response, Model model,RedirectAttributes redirectAttributes){
+		
+			String savePath=null;
+			String fileName=System.currentTimeMillis()+".jpg";
+			try {
+				savePath = request.getSession().getServletContext().getRealPath("/") + "upload" + "/"+"rksj"+"/";
+				logger.info("==>上传文件路径：{}", savePath);
+				 //获取输出流
+	            OutputStream os=new FileOutputStream(savePath+fileName);
+	            //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+	            byte[] buffer = new byte[1024 * 1024];  
+	            InputStream is=file.getInputStream();
+	            //一个一个字节的读取并写入
+	            int length;  
+	            while ((length = is.read(buffer)) > 0) {  
+	              os.write(buffer, 0, length);  
+	            }
+	           os.flush();
+	           os.close();
+	           is.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String imgUrl="rksj/"+fileName;
+			DeliveryDes deliveryDes = new DeliveryDes();
+			deliveryDes.setDrugType(delivery.getDrugType());
+			deliveryDes.setDjbh(delivery.getDjbh());
+			deliveryDes.setDwbh(delivery.getDwbh());
+			deliveryDes.setDwmch(delivery.getDwmch());
+			deliveryDes.setRq(delivery.getRq());
+			deliveryDes.setPihao(delivery.getPihao());
+			deliveryDes.setSpbh(delivery.getSpbh());
+			deliveryDes.setSpmch(delivery.getSpmch());
+			deliveryDes.setZjm(delivery.getZjm());
+			deliveryDes.setShpgg(delivery.getShpgg());
+			deliveryDes.setShengccj(delivery.getShengccj());
+			deliveryDes.setPici(delivery);
+			deliveryDes.setShl(delivery.getShl());
+			deliveryDes.setHsje(delivery.getHsje());
+			deliveryDes.setImgurl(imgUrl);
+			List<DeliveryDes> deliveryDesList =new ArrayList<DeliveryDes>();
+			deliveryDesList.add(deliveryDes);
+			delivery.setDeliveryDesList(deliveryDesList);
+			deliveryService.save(delivery);
+		return "redirect:"+Global.getAdminPath()+"/delivery/delivery/form/?djbh="+delivery.getDjbh()+"&pici="+delivery.getPici()+"&repage";
+	}
+	
+	
+	@RequiresPermissions("high:high:edit")
+	@RequestMapping(value = {"localUploadHost"})
+	public String localUploadHost(Delivery delivery,String djbh,String drugType,@RequestParam("file") CommonsMultipartFile file,HttpServletRequest request, Model model,RedirectAttributes redirectAttributes){
+		
+		Vjhrkmx vjhrkmx =new Vjhrkmx();
+		vjhrkmx.setDjbh(djbh);
+		List<Vjhrkmx> vjhrkmxList=vjhrkmxService.findList(vjhrkmx);
+		if(vjhrkmxList!=null){
+			for (int i = 0; i < vjhrkmxList.size(); i++) {
+				Vjhrkmx vjhr=vjhrkmxList.get(i);
+					String savePath=null;
+					String fileName=System.currentTimeMillis()+"jpg";
+					try {
+						savePath = request.getSession().getServletContext().getRealPath("/") + "upload" + "/"+"rksj"+"/";
+						logger.info("==>上传文件路径：{}", savePath);
+						 //获取输出流
+			            OutputStream os=new FileOutputStream(savePath+fileName);
+			            //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+			            byte[] buffer = new byte[1024 * 1024];  
+			            InputStream is=file.getInputStream();
+			            //一个一个字节的读取并写入
+			            int length;  
+			            while ((length = is.read(buffer)) > 0) {  
+			              os.write(buffer, 0, length);  
+			            }
+			           os.flush();
+			           os.close();
+			           is.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String imgUrl="rksj/"+fileName;
+					DeliveryDes deliveryDes = new DeliveryDes();
+					delivery.setDjbh(vjhr.getDjbh());
+					delivery.setDwbh(vjhr.getDwbh());
+					delivery.setDwmch(vjhr.getDwmch());
+					delivery.setRq(vjhr.getRq());
+					delivery.setSpbh(vjhr.getSpbh());
+					delivery.setSpmch(vjhr.getSpmch());
+					delivery.setZjm(vjhr.getZjm());
+					delivery.setShengccj(vjhr.getShengccj());
+					delivery.setPici(vjhr.getPici());
+					delivery.setPihao(vjhr.getPihao());
+					delivery.setShl(vjhr.getShl().toString());
+					delivery.setHsje(vjhr.getHsje());
+					delivery.setShpgg(vjhr.getShpgg());
+					delivery.setDrugType(drugType);
+					deliveryDes.setDrugType(drugType);
+					deliveryDes.setDjbh(vjhr.getDjbh());
+					deliveryDes.setDwbh(vjhr.getDwbh());
+					deliveryDes.setDwmch(vjhr.getDwmch());
+					deliveryDes.setRq(vjhr.getRq());
+					deliveryDes.setPihao(vjhr.getPihao());
+					deliveryDes.setSpbh(vjhr.getSpbh());
+					deliveryDes.setSpmch(vjhr.getSpmch());
+					deliveryDes.setZjm(vjhr.getZjm());
+					deliveryDes.setShpgg(vjhr.getShpgg());
+					deliveryDes.setShengccj(vjhr.getShengccj());
+					deliveryDes.setPici(delivery);
+					deliveryDes.setShl(vjhr.getShl().toString());
+					deliveryDes.setHsje(vjhr.getHsje());
+					deliveryDes.setImgurl(imgUrl);
+					List<DeliveryDes> deliveryDesList =new ArrayList<DeliveryDes>();
+					deliveryDesList.add(deliveryDes);
+					delivery.setDeliveryDesList(deliveryDesList);
+					deliveryService.save(delivery);
+			}
+		}
+		return "redirect:"+Global.getAdminPath()+"/vjhrkhz/vjhrkhz/details/?djbh="+djbh+"&repage";
+	}
+	
+	
+	
+	@RequiresPermissions("delivery:delivery:edit")
+	@RequestMapping(value = "delete")
+	public String delete(Delivery delivery, RedirectAttributes redirectAttributes) {
+		deliveryService.delete(delivery);
+		addMessage(redirectAttributes, "删除入库信息成功");
+		return "redirect:"+Global.getAdminPath()+"/delivery/delivery/?repage";
+	}
+
+}

@@ -1,0 +1,403 @@
+package com.thinkgem.jeesite.web.controller;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.utils.WxUtil;
+import com.thinkgem.jeesite.common.vo.UserInfo;
+import com.thinkgem.jeesite.modules.liux.factory.entity.Factory;
+import com.thinkgem.jeesite.modules.liux.factory.service.FactoryService;
+import com.thinkgem.jeesite.modules.liux.lxcxcgjhmx.entity.LxcxCgjhmx;
+import com.thinkgem.jeesite.modules.liux.lxcxcgjhmx.service.LxcxCgjhmxService;
+import com.thinkgem.jeesite.modules.liux.lxcxjhmx.entity.LxcxJhmx;
+import com.thinkgem.jeesite.modules.liux.lxcxjhmx.service.LxcxJhmxService;
+import com.thinkgem.jeesite.modules.liux.lxcxsskc.entity.LxcxSskc;
+import com.thinkgem.jeesite.modules.liux.lxcxsskc.service.LxcxSskcService;
+import com.thinkgem.jeesite.modules.liux.lxcxxshz.eitity.LxcxXshz;
+import com.thinkgem.jeesite.modules.liux.lxcxxshz.service.LxcxXshzService;
+import com.thinkgem.jeesite.modules.liux.lxcxxsmx.entity.LxcxXsmx;
+import com.thinkgem.jeesite.modules.liux.lxcxxsmx.service.LxcxXsmxService;
+import com.thinkgem.jeesite.modules.liux.lxcxxsmxsy.entity.LxcxXsmxsy;
+import com.thinkgem.jeesite.modules.liux.lxcxxsmxsy.service.LxcxXsmxsyService;
+import com.thinkgem.jeesite.modules.liux.lxcxxsmxyl.entity.LxcxXsmxyl;
+import com.thinkgem.jeesite.modules.liux.lxcxxsmxyl.service.LxcxXsmxylService;
+import com.thinkgem.jeesite.web.vo.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+/**
+ * Author: lyp
+ * Create Date: 2018/2/9
+ * Description:
+ */
+//@CrossOrigin(origins = "*")
+@RestController
+@RequestMapping(value = "/wap/flow")
+public class FlowToController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private LxcxXshzService lxcxXshzService;
+
+    @Autowired
+    private LxcxXsmxService lxcxXsmxService;
+
+    @Autowired
+    private LxcxXsmxsyService lxcxXsmxsyService;
+
+    @Autowired
+    private LxcxXsmxylService lxcxXsmxylService;
+
+    @Autowired
+    private LxcxJhmxService lxcxJhmxService;
+
+    @Autowired
+    private LxcxCgjhmxService lxcxCgjhmxService;
+
+    @Autowired
+    private LxcxSskcService lxcxSskcService;
+
+    @Autowired
+    private FactoryService factoryService;
+
+    /**
+     * 销售汇总列表
+     * @param request
+     * @param response
+     * @param beginOppDate
+     * @param endOppDate
+     * @param danwbh
+     * @param spbh
+     * @param dwmch
+     * @param spmch
+     * @return
+     */
+    @RequestMapping(value = "/xshz", method = RequestMethod.GET)
+    public Response xshz(HttpServletRequest request, HttpServletResponse response,
+                         @RequestParam(required = false) String beginOppDate,
+                         @RequestParam(required = false) String endOppDate,
+                         @RequestParam(required = false) String danwbh,
+                         @RequestParam(required = false) String spbh,
+                         @RequestParam(required = false) String dwmch,
+                         @RequestParam(required = false) String spmch) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            LxcxXshz lxcxXshz = new LxcxXshz();
+            /*UserInfo userInfo = WxUtil.getUserInfoByRequest(request);
+            if(userInfo!=null && StringUtils.isNoneBlank(userInfo.getName())){
+                lxcxXshz.setJajPzsqr(userInfo.getName());
+            }*/
+            lxcxXshz.setJajPzsqr("王德强");
+            if (StringUtils.isNoneBlank(beginOppDate)) {
+                lxcxXshz.setBeginOppDate(sdf.parse(beginOppDate));
+            }
+            if (StringUtils.isNoneBlank(endOppDate)) {
+                lxcxXshz.setEndOppDate(sdf.parse(endOppDate));
+            }
+            lxcxXshz.setDanwbh(danwbh);
+            lxcxXshz.setSpbh(spbh);
+            lxcxXshz.setDwmch(dwmch);
+            lxcxXshz.setSpmch(spmch);
+            Page<LxcxXshz> page = lxcxXshzService.findPage(new Page<LxcxXshz>(request, response), lxcxXshz);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取销售汇总列表出错：", e);
+        }
+        return Response.failure();
+    }
+
+    /**
+     * 销售明细列表
+     * @param request
+     * @param response
+     * @param beginOppDate
+     * @param endOppDate
+     * @param danwbh
+     * @param spbh
+     * @param dwmch
+     * @param spmch
+     * @return
+     */
+    @GetMapping(value = "/xsmx")
+    public Response xsmx(HttpServletRequest request, HttpServletResponse response,
+                         @RequestParam(required = false) String beginOppDate,
+                         @RequestParam(required = false) String endOppDate,
+                         @RequestParam(required = false) String danwbh,
+                         @RequestParam(required = false) String spbh,
+                         @RequestParam(required = false) String dwmch,
+                         @RequestParam(required = false) String spmch) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            LxcxXsmx lxcxXsmx = new LxcxXsmx();
+            /*UserInfo userInfo = WxUtil.getUserInfoByRequest(request);
+            if(userInfo!=null && StringUtils.isNoneBlank(userInfo.getName())){
+                lxcxXsmx.setJajPzsqr(userInfo.getName());
+            }*/
+            lxcxXsmx.setJajPzsqr("王德强");
+            if (StringUtils.isNoneBlank(beginOppDate)) {
+                lxcxXsmx.setBeginOppDate(sdf.parse(beginOppDate));
+            }
+            if (StringUtils.isNoneBlank(endOppDate)) {
+                lxcxXsmx.setEndOppDate(sdf.parse(endOppDate));
+            }
+            lxcxXsmx.setDanwbh(danwbh);
+            lxcxXsmx.setSpbh(spbh);
+            lxcxXsmx.setDwmch(dwmch);
+            lxcxXsmx.setSpmch(spmch);
+            Page<LxcxXsmx> page = lxcxXsmxService.findPage(new Page<LxcxXsmx>(request, response), lxcxXsmx);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取销售明细列表出错：", e);
+        }
+        return Response.failure();
+    }
+
+    /**
+     * 销售明细（商业）
+     * @param request
+     * @param response
+     * @param beginOppDate
+     * @param endOppDate
+     * @param danwbh
+     * @param spbh
+     * @param dwmch
+     * @param spmch
+     * @param pihao
+     * @return
+     */
+    @GetMapping(value = "/syxsmx")
+    public Response syxsmx(HttpServletRequest request, HttpServletResponse response,
+                           @RequestParam(required = false) String beginOppDate,
+                           @RequestParam(required = false) String endOppDate,
+                           @RequestParam(required = false) String danwbh,
+                           @RequestParam(required = false) String spbh,
+                           @RequestParam(required = false) String dwmch,
+                           @RequestParam(required = false) String spmch,
+                           @RequestParam(required = false) String pihao) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            LxcxXsmxsy lxcxXsmxsy = new LxcxXsmxsy();
+            /*UserInfo userInfo = WxUtil.getUserInfoByRequest(request);
+            if(userInfo!=null && StringUtils.isNoneBlank(userInfo.getName())){
+                lxcxXsmxsy.setJajPzsqr(userInfo.getName());
+            }*/
+            lxcxXsmxsy.setJajPzsqr("王德强");
+            if (StringUtils.isNoneBlank(beginOppDate)) {
+                lxcxXsmxsy.setBeginOppDate(sdf.parse(beginOppDate));
+            }
+            if (StringUtils.isNoneBlank(endOppDate)) {
+                lxcxXsmxsy.setEndOppDate(sdf.parse(endOppDate));
+            }
+            lxcxXsmxsy.setDanwbh(danwbh);
+            lxcxXsmxsy.setSpbh(spbh);
+            lxcxXsmxsy.setDwmch(dwmch);
+            lxcxXsmxsy.setSpmch(spmch);
+            lxcxXsmxsy.setPihao(pihao);
+            Page<LxcxXsmxsy> page = lxcxXsmxsyService.findPage(new Page<LxcxXsmxsy>(request, response), lxcxXsmxsy);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取销售明细（商业）列表出错：", e);
+        }
+        return Response.failure();
+    }
+
+    /**
+     * 销售明细（医疗）
+     * @param request
+     * @param response
+     * @param beginOppDate
+     * @param endOppDate
+     * @param danwbh
+     * @param spbh
+     * @param dwmch
+     * @param spmch
+     * @param pihao
+     * @return
+     */
+    @GetMapping(value = "/ylxsmx")
+    public Response ylxsmx(HttpServletRequest request, HttpServletResponse response,
+                           @RequestParam(required = false) String beginOppDate,
+                           @RequestParam(required = false) String endOppDate,
+                           @RequestParam(required = false) String danwbh,
+                           @RequestParam(required = false) String spbh,
+                           @RequestParam(required = false) String dwmch,
+                           @RequestParam(required = false) String spmch,
+                           @RequestParam(required = false) String pihao) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            LxcxXsmxyl lxcxXsmxyl = new LxcxXsmxyl();
+            /*UserInfo userInfo = WxUtil.getUserInfoByRequest(request);
+            if(userInfo!=null && StringUtils.isNoneBlank(userInfo.getName())){
+                lxcxXsmxyl.setJajPzsqr(userInfo.getName());
+            }*/
+            lxcxXsmxyl.setJajPzsqr("王德强");
+            if (StringUtils.isNoneBlank(beginOppDate)) {
+                lxcxXsmxyl.setBeginOppDate(sdf.parse(beginOppDate));
+            }
+            if (StringUtils.isNoneBlank(endOppDate)) {
+                lxcxXsmxyl.setEndOppDate(sdf.parse(endOppDate));
+            }
+            lxcxXsmxyl.setDanwbh(danwbh);
+            lxcxXsmxyl.setSpbh(spbh);
+            lxcxXsmxyl.setDwmch(dwmch);
+            lxcxXsmxyl.setSpmch(spmch);
+            lxcxXsmxyl.setPihao(pihao);
+            Page<LxcxXsmxyl> page = lxcxXsmxylService.findPage(new Page<LxcxXsmxyl>(request, response), lxcxXsmxyl);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取销售明细（医疗）列表出错：", e);
+        }
+        return Response.failure();
+    }
+
+    /**
+     * 采购计划明细列表
+     * @param request
+     * @param response
+     * @param beginOppDate
+     * @param endOppDate
+     * @param spbh
+     * @param spmch
+     * @return
+     */
+    @GetMapping(value = "/cgjhmx")
+    public Response cgjhmx(HttpServletRequest request, HttpServletResponse response,
+                           @RequestParam(required = false) String beginOppDate,
+                           @RequestParam(required = false) String endOppDate,
+                           @RequestParam(required = false) String spbh,
+                           @RequestParam(required = false) String spmch) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            LxcxCgjhmx lxcxCgjhmx = new LxcxCgjhmx();
+//            UserInfo userInfo = WxUtil.getUserInfoByRequest(request);
+//            if(userInfo!=null && StringUtils.isNoneBlank(userInfo.getName())){
+//                lxcxCgjhmx.setJajPzsqr(userInfo.getName());
+//            }
+            lxcxCgjhmx.setJajPzsqr("王德强");
+            if (StringUtils.isNoneBlank(beginOppDate)) {
+                lxcxCgjhmx.setBeginOppDate(sdf.parse(beginOppDate));
+            }
+            if (StringUtils.isNoneBlank(endOppDate)) {
+                lxcxCgjhmx.setEndOppDate(sdf.parse(endOppDate));
+            }
+            lxcxCgjhmx.setSpbh(spbh);
+            lxcxCgjhmx.setSpmch(spmch);
+            Page<LxcxCgjhmx> page = lxcxCgjhmxService.findPage(new Page<LxcxCgjhmx>(request, response), lxcxCgjhmx);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取采购计划明细列表出错：", e);
+        }
+        return Response.failure();
+    }
+
+    /**
+     * 进货明细列表
+     * @param request
+     * @param response
+     * @param beginOppDate
+     * @param endOppDate
+     * @param spbh
+     * @param spmch
+     * @param pihao
+     * @return
+     */
+    @GetMapping(value = "/jhmx")
+    public Response jhmx(HttpServletRequest request, HttpServletResponse response,
+                           @RequestParam(required = false) String beginOppDate,
+                           @RequestParam(required = false) String endOppDate,
+                           @RequestParam(required = false) String spbh,
+                           @RequestParam(required = false) String spmch,
+                           @RequestParam(required = false) String pihao) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            LxcxJhmx lxcxJhmx = new LxcxJhmx();
+            /*UserInfo userInfo = WxUtil.getUserInfoByRequest(request);
+            if(userInfo!=null && StringUtils.isNoneBlank(userInfo.getName())){
+                lxcxJhmx.setJajPzsqr(userInfo.getName());
+            }*/
+            lxcxJhmx.setJajPzsqr("王德强");
+            if (StringUtils.isNoneBlank(beginOppDate)) {
+                lxcxJhmx.setBeginOppDate(sdf.parse(beginOppDate));
+            }
+            if (StringUtils.isNoneBlank(endOppDate)) {
+                lxcxJhmx.setEndOppDate(sdf.parse(endOppDate));
+            }
+            lxcxJhmx.setSpbh(spbh);
+            lxcxJhmx.setSpmch(spmch);
+            lxcxJhmx.setPihao(pihao);
+            Page<LxcxJhmx> page = lxcxJhmxService.findPage(new Page<LxcxJhmx>(request, response), lxcxJhmx);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取进货明细列表出错：", e);
+        }
+        return Response.failure();
+    }
+
+    /**
+     * 实时库存列表
+     * @param request
+     * @param response
+     * @param spbh
+     * @param spmch
+     * @return
+     */
+    @GetMapping(value = "/sskc")
+    public Response sskc(HttpServletRequest request, HttpServletResponse response,
+                           @RequestParam(required = false) String spbh,
+                           @RequestParam(required = false) String spmch) {
+        try {
+            LxcxSskc lxcxSskc = new LxcxSskc();
+            /*UserInfo userInfo = WxUtil.getUserInfoByRequest(request);
+            if(userInfo!=null && StringUtils.isNoneBlank(userInfo.getName())){
+                lxcxSskc.setJajpzsqr(userInfo.getName());
+            }*/
+            lxcxSskc.setJajpzsqr("王德强");
+            lxcxSskc.setSpbh(spbh);
+            lxcxSskc.setSpmch(spmch);
+            Page<LxcxSskc> page = lxcxSskcService.findPage(new Page<LxcxSskc>(request, response), lxcxSskc);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取实时库存列表出错：", e);
+        }
+        return Response.failure();
+    }
+
+    /**
+     * 历史库存列表
+     * @param request
+     * @param response
+     * @param beginOppDate
+     * @param endOppDate
+     * @param spbh
+     * @return
+     */
+    @GetMapping(value = "/lskc")
+    public Response lskc(HttpServletRequest request, HttpServletResponse response,
+                         @RequestParam(required = false) String beginOppDate,
+                         @RequestParam(required = false) String endOppDate,
+                         @RequestParam(required = false) String spbh) {
+        try {
+            Factory factory = new Factory();
+            /*UserInfo userInfo = WxUtil.getUserInfoByRequest(request);
+            if(userInfo!=null && StringUtils.isNoneBlank(userInfo.getName())){
+                factory.setpCaozy(userInfo.getName());
+            }*/
+            factory.setpCaozy("王德强");
+            factory.setStartRq(beginOppDate);
+            factory.setEndRq(endOppDate);
+            factory.setSpbh(spbh);
+            List<Factory> list = factoryService.findList(factory);
+            return Response.successCollection(list);
+        } catch (Exception e) {
+            logger.error("获取厂家历史库存列表出错：", e);
+        }
+        return Response.failure();
+    }
+}

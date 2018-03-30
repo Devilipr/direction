@@ -1,0 +1,161 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.modules.liux.high.web;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.liux.high.entity.High;
+import com.thinkgem.jeesite.modules.liux.high.entity.HighDes;
+import com.thinkgem.jeesite.modules.liux.high.service.HighService;
+import com.thinkgem.jeesite.modules.liux.vspkfk.entity.Vspkfk;
+import com.thinkgem.jeesite.modules.liux.vspkfk.service.VspkfkService;
+
+/**
+ * 高拍仪Controller
+ * @author zyb
+ * @version 2017-11-23
+ */
+@Controller
+@RequestMapping(value = "${adminPath}/high/high")
+public class HighController extends BaseController {
+	
+	private Logger logger=LoggerFactory.getLogger(this.getClass());
+
+	@Autowired
+	private HighService highService;
+	@Autowired
+	private VspkfkService vspkfkServcie;
+	@ModelAttribute
+	public High get(@RequestParam(required=false) String id) {
+		High entity = null;
+		High hi=new High();
+		if (StringUtils.isNotBlank(id)){
+			hi.setSpbh(id);
+			entity = highService.get(hi);
+		}
+		if (entity == null){
+			entity = new High();
+		}
+		return entity;
+	}
+	
+	@RequiresPermissions("high:high:view")
+	@RequestMapping(value = {"list", ""})
+	public String list(High high, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<High> page = highService.findPage(new Page<High>(request, response), high); 
+		model.addAttribute("page", page);
+		return "modules/liuxxt/highList";
+	}
+
+	@RequiresPermissions("high:high:view")
+	@RequestMapping(value = "form")
+	public String form(High high, Model model,HttpServletRequest request) {
+		if(high.getDrugType()==null){
+			high.setDrugType("0");
+		}
+		Vspkfk vspkfk= vspkfkServcie.get(high.getId());
+		HighDes highDes = new HighDes();
+		highDes.setDrugType(high.getDrugType());
+		highDes.setSpbh(high);
+		List<HighDes> highDesList = highService.findHighDesList(highDes);
+		model.addAttribute("vspkfk", vspkfk);
+		model.addAttribute("highDesList", highDesList);
+		model.addAttribute("high", high);
+		return "modules/liuxxt/highForm";
+	}
+
+	@RequiresPermissions("high:high:edit")
+	@RequestMapping(value = "save")
+	public String save(High high, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, high)){
+			return form(high, model,null);
+		}
+		highService.save(high);
+		addMessage(redirectAttributes, "保存高拍仪成功");
+		return null;
+	}
+	@RequiresPermissions("high:high:edit")
+	@RequestMapping(value = {"localUpload"})
+	public String localUpload(High high,HttpServletRequest request,@RequestParam("file") CommonsMultipartFile file, Model model,RedirectAttributes redirectAttributes){
+		
+			//String fileName=captureUrl.substring(captureUrl.lastIndexOf("\\")+1);
+			String savePath=null;
+			String fileName=System.currentTimeMillis()+".jpg";
+			try {
+				savePath = request.getSession().getServletContext().getRealPath("/") + "upload" + "/"+"ypzz"+"/";
+				logger.info("==>上传文件路径：{}", savePath);
+				 //获取输出流
+	            OutputStream os=new FileOutputStream(savePath+fileName);
+	            //获取输入流 CommonsMultipartFile 中可以直接得到文件的流
+	            byte[] buffer = new byte[1024 * 1024];  
+	            InputStream is=file.getInputStream();
+	            //一个一个字节的读取并写入
+	            int length;  
+	            while ((length = is.read(buffer)) > 0) {  
+	              os.write(buffer, 0, length);  
+	            }
+	           os.flush();
+	           os.close();
+	           is.close();
+				//Thumbnails.of(captureUrl).scale(0.5f).outputQuality(0.5f).toFile(savePath+fileName);
+				//File file1=new File(captureUrl);
+				//File file=new File(savePath,fileName);
+				//FileUtils.copyFile(file, new File(file1,fileName));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			String imgUrl="ypzz/"+fileName;
+			HighDes highDes = new HighDes();
+			highDes.setDrugType(high.getDrugType());
+			highDes.setSpbh(high);
+			highDes.setSpmch(high.getSpmch());
+			highDes.setZjm(high.getZjm());
+			highDes.setShpgg(high.getShpgg());
+			highDes.setBeactive(high.getBeactive());
+			highDes.setShengccj(high.getShengccj());
+			highDes.setPizhwn(high.getPizhwh());
+			highDes.setStorerkey(high.getStorerkey());
+			highDes.setImgUrl(imgUrl);
+			List<HighDes> highDesList =new ArrayList<HighDes>();
+			highDesList.add(highDes);
+			high.setHighDesList(highDesList);
+			highService.save(high);
+		return "redirect:"+Global.getAdminPath()+"/high/high/form/?id="+high.getSpbh()+"&repage";
+	}
+	@RequiresPermissions("high:high:edit")
+	@RequestMapping(value = "delete")
+	public String delete(High high,String no,String id, RedirectAttributes redirectAttributes) {
+		HighDes highDes= new HighDes();
+		highDes.setId(no);
+		highService.deleteImg(highDes);
+		addMessage(redirectAttributes, "删除成功");
+		return "redirect:"+Global.getAdminPath()+"/high/high/form/?id="+id+"&repage";
+	}
+
+}

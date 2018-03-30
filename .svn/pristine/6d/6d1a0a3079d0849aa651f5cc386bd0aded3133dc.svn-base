@@ -1,0 +1,93 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.modules.liux.mchk.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.liux.mchk.entity.Mchk;
+import com.thinkgem.jeesite.modules.liux.mchk.dao.MchkDao;
+import com.thinkgem.jeesite.modules.liux.mchk.entity.MchkDes;
+import com.thinkgem.jeesite.modules.liux.mchk.dao.MchkDesDao;
+
+/**
+ * 客商Service
+ * @author zyb
+ * @version 2017-11-30
+ */
+@Service
+@Transactional(readOnly = true)
+public class MchkService extends CrudService<MchkDao, Mchk> {
+
+	@Autowired
+	private MchkDesDao mchkDesDao;
+	
+	public Mchk get(String id) {
+		Mchk mchk = super.get(id);
+		mchk.setMchkDesList(mchkDesDao.findList(new MchkDes(mchk)));
+		return mchk;
+	}
+	public Mchk get(Mchk mchk) {
+		Mchk mchk1 = super.get(mchk);
+		if(mchk1!=null){
+		mchk1.setMchkDesList(mchkDesDao.findList(new MchkDes(mchk1)));
+		}
+		return mchk1;
+	}
+	public List<Mchk> findList(Mchk mchk) {
+		return super.findList(mchk);
+	}
+	
+	public Page<Mchk> findPage(Page<Mchk> page, Mchk mchk) {
+		return super.findPage(page, mchk);
+	}
+	public List<MchkDes> findHighDesList(MchkDes mchkDes) {
+		return mchkDesDao.findList(mchkDes);
+	}
+	@Transactional(readOnly = false)
+	public void save(Mchk mchk) {
+		Mchk mc=new Mchk();
+		if(mchk!=null){
+			mc=super.get(mchk);
+		}
+		if(mc==null){
+			mchk.setId("");
+			super.save(mchk);
+		}
+		
+		for (MchkDes mchkDes : mchk.getMchkDesList()){
+//			if (mchkDes.getId() == null){
+//				continue;
+//			}
+			if (MchkDes.DEL_FLAG_NORMAL.equals(mchkDes.getDelFlag())){
+				if (StringUtils.isBlank(mchkDes.getId())){
+					mchkDes.setDwbh(mchk);
+					mchkDes.preInsert();
+					mchkDesDao.insert(mchkDes);
+				}else{
+					mchkDes.preUpdate();
+					mchkDesDao.update(mchkDes);
+				}
+			}else{
+				mchkDesDao.delete(mchkDes);
+			}
+		}
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(Mchk mchk) {
+		super.delete(mchk);
+		mchkDesDao.delete(new MchkDes(mchk));
+	}
+	@Transactional(readOnly = false)
+	public void deleteImg(MchkDes mchkDes) {
+		mchkDesDao.delete(mchkDes);
+	}
+}

@@ -1,0 +1,47 @@
+package com.thinkgem.jeesite.modules.liux.vpfckmx.service;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.liux.vpfckmx.dao.VpfckmxDao;
+import com.thinkgem.jeesite.modules.liux.vpfckmx.entity.Vpfckmx;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+
+@Service
+@Transactional(readOnly = true)
+public class VpfckmxService extends CrudService<VpfckmxDao, Vpfckmx> {
+	public Vpfckmx get(String id) {
+		return super.get(id);
+	}
+	
+	public List<Vpfckmx> findList(Vpfckmx vpfckmx) {
+		return super.findList(vpfckmx);
+	}
+	
+	public Page<Vpfckmx> findPage(Page<Vpfckmx> page, Vpfckmx vpfckmx) {
+		return super.findPage(page, vpfckmx);
+	}
+	
+	@Transactional(readOnly = false)
+	public void save(Vpfckmx vpfckmx) {
+		super.save(vpfckmx);
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(Vpfckmx vpfckmx) {
+		super.delete(vpfckmx);
+	}
+
+	public List<Vpfckmx> findCkmxList(String[] piciArray, String djbh) {
+		return dao.findCkmxList(piciArray, djbh);
+	}
+
+	public Page<Vpfckmx> findListByStatus(Page<Vpfckmx> page, Vpfckmx vpfckmx) {
+		vpfckmx.setPage(page);
+		page.setList(dao.findListByStatus());
+		return page;
+	}
+}

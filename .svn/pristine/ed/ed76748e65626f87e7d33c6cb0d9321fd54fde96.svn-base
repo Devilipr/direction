@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.mchk.dao.MchkDao">
+    
+	<sql id="mchkColumns">
+		a.dwbh AS "dwbh",
+		a.dwmch AS "dwmch",
+		a.zjm AS "zjm",
+		a.shh AS "shh",
+		a.dzhdh AS "dzhdh"
+	</sql>
+	
+	<sql id="mchkJoins">
+	</sql>
+    
+	<select id="get" resultType="Mchk">
+		SELECT 
+			<include refid="mchkColumns"/>
+		FROM vmchk a
+		<include refid="mchkJoins"/>
+		WHERE a.dwbh = #{dwbh}
+	</select>
+	
+	<select id="findList" resultType="Mchk">
+		SELECT 
+			<include refid="mchkColumns"/>
+		FROM vmchk a
+		<include refid="mchkJoins"/>
+		<where>
+			
+			<if test="dwbh != null and dwbh != ''">
+				AND a.dwbh LIKE 
+					<if test="dbName == 'oracle'">'%'||#{dwbh}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{dwbh}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{dwbh},'%')</if>
+			</if>
+			<if test="dwmch != null and dwmch != ''">
+				AND a.dwmch LIKE 
+					<if test="dbName == 'oracle'">'%'||#{dwmch}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{dwmch}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{dwmch},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Mchk">
+		SELECT 
+			<include refid="mchkColumns"/>
+		FROM vmchk a
+		<include refid="mchkJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO vmchk(
+			dwbh,
+			dwmch,
+			zjm,
+			shh,
+			dzhdh
+		) VALUES (
+			#{dwbh},
+			#{dwmch},
+			#{zjm},
+			#{shh},
+			#{dzhdh}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE vmchk SET 	
+			dwbh = #{dwbh},
+			dwmch = #{dwmch},
+			zjm = #{zjm},
+			shh = #{shh},
+			dzhdh = #{dzhdh}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM vmchk
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

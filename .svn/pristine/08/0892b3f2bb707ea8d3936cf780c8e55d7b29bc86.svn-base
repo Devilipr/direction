@@ -1,0 +1,14 @@
+package com.thinkgem.jeesite.modules.liux.vpfckmx.dao;
+
+import com.thinkgem.jeesite.common.persistence.CrudDao;
+import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
+import com.thinkgem.jeesite.modules.liux.vpfckmx.entity.Vpfckmx;
+/**
+ * 出库数据
+ * @author zhao
+ * @version 2017-11-08
+ */
+@MyBatisDao
+public interface VpfckmxDao extends CrudDao<Vpfckmx> {
+
+}

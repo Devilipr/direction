@@ -1,0 +1,137 @@
+package com.thinkgem.jeesite.modules.liux.vjhrkhz.web;
+
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.thinkgem.jeesite.modules.liux.delivery.entity.Delivery;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.DeliveryDes;
+import com.thinkgem.jeesite.modules.liux.delivery.service.DeliveryDesService;
+import com.thinkgem.jeesite.modules.liux.delivery.service.DeliveryService;
+import com.thinkgem.jeesite.modules.liux.vjhrkmx.entity.Vjhrkmx;
+import com.thinkgem.jeesite.modules.liux.vjhrkmx.service.VjhrkmxService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.liux.vjhrkhz.entity.Vjhrkhz;
+import com.thinkgem.jeesite.modules.liux.vjhrkhz.service.VjhrkhzService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 入库主表
+ * @author zhao
+ *
+ */
+@Controller
+@RequestMapping(value = "${adminPath}/vjhrkhz/vjhrkhz")
+public class VjhrkhzController  extends BaseController {
+	@Autowired
+	private VjhrkhzService vjhrkhzService;
+
+	@Autowired
+	private VjhrkmxService vjhrkmxService;
+
+	@Autowired
+	private DeliveryDesService deliveryDesService;
+
+	@ModelAttribute
+	public Vjhrkhz get(@RequestParam(required=false) String id) {
+		Vjhrkhz entity = null;
+		if (StringUtils.isNotBlank(id)){
+			entity = vjhrkhzService.get(id);
+		}
+		if (entity == null){
+			entity = new Vjhrkhz();
+		}
+		return entity;
+	}
+	@RequiresPermissions("vjhrkhz:vjhrkhz:view")
+	@RequestMapping(value = {"list", ""})
+	public String list(Vjhrkhz vjhrkhz, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<Vjhrkhz> page = vjhrkhzService.findPage(new Page<Vjhrkhz>(request, response), vjhrkhz); 
+		model.addAttribute("page", page);
+		return "modules/liuxxt/vjhrkhzList";
+	}
+	@RequiresPermissions("vjhrkhz:vjhrkhz:view")
+	@RequestMapping(value = "form")
+	public String form(Vjhrkhz vjhrkhz, Model model) {
+		model.addAttribute("vjhrkhz", vjhrkhz);
+		return "modules/liuxxt/vjhrkhzForm";
+	}
+
+	@RequiresPermissions("vjhrkhz:vjhrkhz:edit")
+	@RequestMapping(value = "save")
+	public String save(Vjhrkhz vjhrkhz, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, vjhrkhz)){
+			return form(vjhrkhz, model);
+		}
+		vjhrkhzService.save(vjhrkhz);
+		addMessage(redirectAttributes, "保存入存成功");
+		return "redirect:"+Global.getAdminPath()+"/vjhrkhz/vjhrkhz/?repage";
+	}
+	
+	@RequiresPermissions("vjhrkhz:vjhrkhz:edit")
+	@RequestMapping(value = "delete")
+	public String delete(Vjhrkhz vjhrkhz, RedirectAttributes redirectAttributes) {
+		vjhrkhzService.delete(vjhrkhz);
+		addMessage(redirectAttributes, "删除入库成功");
+		return "redirect:"+Global.getAdminPath()+"/vjhrkhz/vjhrkhz/?repage";
+	}
+
+	@RequiresPermissions("vjhrkhz:vjhrkhz:view")
+	@RequestMapping(value = "details")
+	public String details(Vjhrkhz vjhrkhz, Model model, HttpServletRequest request, HttpServletResponse response) {
+		vjhrkhz = vjhrkhzService.getByDjbh(vjhrkhz.getDjbh());
+		Vjhrkmx vjhrkmx = new Vjhrkmx();
+		vjhrkmx.setDjbh(vjhrkhz.getDjbh());
+		Page<Vjhrkmx> page = vjhrkmxService.findPage(new Page<Vjhrkmx>(request, response), vjhrkmx);
+		model.addAttribute("page", page);
+		model.addAttribute("vjhrkhz", vjhrkhz);
+		return "modules/liuxxt/vjhrkmxDetails";
+	}
+
+	@RequestMapping(value = "/delivery")
+	public @ResponseBody
+	List<List<DeliveryDes>> delivery(String djbh, String drugType) {
+		Vjhrkmx vjhrkmx = new Vjhrkmx();
+		vjhrkmx.setDjbh(djbh);
+		List<Vjhrkmx> list = vjhrkmxService.findList(vjhrkmx);
+		List<List<DeliveryDes>> imageList = new ArrayList<List<DeliveryDes>>();
+		for (Vjhrkmx mx : list) {
+			DeliveryDes deliveryDes = new DeliveryDes();
+			if (StringUtils.isBlank(drugType)) {
+				drugType = "0";
+			}
+			deliveryDes.setDrugType(drugType);
+			Delivery delivery = new Delivery();
+			delivery.setPici(mx.getPici());
+			deliveryDes.setPici(delivery);
+			List<DeliveryDes> deliveryDesList = deliveryDesService.findList(deliveryDes);
+			imageList.add(deliveryDesList);
+		}
+		return imageList;
+	}
+
+	@RequestMapping(value = "delImage")
+	public String delDelivery(String did, String djbh) {
+		try {
+			deliveryDesService.deleteById(did);
+		} catch (Exception e) {
+			logger.error("删除图片信息数据出错：", e);
+		}
+		return "redirect:"+Global.getAdminPath()+"/vjhrkhz/vjhrkhz/details?djbh="+djbh+"&repage";
+	}
+}

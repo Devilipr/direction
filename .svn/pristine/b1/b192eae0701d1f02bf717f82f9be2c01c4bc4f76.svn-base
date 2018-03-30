@@ -1,0 +1,83 @@
+package com.thinkgem.jeesite.modules.liux.high.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.liux.high.entity.High;
+import com.thinkgem.jeesite.modules.liux.high.dao.HighDao;
+import com.thinkgem.jeesite.modules.liux.high.entity.HighDes;
+import com.thinkgem.jeesite.modules.liux.high.dao.HighDesDao;
+
+/**
+ * 高拍仪Service
+ * @author zyb
+ * @version 2017-11-23
+ */
+@Service
+@Transactional(readOnly = true)
+public class HighService extends CrudService<HighDao, High> {
+
+	@Autowired
+	private HighDesDao highDesDao;
+	
+	public High get(String id) {
+		High high = super.get(id);
+		high.setHighDesList(highDesDao.findList(new HighDes(high)));
+		return high;
+	}
+	public High get(High high) {
+		High high1 = super.get(high);
+		if(high1!=null){
+			high1.setHighDesList(highDesDao.findList(new HighDes(high1)));
+		}
+		return high1;
+	}
+	public List<High> findList(High high) {
+		return super.findList(high);
+	}
+	
+	public Page<High> findPage(Page<High> page, High high) {
+		return super.findPage(page, high);
+	}
+	
+	@Transactional(readOnly = false)
+	public void save(High high) {
+		High h=new High();
+		if(high!=null){
+			h=super.get(high);
+		}
+		if(h==null){
+			super.save(high);
+		}
+		for (HighDes highDes : high.getHighDesList()){
+			/*if (highDes.getId() == null){
+				continue;
+			}*/
+			if (HighDes.DEL_FLAG_NORMAL.equals(highDes.getDelFlag())){
+				if (StringUtils.isBlank(highDes.getId())){
+					highDes.setSpbh(high);
+					highDes.preInsert();
+					highDesDao.insert(highDes);
+				}else{
+					highDes.preUpdate();
+					highDesDao.update(highDes);
+				}
+			}else{
+				highDesDao.delete(highDes);
+			}
+		}
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(High high) {
+		super.delete(high);
+		highDesDao.delete(new HighDes(high));
+	}
+	
+}

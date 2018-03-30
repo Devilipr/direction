@@ -1,0 +1,42 @@
+package com.thinkgem.jeesite.modules.liux.vpfckhz.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.liux.vpfckhz.dao.VpfckhzDao;
+import com.thinkgem.jeesite.modules.liux.vpfckhz.entity.Vpfckhz;
+
+
+@Service
+@Transactional(readOnly = true)
+public class VpfckhzService extends CrudService<VpfckhzDao, Vpfckhz> {
+	public Vpfckhz get(String id) {
+		return super.get(id);
+	}
+	
+	public List<Vpfckhz> findList(Vpfckhz vpfckhz) {
+		return super.findList(vpfckhz);
+	}
+	
+	public Page<Vpfckhz> findPage(Page<Vpfckhz> page, Vpfckhz vpfckhz) {
+		return super.findPage(page, vpfckhz);
+	}
+	
+	@Transactional(readOnly = false)
+	public void save(Vpfckhz vpfckhz) {
+		super.save(vpfckhz);
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(Vpfckhz vpfckhz) {
+		super.delete(vpfckhz);
+	}
+
+	public Vpfckhz getByDjbh(String djbh) {
+		return dao.getByDjbh(djbh);
+	}
+}

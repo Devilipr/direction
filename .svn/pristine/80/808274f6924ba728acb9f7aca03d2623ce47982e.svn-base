@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.lxcxxshz.dao.LxcxXshzDao">
+    
+	<sql id="areaDetailColumns">
+		a.danwbh AS "danwbh",
+		replace(a.dwmch,'','') AS "dwmch",
+		replace(a.leibie,'','') AS "leibie",
+		a.spbh AS "spbh",
+		replace(a.spmch,'','') AS "spmch",
+		a.jlgg AS "jlgg",
+		a.shengccj AS "shengccj",
+		a.shpgg AS "shpgg",
+		a.rq AS "rq",
+		a.shl AS "shl",
+		a.dzhdh AS "dzhdh",
+		a.jaj_Pzsqr AS "jajPzsqr"
+	</sql>
+	
+	<sql id="areaDetailJoins">
+	</sql>
+    
+	
+	<select id="findList" resultType="LxcxXshz">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM lxcx_xshz a
+		<include refid="areaDetailJoins"/>
+		<where>
+			<if test="danwbh != null and danwbh != ''">
+				a.danwbh like
+					<if test="dbName == 'oracle'">'%'||#{danwbh}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{danwbh}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{danwbh},'%')</if>
+				
+			</if>
+			<if test="spbh != null and spbh != ''">
+				a.spbh like
+					<if test="dbName == 'oracle'">'%'||#{spbh}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spbh}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spbh},'%')</if>
+				
+			</if>
+			<if test="dwmch != null and dwmch != ''">
+				a.dwmch like
+					<if test="dbName == 'oracle'">'%'||#{dwmch}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{dwmch}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{dwmch},'%')</if>
+				
+			</if>
+			<if test="spmch != null and spmch != ''">
+				a.spmch like
+					<if test="dbName == 'oracle'">'%'||#{spmch}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spmch}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spmch},'%')</if>
+				
+			</if>
+			<if test="beginOppDate != null and beginOppDate != ''">
+				AND a.rq &gt;= #{beginOppDate}
+			</if>
+			<if test="endOppDate != null and endOppDate != ''">
+				AND a.rq &lt;= #{endOppDate}
+			</if>
+			and a.jaj_Pzsqr=#{jajPzsqr}
+		</where>
+		order by a.rq desc
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="LxcxXshz">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM lxcx_xshz a
+		<include refid="areaDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		DELETE FROM lxcx_xshz
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

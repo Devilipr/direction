@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.high.dao.HighDao">
+    
+	<sql id="highColumns">
+		a.spbh AS "spbh",
+		a.spmch AS "spmch",
+		a.shpgg AS "shpgg",
+		a.zjm AS "zjm",
+		a.beactive AS "beactive",
+		a.shengccj AS "shengccj",
+		a.pizhwh AS "pizhwh",
+		a.storerkey AS "storerkey"
+	</sql>
+	
+	<sql id="highJoins">
+	</sql>
+    
+	<select id="get" resultType="High">
+		SELECT 
+			<include refid="highColumns"/>
+		FROM high a
+		<include refid="highJoins"/>
+		WHERE a.spbh = #{spbh}
+	</select>
+	
+	<select id="findList" resultType="High">
+		SELECT 
+			<include refid="highColumns"/>
+		FROM high a
+		<include refid="highJoins"/>
+		<where>
+			
+			<if test="spmch != null and spmch != ''">
+				AND a.spmch LIKE 
+					<if test="dbName == 'oracle'">'%'||#{spmch}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spmch}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spmch},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="High">
+		SELECT 
+			<include refid="highColumns"/>
+		FROM high a
+		<include refid="highJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO high(
+			spbh,
+			spmch,
+			shpgg,
+			zjm,
+			beactive,
+			shengccj,
+			pizhwh,
+			storerkey
+		) VALUES (
+			#{spbh},
+			#{spmch},
+			#{shpgg},
+			#{zjm},
+			#{beactive},
+			#{shengccj},
+			#{pizhwh},
+			#{storerkey}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE high SET 	
+			spbh = #{spbh},
+			spmch = #{spmch},
+			shpgg = #{shpgg},
+			zjm = #{zjm},
+			beactive = #{beactive},
+			shengccj = #{shengccj},
+			pizhwh = #{pizhwh},
+			storerkey = #{storerkey}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM high
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

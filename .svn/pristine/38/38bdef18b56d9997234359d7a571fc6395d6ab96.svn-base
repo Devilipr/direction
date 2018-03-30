@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.delivery.dao.DeliveryDao">
+    
+	<sql id="deliveryColumns">
+		a.djbh AS "djbh",
+		a.dwbh AS "dwbh",
+		a.dwmch AS "dwmch",
+		a.rq AS "rq",
+		a.spbh AS "spbh",
+		a.spmch AS "spmch",
+		a.zjm AS "zjm",
+		a.shpgg AS "shpgg",
+		a.shengccj AS "shengccj",
+		a.pici AS "pici",
+		a.pihao AS "pihao",
+		a.shl AS "shl",
+		a.hsje AS "hsje",
+		a.drug_type AS "drugType",
+		a.imgurl AS "imgurl",
+		a.delivery_id AS "deliveryId"
+	</sql>
+	
+	<sql id="deliveryJoins">
+	</sql>
+    
+	<select id="get" resultType="Delivery">
+		SELECT 
+			<include refid="deliveryColumns"/>
+		FROM delivery a
+		<include refid="deliveryJoins"/>
+		WHERE a.pici = #{pici}
+	</select>
+	
+	<select id="findList" resultType="Delivery">
+		SELECT 
+			<include refid="deliveryColumns"/>
+		FROM delivery a
+		<include refid="deliveryJoins"/>
+		<where>
+			
+			<if test="spbh != null and spbh != ''">
+				AND a.spbh LIKE 
+					<if test="dbName == 'oracle'">'%'||#{spbh}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spbh}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spbh},'%')</if>
+			</if>
+			<if test="spmch != null and spmch != ''">
+				AND a.spmch LIKE 
+					<if test="dbName == 'oracle'">'%'||#{spmch}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{spmch}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{spmch},'%')</if>
+			</if>
+			<if test="zjm != null and zjm != ''">
+				AND a.zjm LIKE 
+					<if test="dbName == 'oracle'">'%'||#{zjm}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{zjm}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{zjm},'%')</if>
+			</if>
+			<if test="pici != null and pici != ''">
+				AND a.pici = #{pici}
+			</if>
+			<if test="drugType != null and drugType != ''">
+				AND a.drug_type = #{drugType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Delivery">
+		SELECT 
+			<include refid="deliveryColumns"/>
+		FROM delivery a
+		<include refid="deliveryJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO delivery(
+			djbh,
+			dwbh,
+			dwmch,
+			rq,
+			spbh,
+			spmch,
+			zjm,
+			shpgg,
+			shengccj,
+			pici,
+			pihao,
+			shl,
+			hsje,
+			drug_type,
+			imgurl,
+			delivery_id
+		) VALUES (
+			#{djbh},
+			#{dwbh},
+			#{dwmch},
+			#{rq},
+			#{spbh},
+			#{spmch},
+			#{zjm},
+			#{shpgg},
+			#{shengccj},
+			#{pici},
+			#{pihao},
+			#{shl},
+			#{hsje},
+			#{drugType},
+			#{imgurl},
+			#{deliveryId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE delivery SET 	
+			djbh = #{djbh},
+			dwbh = #{dwbh},
+			dwmch = #{dwmch},
+			rq = #{rq},
+			spbh = #{spbh},
+			spmch = #{spmch},
+			zjm = #{zjm},
+			shpgg = #{shpgg},
+			shengccj = #{shengccj},
+			pici = #{pici},
+			pihao = #{pihao},
+			shl = #{shl},
+			hsje = #{hsje},
+			drug_type = #{drugType},
+			imgurl = #{imgurl},
+			delivery_id = #{deliveryId}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM delivery
+		WHERE delivery_id = #{deliveryId}
+	</update>
+	
+</mapper>

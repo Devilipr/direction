@@ -1,0 +1,73 @@
+package com.thinkgem.jeesite.web.controller;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.modules.liux.vjhrkhz.entity.Vjhrkhz;
+import com.thinkgem.jeesite.modules.liux.vjhrkhz.service.VjhrkhzService;
+import com.thinkgem.jeesite.modules.liux.vjhrkmx.entity.Vjhrkmx;
+import com.thinkgem.jeesite.modules.liux.vjhrkmx.service.VjhrkmxService;
+import com.thinkgem.jeesite.web.vo.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Author: lyp
+ * Create Date: 2018/1/30
+ * Description:
+ */
+@CrossOrigin(origins = "*")
+@RestController
+@RequestMapping(value = "/wap/vjhrkhz")
+public class VjhrkhzWapController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private VjhrkhzService vjhrkhzService;
+
+    @Autowired
+    private VjhrkmxService vjhrkmxService;
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public Response list(HttpServletRequest request, HttpServletResponse response,
+                         @RequestParam(required = false) Date startTime,
+                         @RequestParam(required = false) Date endTime,
+                         @RequestParam(required = false) String djbh) {
+        try {
+            Vjhrkhz vjhrkhz = new Vjhrkhz();
+            vjhrkhz.setBeginOppDate(startTime);
+            vjhrkhz.setEndOppDate(endTime);
+            vjhrkhz.setDjbh(djbh);
+            Page<Vjhrkhz> page = vjhrkhzService.findPage(new Page<Vjhrkhz>(request, response), vjhrkhz);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取入库主表数据出错：", e);
+        }
+        return Response.failure();
+    }
+
+    @RequestMapping(value = "/details", method = RequestMethod.GET)
+    public Response details(HttpServletRequest request, HttpServletResponse response,
+                            @RequestParam String djbh) {
+        try {
+            Vjhrkhz vjhrkhz = vjhrkhzService.getByDjbh(djbh);
+            Vjhrkmx vjhrkmx = new Vjhrkmx();
+            vjhrkmx.setDjbh(vjhrkhz.getDjbh());
+            Page<Vjhrkmx> page = vjhrkmxService.findPage(new Page<Vjhrkmx>(request, response), vjhrkmx);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("vjhrkhz", vjhrkhz);
+            map.put("list", page.getList());
+            return Response.successObject(map);
+        } catch (Exception e) {
+            logger.error("获取入库明细数据出错：", e);
+        }
+        return Response.failure();
+    }
+}

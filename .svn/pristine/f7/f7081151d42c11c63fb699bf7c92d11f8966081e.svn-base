@@ -1,0 +1,73 @@
+package com.thinkgem.jeesite.modules.liux.vpfckmx.web;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.liux.vpfckmx.entity.Vpfckmx;
+import com.thinkgem.jeesite.modules.liux.vpfckmx.service.VpfckmxService;
+/**
+ * 出库明细
+ * @author zhao
+ *
+ */
+@Controller
+@RequestMapping(value = "${adminPath}/vpfckmx/vpfckmx")
+public class VpfckmxController  extends BaseController {
+	@Autowired
+	private VpfckmxService vpfckmxService;
+	@ModelAttribute
+	public Vpfckmx get(@RequestParam(required=false) String id) {
+		Vpfckmx entity = null;
+		if (StringUtils.isNotBlank(id)){
+			entity = vpfckmxService.get(id);
+		}
+		if (entity == null){
+			entity = new Vpfckmx();
+		}
+		return entity;
+	}
+	@RequiresPermissions("vpfckmx:vpfckmx:view")
+	@RequestMapping(value = {"list", ""})
+	public String list(Vpfckmx vpfckmx, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<Vpfckmx> page = vpfckmxService.findPage(new Page<Vpfckmx>(request, response), vpfckmx); 
+		model.addAttribute("page", page);
+		return "modules/liuxxt/vpfckmxList";
+	}
+	@RequiresPermissions("vpfckmx:vpfckmx:view")
+	@RequestMapping(value = "form")
+	public String form(Vpfckmx vpfckmx, Model model) {
+		model.addAttribute("vjhrkmx", vpfckmx);
+		return "modules/liuxxt/vjhrkmxCaptureVideo";
+	}
+
+	@RequiresPermissions("vpfckmx:vpfckmx:edit")
+	@RequestMapping(value = "save")
+	public String save(Vpfckmx vpfckmx, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, vpfckmx)){
+			return form(vpfckmx, model);
+		}
+		vpfckmxService.save(vpfckmx);
+		addMessage(redirectAttributes, "保存客商存成功");
+		return "redirect:"+Global.getAdminPath()+"/vjhrkmx/vjhrkmx/?repage";
+	}
+	
+	@RequiresPermissions("vpfckmx:vpfckmx:edit")
+	@RequestMapping(value = "delete")
+	public String delete(Vpfckmx vpfckmx, RedirectAttributes redirectAttributes) {
+		vpfckmxService.delete(vpfckmx);
+		addMessage(redirectAttributes, "删除客商成功");
+		return "redirect:"+Global.getAdminPath()+"/vpfckmx/vpfckmx/?repage";
+	}
+	
+}

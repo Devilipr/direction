@@ -1,0 +1,148 @@
+package com.thinkgem.jeesite.web.controller;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.utils.WxUtil;
+import com.thinkgem.jeesite.common.vo.UserInfo;
+import com.thinkgem.jeesite.modules.liux.delivery.service.DeliveryDesService;
+import com.thinkgem.jeesite.modules.liux.vpfckhz.entity.Vpfckhz;
+import com.thinkgem.jeesite.modules.liux.vpfckhz.service.VpfckhzService;
+import com.thinkgem.jeesite.modules.liux.vpfckmx.entity.Vpfckmx;
+import com.thinkgem.jeesite.modules.liux.vpfckmx.service.VpfckmxService;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
+import com.thinkgem.jeesite.web.enumtype.ResponseStatus;
+import com.thinkgem.jeesite.web.vo.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.ContextLoader;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Author: lyp
+ * Create Date: 2018/1/31
+ * Description:
+ */
+@CrossOrigin(origins = "*")
+@RestController
+@RequestMapping(value = "/wap/vpfckhz")
+public class VpfckhzWapController {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private VpfckhzService vpfckhzService;
+
+    @Autowired
+    private VpfckmxService vpfckmxService;
+
+    @Autowired
+    private DeliveryDesService deliveryDesService;
+
+    @Autowired
+    private SystemService systemService;
+
+    /**
+     * 出库汇总列表
+     * @param request
+     * @param response
+     * @param startTime
+     * @param endTime
+     * @param djbh
+     * @param dwmch
+     * @param storerkey
+     * @return
+     */
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public Response list(HttpServletRequest request, HttpServletResponse response,
+                         @RequestParam(required = false) String startTime,
+                         @RequestParam(required = false) String endTime,
+                         @RequestParam(required = false) String djbh,
+                         @RequestParam(required = false) String dwmch,
+                         @RequestParam(required = false) String storerkey) {
+        try {
+            UserInfo userInfo = WxUtil.getUserInfoByRequest(request);
+            User user = systemService.getUserByName(userInfo.getName());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Vpfckhz vpfckhz = new Vpfckhz();
+            if (StringUtils.isNoneBlank(startTime)) {
+                vpfckhz.setBeginOppDate(sdf.parse(startTime));
+            }
+            if (StringUtils.isNoneBlank(endTime)) {
+                vpfckhz.setEndOppDate(sdf.parse(endTime));
+            }
+            if (StringUtils.isNoneBlank(user.getOffice().getName())) {
+                vpfckhz.setDwmch(user.getOffice().getName());
+            }
+            vpfckhz.setDjbh(djbh);
+            vpfckhz.setDwmch(dwmch);
+            vpfckhz.setStorerkey(storerkey);
+            Page<Vpfckhz> page = vpfckhzService.findPage(new Page<Vpfckhz>(request, response), vpfckhz);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取出库主表数据出错：", e);
+        }
+        return Response.failure();
+    }
+
+    /**
+     * 出库明细列表
+     * @param request
+     * @param response
+     * @param djbh
+     * @return
+     */
+    @RequestMapping(value = "/details", method = RequestMethod.GET)
+    public Response details(HttpServletRequest request, HttpServletResponse response,
+                            @RequestParam String djbh) {
+        try {
+            Vpfckhz vpfckhz = vpfckhzService.getByDjbh(djbh);
+            Vpfckmx vpfckmx = new Vpfckmx();
+            vpfckmx.setDjbh(vpfckhz.getDjbh());
+            Page<Vpfckmx> page = vpfckmxService.findPage(new Page<Vpfckmx>(request, response), vpfckmx);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("vpfckhz", vpfckhz);
+            map.put("list", page.getList());
+            return Response.successObject(map);
+        } catch (Exception e) {
+            logger.error("获取出库明细数据出错：", e);
+        }
+        return Response.failure();
+    }
+
+    /**
+     * 图片打包下载
+     * @param djbh
+     * @param drugTypes
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/download", method = RequestMethod.GET)
+    public Response download(@RequestParam String djbh, @RequestParam(required = false) String drugTypes,
+                             HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        String contextPath = ContextLoader.getCurrentWebApplicationContext().getServletContext().getRealPath("/");
+        String zipfile = "zipfiles/" + System.currentTimeMillis() + ".zip";
+        try {
+            String downloadUrl = deliveryDesService.getDownloadUrl(djbh, drugTypes, contextPath, zipfile);
+            if (StringUtils.isNoneBlank(downloadUrl)) {
+                map.put("url", request.getContextPath() + "/" + downloadUrl);
+                return Response.successObject(map);
+            } else {
+                return Response.failure(ResponseStatus.ResourceNotFound.value(), "没有数据可下载");
+            }
+        } catch (IOException e) {
+            logger.error("文件打包下载出错：", e);
+        }
+        return Response.failure();
+    }
+}

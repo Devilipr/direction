@@ -1,0 +1,27 @@
+package com.thinkgem.jeesite.modules.liux.delivery.service;
+
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.liux.delivery.dao.DeliveryDesDao;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.DeliveryDes;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+/**
+ * Author: lyp
+ * Create Date: 2018/1/27
+ * Description:
+ */
+@Service
+@Transactional(readOnly = true)
+public class DeliveryDesService extends CrudService<DeliveryDesDao, DeliveryDes> {
+
+    public List<DeliveryDes> findList(DeliveryDes deliveryDes) {
+        return dao.findList(deliveryDes);
+    }
+
+    public List<DeliveryDes> findAllList(DeliveryDes deliveryDes) {
+        return dao.findAllList(deliveryDes);
+    }
+}

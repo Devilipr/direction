@@ -1,0 +1,38 @@
+package com.thinkgem.jeesite.modules.liux.vjhrkhz.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.liux.vjhrkhz.dao.VjhrkhzDao;
+import com.thinkgem.jeesite.modules.liux.vjhrkhz.entity.Vjhrkhz;
+
+
+@Service
+@Transactional(readOnly = true)
+public class VjhrkhzService extends CrudService<VjhrkhzDao, Vjhrkhz> {
+	public Vjhrkhz get(String id) {
+		return super.get(id);
+	}
+	
+	public List<Vjhrkhz> findList(Vjhrkhz vjhrkhz) {
+		return super.findList(vjhrkhz);
+	}
+	
+	public Page<Vjhrkhz> findPage(Page<Vjhrkhz> page, Vjhrkhz vjhrkhz) {
+		return super.findPage(page, vjhrkhz);
+	}
+	
+	@Transactional(readOnly = false)
+	public void save(Vjhrkhz vjhrkhz) {
+		super.save(vjhrkhz);
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(Vjhrkhz vjhrkhz) {
+		super.delete(vjhrkhz);
+	}
+}

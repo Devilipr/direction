@@ -1,0 +1,126 @@
+package com.thinkgem.jeesite.modules.liux.vpfckhz.web;
+
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.Delivery;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.DeliveryDes;
+import com.thinkgem.jeesite.modules.liux.delivery.service.DeliveryDesService;
+import com.thinkgem.jeesite.modules.liux.vpfckhz.entity.Vpfckhz;
+import com.thinkgem.jeesite.modules.liux.vpfckhz.service.VpfckhzService;
+import com.thinkgem.jeesite.modules.liux.vpfckmx.entity.Vpfckmx;
+import com.thinkgem.jeesite.modules.liux.vpfckmx.service.VpfckmxService;
+import com.thinkgem.jeesite.modules.sys.entity.Dict;
+import com.thinkgem.jeesite.modules.sys.utils.DictUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+
+/**
+ * 出库主表信息
+ * @author zhao
+ *
+ */
+@Controller
+@RequestMapping(value = "${adminPath}/vpfckhz/vpfckhz")
+public class VpfckhzController  extends BaseController {
+	@Autowired
+	private VpfckhzService vpfckhzService;
+
+	@Autowired
+	private VpfckmxService vpfckmxService;
+
+	@Autowired
+	private DeliveryDesService deliveryDesService;
+
+	@ModelAttribute
+	public Vpfckhz get(@RequestParam(required=false) String id) {
+		Vpfckhz entity = null;
+		if (StringUtils.isNotBlank(id)){
+			entity = vpfckhzService.get(id);
+		}
+		if (entity == null){
+			entity = new Vpfckhz();
+		}
+		return entity;
+	}
+	@RequiresPermissions("vpfckhz:vpfckhz:view")
+	@RequestMapping(value = {"list", ""})
+	public String list(Vpfckhz vpfckhz, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<Vpfckhz> page = vpfckhzService.findPage(new Page<Vpfckhz>(request, response), vpfckhz); 
+		model.addAttribute("page", page);
+		return "modules/liuxxt/vpfckhzList";
+	}
+	@RequiresPermissions("vpfckhz:vpfckhz:view")
+	@RequestMapping(value = "form")
+	public String form(Vpfckhz vpfckhz, Model model) {
+		model.addAttribute("vpfckhz", vpfckhz);
+		return "modules/liuxxt/vpfckhzForm";
+	}
+
+	@RequiresPermissions("vpfckhz:vpfckhz:edit")
+	@RequestMapping(value = "save")
+	public String save(Vpfckhz vpfckhz, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, vpfckhz)){
+			return form(vpfckhz, model);
+		}
+		vpfckhzService.save(vpfckhz);
+		addMessage(redirectAttributes, "保存入存成功");
+		return "redirect:"+Global.getAdminPath()+"/vpfckhz/vpfckhz/?repage";
+	}
+	
+	@RequiresPermissions("vpfckhz:vpfckhz:edit")
+	@RequestMapping(value = "delete")
+	public String delete(Vpfckhz vpfckhz, RedirectAttributes redirectAttributes) {
+		vpfckhzService.delete(vpfckhz);
+		addMessage(redirectAttributes, "删除入库成功");
+		return "redirect:"+Global.getAdminPath()+"/vpfckhz/vpfckhz/?repage";
+	}
+
+	@RequiresPermissions("vpfckhz:vpfckhz:view")
+	@RequestMapping(value = "details")
+	public String details(Vpfckhz vpfckhz, String drugType, Model model, HttpServletRequest request, HttpServletResponse response) {
+		List<Dict> dictList = DictUtils.getDictList("qualification_warehousing");
+		vpfckhz = vpfckhzService.getByDjbh(vpfckhz.getDjbh());
+		Vpfckmx vpfckmx = new Vpfckmx();
+		vpfckmx.setDjbh(vpfckhz.getDjbh());
+		Page<Vpfckmx> page = vpfckmxService.findPage(new Page<Vpfckmx>(request, response), vpfckmx);
+		model.addAttribute("page", page);
+		model.addAttribute("vpfckhz", vpfckhz);
+		model.addAttribute("dictList", dictList);
+		return "modules/liuxxt/vpfckmxDetails";
+	}
+
+	@RequiresPermissions("vpfckhz:vpfckhz:view")
+	@RequestMapping(value = "delivery")
+	public @ResponseBody
+	List<Vpfckmx> getCkmxData (String picis, String djbh, String drugType) {
+		String[] piciArray = picis.split(",");
+		List<Vpfckmx> ckmxList = vpfckmxService.findCkmxList(piciArray, djbh);
+		for (Vpfckmx mx : ckmxList) {
+			DeliveryDes deliveryDes = new DeliveryDes();
+			deliveryDes.setDrugType(drugType);
+			deliveryDes.setDjbh(mx.getDjbh());
+			Delivery delivery = new Delivery();
+			delivery.setPici(mx.getPici());
+			deliveryDes.setPici(delivery);
+			List<DeliveryDes> deliveryDesList = deliveryDesService.findList(deliveryDes);
+			mx.setDeliveryDesList(deliveryDesList);
+		}
+		return ckmxList;
+	}
+}

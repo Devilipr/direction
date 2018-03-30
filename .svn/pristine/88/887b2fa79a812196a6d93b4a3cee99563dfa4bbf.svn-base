@@ -1,0 +1,81 @@
+package com.thinkgem.jeesite.modules.liux.vmchk.entity;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+/**
+ * 客商
+ * @author zhao
+ *
+ */
+public class Vmchk extends DataEntity<Vmchk> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String dwbh;
+	private String danwbh;
+	private String dwmch;
+	private String zjm;
+	private String beactive;
+	private String shh;
+	private String dzhdh;
+	private String storerkey;
+	public String getDwbh() {
+		return dwbh;
+	}
+	public void setDwbh(String dwbh) {
+		this.dwbh = dwbh;
+	}
+	public String getDanwbh() {
+		return danwbh;
+	}
+	public void setDanwbh(String danwbh) {
+		this.danwbh = danwbh;
+	}
+	public String getDwmch() {
+		return dwmch;
+	}
+	public void setDwmch(String dwmch) {
+		this.dwmch = dwmch;
+	}
+	public String getZjm() {
+		return zjm;
+	}
+	public void setZjm(String zjm) {
+		this.zjm = zjm;
+	}
+	public String getBeactive() {
+		return beactive;
+	}
+	public void setBeactive(String beactive) {
+		this.beactive = beactive;
+	}
+	public String getShh() {
+		return shh;
+	}
+	public void setShh(String shh) {
+		this.shh = shh;
+	}
+	public String getDzhdh() {
+		return dzhdh;
+	}
+	public void setDzhdh(String dzhdh) {
+		this.dzhdh = dzhdh;
+	}
+	public String getStorerkey() {
+		return storerkey;
+	}
+	public void setStorerkey(String storerkey) {
+		this.storerkey = storerkey;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	@Override
+	public String toString() {
+		return "Vmchk [dwbh=" + dwbh + ", danwbh=" + danwbh + ", dwmch="
+				+ dwmch + ", zjm=" + zjm + ", beactive=" + beactive + ", shh="
+				+ shh + ", dzhdh=" + dzhdh + ", storerkey=" + storerkey + "]";
+	}
+}

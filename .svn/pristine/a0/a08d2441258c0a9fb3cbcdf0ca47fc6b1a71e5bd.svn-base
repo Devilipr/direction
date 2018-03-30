@@ -1,0 +1,114 @@
+package com.thinkgem.jeesite.modules.liux.high.entity;
+
+import org.hibernate.validator.constraints.Length;
+import java.util.List;
+import com.google.common.collect.Lists;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+/**
+ * 高拍仪Entity
+ * @author zyb
+ * @version 2017-11-23
+ */
+public class High extends DataEntity<High> {
+	
+	private static final long serialVersionUID = 1L;
+	private String spbh;		// 商品编号
+	private String spmch;		// 商品名称
+	private String shpgg;		// 规格
+	private String zjm;		// 助记码
+	private String beactive;		// beactive
+	private String shengccj;		// 生产厂商
+	private String pizhwh;		// 批准文号
+	private String storerkey;		// storerkey
+	private List<HighDes> highDesList = Lists.newArrayList();		// 子表列表
+	
+	public High() {
+		super();
+	}
+
+	public High(String id){
+		super(id);
+	}
+
+	@Length(min=1, max=100, message="商品编号长度必须介于 1 和 100 之间")
+	public String getSpbh() {
+		return spbh;
+	}
+
+	public void setSpbh(String spbh) {
+		this.spbh = spbh;
+	}
+	
+	@Length(min=0, max=200, message="商品名称长度必须介于 0 和 200 之间")
+	public String getSpmch() {
+		return spmch;
+	}
+
+	public void setSpmch(String spmch) {
+		this.spmch = spmch;
+	}
+	
+	@Length(min=0, max=100, message="规格长度必须介于 0 和 100 之间")
+	public String getShpgg() {
+		return shpgg;
+	}
+
+	public void setShpgg(String shpgg) {
+		this.shpgg = shpgg;
+	}
+	
+	@Length(min=0, max=100, message="助记码长度必须介于 0 和 100 之间")
+	public String getZjm() {
+		return zjm;
+	}
+
+	public void setZjm(String zjm) {
+		this.zjm = zjm;
+	}
+	
+	@Length(min=0, max=100, message="beactive长度必须介于 0 和 100 之间")
+	public String getBeactive() {
+		return beactive;
+	}
+
+	public void setBeactive(String beactive) {
+		this.beactive = beactive;
+	}
+	
+	@Length(min=0, max=200, message="生产厂商长度必须介于 0 和 200 之间")
+	public String getShengccj() {
+		return shengccj;
+	}
+
+	public void setShengccj(String shengccj) {
+		this.shengccj = shengccj;
+	}
+	
+	@Length(min=0, max=100, message="批准文号长度必须介于 0 和 100 之间")
+	public String getPizhwh() {
+		return pizhwh;
+	}
+
+	public void setPizhwh(String pizhwh) {
+		this.pizhwh = pizhwh;
+	}
+	
+	@Length(min=0, max=100, message="storerkey长度必须介于 0 和 100 之间")
+	public String getStorerkey() {
+		return storerkey;
+	}
+
+	public void setStorerkey(String storerkey) {
+		this.storerkey = storerkey;
+	}
+	
+	public List<HighDes> getHighDesList() {
+		return highDesList;
+	}
+
+	public void setHighDesList(List<HighDes> highDesList) {
+		this.highDesList = highDesList;
+	}
+}

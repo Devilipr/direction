@@ -1,0 +1,80 @@
+package com.thinkgem.jeesite.modules.liux.vpfckhz.entity;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+import java.util.Date;
+
+public class Vpfckhz extends DataEntity<Vpfckhz>{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private String djbh; //单据编号
+	private String dwbh; //单位编号
+	private String danwbh; //单位编号
+	private String dwmch; //单位名称
+	private String rq; //日期
+	private String hsje; //含税金额
+	private Date beginOppDate;
+	private Date endOppDate;
+	private String storerkey;
+	public String getDjbh() {
+		return djbh;
+	}
+	public void setDjbh(String djbh) {
+		this.djbh = djbh;
+	}
+	public String getDwbh() {
+		return dwbh;
+	}
+	public void setDwbh(String dwbh) {
+		this.dwbh = dwbh;
+	}
+	public String getDanwbh() {
+		return danwbh;
+	}
+	public void setDanwbh(String danwbh) {
+		this.danwbh = danwbh;
+	}
+	public String getDwmch() {
+		return dwmch;
+	}
+	public void setDwmch(String dwmch) {
+		this.dwmch = dwmch;
+	}
+	public String getRq() {
+		return rq;
+	}
+	public void setRq(String rq) {
+		this.rq = rq;
+	}
+	public String getHsje() {
+		return hsje;
+	}
+	public void setHsje(String hsje) {
+		this.hsje = hsje;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public Date getBeginOppDate() {
+		return beginOppDate;
+	}
+	public void setBeginOppDate(Date beginOppDate) {
+		this.beginOppDate = beginOppDate;
+	}
+	public Date getEndOppDate() {
+		return endOppDate;
+	}
+	public void setEndOppDate(Date endOppDate) {
+		this.endOppDate = endOppDate;
+	}
+	public String getStorerkey() {
+		return storerkey;
+	}
+	public void setStorerkey(String storerkey) {
+		this.storerkey = storerkey;
+	}
+}

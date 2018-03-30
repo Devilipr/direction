@@ -1,0 +1,157 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.modules.liux.delivery.entity;
+
+import org.hibernate.validator.constraints.Length;
+import java.util.List;
+import com.google.common.collect.Lists;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+/**
+ * 入库信息Entity
+ * @author zyb
+ * @version 2017-12-01
+ */
+public class Delivery extends DataEntity<Delivery> {
+	
+	private static final long serialVersionUID = 1L;
+	private String dwbh;		// dwbh
+	private String dwmch;		// dwmch
+	private String rq;		// rq
+	private String spbh;		// spbh
+	private String spmch;		// spmch
+	private String zjm;		// zjm
+	private String shpgg;		// shpgg
+	private String shengccj;		// shengccj
+	private String pici;		// pici
+	private String pihao;		// pihao
+	private String shl;		// shl
+	private String hsje;		// hsje
+	private List<DeliveryDes> deliveryDesList = Lists.newArrayList();		// 子表列表
+	
+	public Delivery() {
+		super();
+	}
+
+	public Delivery(String id){
+		super(id);
+	}
+
+	@Length(min=0, max=255, message="dwbh长度必须介于 0 和 255 之间")
+	public String getDwbh() {
+		return dwbh;
+	}
+
+	public void setDwbh(String dwbh) {
+		this.dwbh = dwbh;
+	}
+	
+	@Length(min=0, max=500, message="dwmch长度必须介于 0 和 500 之间")
+	public String getDwmch() {
+		return dwmch;
+	}
+
+	public void setDwmch(String dwmch) {
+		this.dwmch = dwmch;
+	}
+	
+	@Length(min=0, max=255, message="rq长度必须介于 0 和 255 之间")
+	public String getRq() {
+		return rq;
+	}
+
+	public void setRq(String rq) {
+		this.rq = rq;
+	}
+	
+	@Length(min=1, max=255, message="spbh长度必须介于 1 和 255 之间")
+	public String getSpbh() {
+		return spbh;
+	}
+
+	public void setSpbh(String spbh) {
+		this.spbh = spbh;
+	}
+	
+	@Length(min=0, max=500, message="spmch长度必须介于 0 和 500 之间")
+	public String getSpmch() {
+		return spmch;
+	}
+
+	public void setSpmch(String spmch) {
+		this.spmch = spmch;
+	}
+	
+	@Length(min=0, max=255, message="zjm长度必须介于 0 和 255 之间")
+	public String getZjm() {
+		return zjm;
+	}
+
+	public void setZjm(String zjm) {
+		this.zjm = zjm;
+	}
+	
+	@Length(min=0, max=255, message="shpgg长度必须介于 0 和 255 之间")
+	public String getShpgg() {
+		return shpgg;
+	}
+
+	public void setShpgg(String shpgg) {
+		this.shpgg = shpgg;
+	}
+	
+	@Length(min=0, max=255, message="shengccj长度必须介于 0 和 255 之间")
+	public String getShengccj() {
+		return shengccj;
+	}
+
+	public void setShengccj(String shengccj) {
+		this.shengccj = shengccj;
+	}
+	
+	@Length(min=0, max=255, message="pici长度必须介于 0 和 255 之间")
+	public String getPici() {
+		return pici;
+	}
+
+	public void setPici(String pici) {
+		this.pici = pici;
+	}
+	
+	@Length(min=0, max=255, message="pihao长度必须介于 0 和 255 之间")
+	public String getPihao() {
+		return pihao;
+	}
+
+	public void setPihao(String pihao) {
+		this.pihao = pihao;
+	}
+	
+	@Length(min=0, max=255, message="shl长度必须介于 0 和 255 之间")
+	public String getShl() {
+		return shl;
+	}
+
+	public void setShl(String shl) {
+		this.shl = shl;
+	}
+	
+	@Length(min=0, max=255, message="hsje长度必须介于 0 和 255 之间")
+	public String getHsje() {
+		return hsje;
+	}
+
+	public void setHsje(String hsje) {
+		this.hsje = hsje;
+	}
+	
+	public List<DeliveryDes> getDeliveryDesList() {
+		return deliveryDesList;
+	}
+
+	public void setDeliveryDesList(List<DeliveryDes> deliveryDesList) {
+		this.deliveryDesList = deliveryDesList;
+	}
+}

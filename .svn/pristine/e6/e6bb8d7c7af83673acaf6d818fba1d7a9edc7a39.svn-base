@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.delivery.dao.DeliveryDesDao">
+    
+	<sql id="deliveryDesColumns">
+		a.id AS "id",
+		a.djbh AS "djbh",
+		a.dwbh AS "dwbh",
+		a.dwmch AS "dwmch",
+		a.rq AS "rq",
+		a.spbh AS "spbh.spbh",
+		a.spmch AS "spmch",
+		a.zjm AS "zjm",
+		a.shpgg AS "shpgg",
+		a.shengccj AS "shengccj",
+		a.pici AS "pici",
+		a.pihao AS "pihao",
+		a.shl AS "shl",
+		a.hsje AS "hsje",
+		a.imgurl AS "imgurl",
+		a.drug_type AS "drugType"
+	</sql>
+	
+	<sql id="deliveryDesJoins">
+		LEFT JOIN delivery b ON b.pici = a.pici
+	</sql>
+    
+	<select id="get" resultType="DeliveryDes">
+		SELECT 
+			<include refid="deliveryDesColumns"/>
+		FROM delivery_des a
+		<include refid="deliveryDesJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="DeliveryDes">
+		SELECT 
+			<include refid="deliveryDesColumns"/>
+		FROM delivery_des a
+		<!--<include refid="deliveryDesJoins"/>-->
+		<where>
+			
+			<if test="pici.pici != null and pici.pici != ''">
+				AND a.pici = #{pici.pici}
+			</if>
+			<if test="djbh != null and djbh != ''">
+				AND a.djbh = #{djbh}
+			</if>
+			<if test="drugType != null and drugType != ''">
+				AND a.drug_type = #{drugType}
+			</if>
+			<if test="drugTypes != null">
+				AND a.drug_type in
+				<foreach collection="drugTypes" item="drugType" index="index" open="(" close=")" separator=",">
+					#{drugType}
+				</foreach>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="DeliveryDes">
+		SELECT 
+			<include refid="deliveryDesColumns"/>
+		FROM delivery_des a
+		<include refid="deliveryDesJoins"/>
+		<where>
+			<if test="piciArray != null">
+				a.pici in
+				<foreach collection="piciArray" item="pici" index="index" open="(" close=")" separator=",">
+					#{pici}
+				</foreach>
+			</if>
+			<if test="drugTypes != null">
+				AND a.drug_type in
+				<foreach collection="drugTypes" item="type" index="index" open="(" close=")" separator=",">
+					#{type}
+				</foreach>
+			</if>
+		</where>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO delivery_des(
+			id,
+			djbh,
+			dwbh,
+			dwmch,
+			rq,
+			spbh,
+			spmch,
+			zjm,
+			shpgg,
+			shengccj,
+			pici,
+			pihao,
+			shl,
+			hsje,
+			imgurl,
+			drug_type
+		) VALUES (
+			#{id},
+			#{djbh},
+			#{dwbh},
+			#{dwmch},
+			#{rq},
+			#{spbh},
+			#{spmch},
+			#{zjm},
+			#{shpgg},
+			#{shengccj},
+			#{pici.pici},
+			#{pihao},
+			#{shl},
+			#{hsje},
+			#{imgurl},
+			#{drugType}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE delivery_des SET 
+			djbh = #{djbh},	
+			dwbh = #{dwbh},
+			dwmch = #{dwmch},
+			rq = #{rq},
+			spbh = #{spbh},
+			spmch = #{spmch},
+			zjm = #{zjm},
+			shpgg = #{shpgg},
+			shengccj = #{shengccj},
+			pici = #{pici.pici},
+			pihao = #{pihao},
+			shl = #{shl},
+			hsje = #{hsje},
+			imgurl = #{imgurl},
+			drug_type = #{drugType}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM delivery_des
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE pici = #{pici.pici}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

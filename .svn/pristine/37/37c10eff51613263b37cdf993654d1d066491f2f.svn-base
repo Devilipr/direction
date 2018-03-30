@@ -1,0 +1,173 @@
+package com.thinkgem.jeesite.web.controller;
+
+import com.sun.jndi.toolkit.chars.BASE64Decoder;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.IdGen;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.Delivery;
+import com.thinkgem.jeesite.modules.liux.delivery.entity.DeliveryDes;
+import com.thinkgem.jeesite.modules.liux.delivery.service.DeliveryService;
+import com.thinkgem.jeesite.modules.liux.vjhrkhz.entity.Vjhrkhz;
+import com.thinkgem.jeesite.modules.liux.vjhrkhz.service.VjhrkhzService;
+import com.thinkgem.jeesite.modules.liux.vjhrkmx.entity.Vjhrkmx;
+import com.thinkgem.jeesite.modules.liux.vjhrkmx.service.VjhrkmxService;
+import com.thinkgem.jeesite.web.vo.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Author: lyp
+ * Create Date: 2018/1/30
+ * Description:
+ */
+@CrossOrigin(origins = "*")
+@RestController
+@RequestMapping(value = "/wap/vjhrkhz")
+public class VjhrkhzWapController {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    private VjhrkhzService vjhrkhzService;
+
+    @Autowired
+    private VjhrkmxService vjhrkmxService;
+    
+    @Autowired
+    private DeliveryService deliveryService;
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public Response list(HttpServletRequest request, HttpServletResponse response,
+                         @RequestParam(required = false) String startTime,
+                         @RequestParam(required = false) String endTime,
+                         @RequestParam(required = false) String djbh,
+                         @RequestParam(required = false) String dwmch,
+                         @RequestParam(required = false) String storerkey) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Vjhrkhz vjhrkhz = new Vjhrkhz();
+            if (StringUtils.isNoneBlank(startTime)) {
+                vjhrkhz.setBeginOppDate(sdf.parse(startTime));
+            }
+            if (StringUtils.isNoneBlank(endTime)) {
+                vjhrkhz.setEndOppDate(sdf.parse(endTime));
+            }
+            vjhrkhz.setDjbh(djbh);
+            vjhrkhz.setDwmch(dwmch);
+            vjhrkhz.setStorerkey(storerkey);
+            Page<Vjhrkhz> page = vjhrkhzService.findPage(new Page<Vjhrkhz>(request, response), vjhrkhz);
+            return Response.successCollection(page.getList());
+        } catch (Exception e) {
+            logger.error("获取入库主表数据出错：", e);
+        }
+        return Response.failure();
+    }
+
+    @RequestMapping(value = "/details", method = RequestMethod.GET)
+    public Response details(HttpServletRequest request, HttpServletResponse response,
+                            @RequestParam String djbh) {
+        try {
+            Vjhrkhz vjhrkhz = vjhrkhzService.getByDjbh(djbh);
+            Vjhrkmx vjhrkmx = new Vjhrkmx();
+            vjhrkmx.setDjbh(vjhrkhz.getDjbh());
+            Page<Vjhrkmx> page = vjhrkmxService.findPage(new Page<Vjhrkmx>(request, response), vjhrkmx);
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.put("vjhrkhz", vjhrkhz);
+            map.put("list", page.getList());
+            return Response.successObject(map);
+        } catch (Exception e) {
+            logger.error("获取入库明细数据出错：", e);
+        }
+        return Response.failure();
+    }
+    @SuppressWarnings("unused")
+	@RequestMapping(value = "/shot", method = RequestMethod.POST)
+    public Response shot(HttpServletRequest request, HttpServletResponse response,
+    		@RequestParam(required = false) String djbh,
+    		@RequestParam(required = false) String drugType,
+    		@RequestParam(required = false) String url
+    		) {
+    	String uuid = IdGen.uuid();
+		String fileName=System.currentTimeMillis()+".jpg";
+		String imgUrl="rksj/"+fileName;
+		Vjhrkmx vjhrkmx=new Vjhrkmx();
+		vjhrkmx.setDjbh(djbh);
+		List<Vjhrkmx> vjhrkmxList=vjhrkmxService.findList(vjhrkmx);
+		Vjhrkhz vkjrkjz=vjhrkhzService.getByDjbh(vjhrkmx.getDjbh());
+		Delivery delivery=new Delivery();
+		delivery.setPici(vjhrkmx.getPici());
+		delivery.setDjbh(vkjrkjz.getDjbh());
+		delivery.setDrugType(drugType);
+		delivery.setDwbh(vkjrkjz.getDwbh());
+		delivery.setDwmch(vkjrkjz.getDwmch());
+		delivery.setRq(vkjrkjz.getRq());
+		delivery.setHsje(vkjrkjz.getHsje());
+		delivery.setImgurl(imgUrl);
+		delivery.setDeliveryId(uuid);
+		if(vjhrkmxList!=null){
+			for (int i = 0; i < vjhrkmxList.size(); i++) {
+				Vjhrkmx vjhrkmxs=vjhrkmxList.get(i);
+				String savePath = request.getSession().getServletContext().getRealPath("/") + "upload" + "/"+"rksj"+"/";
+				BASE64Decoder decoder = new BASE64Decoder();
+				try {
+					//获取输出流
+					 byte[] bytes = decoder.decodeBuffer(url);
+				        for (int j = 0; j < bytes.length; ++j)
+				        {
+				            if (bytes[j] < 0)// 调整异常数据
+				            {
+				                bytes[j] += 256;
+				            }
+				        }
+				        // 生成jpeg图片
+				        OutputStream out = new FileOutputStream(savePath+fileName);
+				        out.write(bytes);
+				        out.flush();
+				        out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					logger.error("上传失败：", e);
+				}
+					List<DeliveryDes> deliveryDesList=new ArrayList<DeliveryDes>();
+					DeliveryDes deliveryDes=new DeliveryDes();
+					deliveryDes.setPici(delivery);
+					deliveryDes.setDrugType(drugType);
+					deliveryDes.setDjbh(vjhrkmxs.getDjbh());
+					deliveryDes.setDwbh(vjhrkmxs.getDwbh());
+					deliveryDes.setDwmch(vjhrkmxs.getDwmch());
+					deliveryDes.setRq(vjhrkmxs.getRq());
+					deliveryDes.setSpmch(vjhrkmxs.getSpmch());
+					deliveryDes.setZjm(vjhrkmxs.getZjm());
+					deliveryDes.setShpgg(vjhrkmxs.getShpgg());
+					deliveryDes.setShengccj(vjhrkmxs.getShengccj());
+					deliveryDes.setSpbh(vjhrkmxs.getSpbh());
+					deliveryDes.setPihao(vjhrkmxs.getPihao());
+					deliveryDes.setShl(vjhrkmxs.getShl().toString());
+					deliveryDes.setHsje(vjhrkmxs.getHsje());
+					deliveryDes.setImgurl(imgUrl);
+					delivery.setPici(vjhrkmxs.getPici());
+					deliveryDes.setDeliveryId(uuid);
+					deliveryDesList.add(deliveryDes);
+					delivery.setDeliveryDesList(deliveryDesList);
+					deliveryService.save(delivery);
+					return Response.success();
+			}
+		}
+        return Response.failure();
+    }
+}

@@ -1,0 +1,54 @@
+package com.thinkgem.jeesite.modules.liux.useroper.entity;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+public class UserOperation  extends DataEntity<UserOperation> {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String dzyid;
+	private String lgnname;
+	private String kl;
+	private String dzyname;
+	private String niming;
+	public String getDzyid() {
+		return dzyid;
+	}
+	public void setDzyid(String dzyid) {
+		this.dzyid = dzyid;
+	}
+	public String getLgnname() {
+		return lgnname;
+	}
+	public void setLgnname(String lgnname) {
+		this.lgnname = lgnname;
+	}
+	public String getKl() {
+		return kl;
+	}
+	public void setKl(String kl) {
+		this.kl = kl;
+	}
+	public String getDzyname() {
+		return dzyname;
+	}
+	public void setDzyname(String dzyname) {
+		this.dzyname = dzyname;
+	}
+	public String getNiming() {
+		return niming;
+	}
+	public void setNiming(String niming) {
+		this.niming = niming;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	@Override
+	public String toString() {
+		return "UserOperation [dzyid=" + dzyid + ", lgnname=" + lgnname
+				+ ", kl=" + kl + ", dzyname=" + dzyname + ", niming=" + niming
+				+ "]";
+	}
+}

@@ -1,0 +1,38 @@
+package com.thinkgem.jeesite.modules.liux.factory.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.liux.factory.dao.FactoryDao;
+import com.thinkgem.jeesite.modules.liux.factory.entity.Factory;
+
+
+@Service
+@Transactional(readOnly = true)
+public class FactoryService extends CrudService<FactoryDao, Factory> {
+	public Factory get(String id) {
+		return super.get(id);
+	}
+	
+	public List<Factory> findList(Factory factory) {
+		return super.findList(factory);
+	}
+	
+	public Page<Factory> findPage(Page<Factory> page, Factory factory) {
+		return super.findPage(page, factory);
+	}
+	
+	@Transactional(readOnly = false)
+	public void save(Factory factory) {
+		super.save(factory);
+	}
+	
+	@Transactional(readOnly = false)
+	public void delete(Factory factory) {
+		super.delete(factory);
+	}
+}

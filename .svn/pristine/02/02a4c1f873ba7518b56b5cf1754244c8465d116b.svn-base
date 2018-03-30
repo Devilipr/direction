@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.mchk.dao.MchkDesDao">
+    
+	<sql id="mchkDesColumns">
+		a.id AS "id",
+		a.dwbh AS "dwbh.dwbh",
+		a.dwmch AS "dwmch",
+		a.imgurl AS "imgurl"
+	</sql>
+	
+	<sql id="mchkDesJoins">
+		LEFT JOIN vmchk b ON b.dwbh = a.dwbh
+	</sql>
+    
+	<select id="get" resultType="MchkDes">
+		SELECT 
+			<include refid="mchkDesColumns"/>
+		FROM vmchk_des a
+		<include refid="mchkDesJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="MchkDes">
+		SELECT 
+			<include refid="mchkDesColumns"/>
+		FROM vmchk_des a
+		<include refid="mchkDesJoins"/>
+		<where>
+			
+			<if test="dwbh != null and dwbh.dwbh != null and dwbh.dwbh != ''">
+				AND a.dwbh = #{dwbh.dwbh}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="MchkDes">
+		SELECT 
+			<include refid="mchkDesColumns"/>
+		FROM vmchk_des a
+		<include refid="mchkDesJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO vmchk_des(
+			id,
+			dwbh,
+			dwmch,
+			imgurl
+		) VALUES (
+			#{id},
+			#{dwbh.dwbh},
+			#{dwmch},
+			#{imgurl}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE vmchk_des SET 	
+			dwbh = #{dwbh.dwbh},
+			dwmch = #{dwmch},
+			imgurl = #{imgurl}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM vmchk_des
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE dwbh = #{dwbh.dwbh}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

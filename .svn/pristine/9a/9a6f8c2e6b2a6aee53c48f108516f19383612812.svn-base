@@ -1,0 +1,106 @@
+package com.thinkgem.jeesite.modules.liux.lxcxsskc.entity;
+
+import java.math.BigDecimal;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+/**
+ * 实时库存
+ * @author zhao
+ *
+ */
+public class LxcxSskc  extends DataEntity<LxcxSskc> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String spbh;
+	private String huowname;
+	private String spmch;
+	private String shpgg;
+	private String shengccj ;
+	private String pihao;
+	private String baozhiqi;
+	private String sxrq;
+	private BigDecimal shl;
+	private String pici;
+	private String jajpzsqr;
+	public String getSpbh() {
+		return spbh;
+	}
+	public void setSpbh(String spbh) {
+		this.spbh = spbh;
+	}
+	public String getHuowname() {
+		return huowname;
+	}
+	public void setHuowname(String huowname) {
+		this.huowname = huowname;
+	}
+	public String getSpmch() {
+		return spmch;
+	}
+	public void setSpmch(String spmch) {
+		this.spmch = spmch;
+	}
+	public String getShpgg() {
+		return shpgg;
+	}
+	public void setShpgg(String shpgg) {
+		this.shpgg = shpgg;
+	}
+	public String getShengccj() {
+		return shengccj;
+	}
+	public void setShengccj(String shengccj) {
+		this.shengccj = shengccj;
+	}
+	public String getPihao() {
+		return pihao;
+	}
+	public void setPihao(String pihao) {
+		this.pihao = pihao;
+	}
+	public String getBaozhiqi() {
+		return baozhiqi;
+	}
+	public void setBaozhiqi(String baozhiqi) {
+		this.baozhiqi = baozhiqi;
+	}
+	public String getSxrq() {
+		return sxrq;
+	}
+	public void setSxrq(String sxrq) {
+		this.sxrq = sxrq;
+	}
+	public BigDecimal getShl() {
+		return shl;
+	}
+	public void setShl(BigDecimal shl) {
+		this.shl = shl;
+	}
+	public String getPici() {
+		return pici;
+	}
+	public void setPici(String pici) {
+		this.pici = pici;
+	}
+	public String getJajpzsqr() {
+		return jajpzsqr;
+	}
+	public void setJajpzsqr(String jajpzsqr) {
+		this.jajpzsqr = jajpzsqr;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	@Override
+	public String toString() {
+		return "LxcxSskc [spbh=" + spbh + ", huowname=" + huowname + ", spmch="
+				+ spmch + ", shpgg=" + shpgg + ", shengccj=" + shengccj
+				+ ", pihao=" + pihao + ", baozhiqi=" + baozhiqi + ", sxrq="
+				+ sxrq + ", shl=" + shl + ", pici=" + pici + ", jajpzsqr="
+				+ jajpzsqr + "]";
+	}
+}

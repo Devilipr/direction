@@ -1,0 +1,107 @@
+package com.thinkgem.jeesite.modules.liux.vspkfk.web;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import net.coobird.thumbnailator.Thumbnails;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.liux.high.entity.High;
+import com.thinkgem.jeesite.modules.liux.high.entity.HighDes;
+import com.thinkgem.jeesite.modules.liux.high.service.HighService;
+import com.thinkgem.jeesite.modules.liux.vspkfk.entity.Vspkfk;
+import com.thinkgem.jeesite.modules.liux.vspkfk.service.VspkfkService;
+@Controller
+@RequestMapping(value = "${adminPath}/vspkfk/vspkfk")
+public class VspkfkController extends BaseController {
+	@Autowired
+	private VspkfkService vspkfkService;
+	@Autowired
+	private HighService highService;
+	@ModelAttribute
+	public Vspkfk get(@RequestParam(required=false) String id) {
+		Vspkfk entity = null;
+		if (StringUtils.isNotBlank(id)){
+			entity = vspkfkService.get(id);
+		}
+		if (entity == null){
+			entity = new Vspkfk();
+		}
+		return entity;
+	}
+	@RequiresPermissions("vspkfk:vspkfk:view")
+	@RequestMapping(value = {"list", ""})
+	public String list(Vspkfk vspkfk, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<Vspkfk> page = vspkfkService.findPage(new Page<Vspkfk>(request, response), vspkfk); 
+		model.addAttribute("page", page);
+		return "modules/liuxxt/vspkfkList";
+	}
+	@RequiresPermissions("vspkfk:vspkfk:view")
+	@RequestMapping(value = "form")
+	public String form(Vspkfk vspkfk,High high, Model model) {
+		model.addAttribute("vspkfk", vspkfk);
+		model.addAttribute("high", high);
+		return "modules/liuxxt/CaptureVideo";
+	}
+	@RequiresPermissions("vspkfk:vspkfk:view")
+	@RequestMapping(value = {"updateVapure"})
+	@ResponseBody
+	public String updateVapure(Vspkfk vspkfk,String drugType,HttpServletRequest request, HttpServletResponse response, Model model){
+		
+		String url=request.getParameter("captureUrl");
+		String fileName=request.getParameter("fileName");
+		String savePath=null;
+		try {
+			savePath = request.getSession().getServletContext().getRealPath("/") + "upload" + "/"+"ypzz"+"/";
+			Thumbnails.of(url).scale(0.5f).outputQuality(0.5f).toFile(savePath+fileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String imgUrl="ypzz/"+fileName;
+		vspkfk=vspkfkService.get(vspkfk.getSpbh());
+		if (vspkfk!=null) {
+			List<HighDes> higDesList=new ArrayList<HighDes>();
+			HighDes highDes=new HighDes();
+			High high=new High();
+			high.setSpbh(vspkfk.getSpbh());
+			highDes.setSpbh(high);
+			highDes.setSpmch(vspkfk.getSpmch());
+			highDes.setZjm(vspkfk.getZjm());
+			highDes.setDrugType(drugType);
+			highDes.setShpgg(vspkfk.getShpgg());
+			highDes.setBeactive(vspkfk.getBeactive());
+			highDes.setShengccj(vspkfk.getShengccj());
+			highDes.setPizhwn(vspkfk.getPizhwh());
+			highDes.setStorerkey(vspkfk.getStorerkey());
+			highDes.setImgUrl(imgUrl);
+			higDesList.add(highDes);
+			high.setHighDesList(higDesList);
+			high.setSpmch(vspkfk.getSpmch());
+			high.setDrugType(drugType);
+			high.setZjm(vspkfk.getZjm());
+			high.setShpgg(vspkfk.getShpgg());
+			high.setBeactive(vspkfk.getBeactive());
+			high.setShengccj(vspkfk.getShengccj());
+			high.setPizhwh(vspkfk.getPizhwh());
+			high.setStorerkey(vspkfk.getStorerkey());
+			highService.save(high);
+		 }
+		return "";
+	}
+}

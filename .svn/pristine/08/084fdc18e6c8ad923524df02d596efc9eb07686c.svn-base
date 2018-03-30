@@ -1,0 +1,173 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+	<title>高拍仪管理</title>
+	<meta name="decorator" content="default"/>
+	<link rel="stylesheet" type="text/css" href="${ctxStatic}/css/highForm.css">
+	<style type="text/css">
+		.tborder {
+			border: 1px solid #ddd;
+		}
+		.tborder td {
+			border: 1px solid #ddd;
+			line-height: 30px;
+			padding: 5px;
+		}
+		.tborder th {
+			border: 1px solid #ddd;
+			line-height: 30px;
+			padding: 5px;
+		}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			//$("#name").focus();
+			$("#inputForm").validate({
+				submitHandler: function(form){
+					loading('正在提交，请稍等...');
+					form.submit();
+				},
+				errorContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					$("#messageBox").text("输入有误，请先更正。");
+					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+						error.appendTo(element.parent().parent());
+					} else {
+						error.insertAfter(element);
+					}
+				}
+			});	
+		});
+		function addRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			$(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			});	
+			
+		}
+		function delRow(obj, prefix){
+			var id = $(prefix+"_id");
+			var delFlag = $(prefix+"_delFlag");
+			if (id.val() == ""){
+				$(obj).parent().parent().remove();
+			}else if(delFlag.val() == "0"){
+				delFlag.val("1");
+				$(obj).html("&divide;").attr("title", "撤销删除");
+				$(obj).parent().parent().addClass("error");
+			}else if(delFlag.val() == "1"){
+				delFlag.val("0");
+				$(obj).html("&times;").attr("title", "删除");
+				$(obj).parent().parent().removeClass("error");
+			} 
+		}
+        function page(n,s){
+            $("#pageNo").val(n);
+            $("#pageSize").val(s);
+            $("#rkhzForm").submit();
+            return false;
+        }
+	</script>
+</head>
+<body>
+	<ul class="nav nav-tabs">
+	</ul><br/>
+	<div>
+		<table class="table table-striped table-bordered table-condensed">
+			<thead>
+				<th>单据编号</th>
+				<th>单位编号</th>
+				<th>单位名称</th>
+				<th>日期</th>
+				<th>含税金额</th>
+			</thead>
+			<tbody>
+			<td>
+				${vjhrkhz.djbh}
+			</td>
+			<td>
+				${vjhrkhz.dwbh}
+			</td>
+
+			<td>
+				${vjhrkhz.dwmch}
+			</td>
+			<td>
+				${vjhrkhz.rq}
+			</td>
+			<td>
+				${vjhrkhz.hsje}
+			</td>
+			</tbody>
+		</table>
+	</div>
+	<div>
+		<form id="rkhzForm" action="${ctx}/vjhrkhz/vjhrkhz/details">
+			<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
+			<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+			<input name="djbh" type="hidden" value="${vjhrkhz.djbh}" />
+		</form>
+		<table id="contentTable" class="table table-striped table-bordered table-condensed">
+			<thead>
+				<th>单位编号</th>
+				<th>商品编号</th>
+				<th>单位名称</th>
+				<th>商品名称</th>
+				<th>日期</th>
+				<th>助记码</th>
+				<th>规格</th>
+				<th>生产厂商</th>
+				<th>批次</th>
+				<th>批号</th>
+				<th>数量</th>
+				<th>含税价</th>
+				<th>操作</th>
+			</thead>
+			<tbody>
+				<c:forEach var="rkhz" items="${page.list}">
+					<tr>
+						<td>${rkhz.dwbh}</td>
+						<td>${rkhz.spbh}</td>
+						<td>${rkhz.dwmch}</td>
+						<td>${rkhz.spmch}</td>
+						<td>${rkhz.rq}</td>
+						<td>${rkhz.zjm}</td>
+						<td>${rkhz.shpgg}</td>
+						<td>${rkhz.shengccj}</td>
+						<td>${rkhz.pici}</td>
+						<td>${rkhz.pihao}</td>
+						<td>${rkhz.shl}</td>
+						<td>${rkhz.hsje}</td>
+						<td>
+							<a href="${ctx}/vjhrkmx/vjhrkmx/form?">拍摄</a>
+						</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+		<div class="pagination">${page}</div>
+		<div class="form-actions text-center" style="padding-left:0;">
+	<%-- 			<shiro:hasPermission name="high:high:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+	--%>			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+		</div>
+	</div>
+
+	<script src="${ctxStatic}/imgResize/touchTouch.jquery.js"></script>
+	<script>
+		$(function(){
+	        // Initialize the gallery
+	        $('#deliveryDesList a').touchTouch();
+	   });
+	</script>
+</body>
+</html>

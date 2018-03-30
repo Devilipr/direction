@@ -1,0 +1,140 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+	<title>高拍仪管理</title>
+	<meta name="decorator" content="default"/>
+	<link rel="stylesheet" type="text/css" href="${ctxStatic}/css/highForm.css">
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			//$("#name").focus();
+			$("#inputForm").validate({
+				submitHandler: function(form){
+					loading('正在提交，请稍等...');
+					form.submit();
+				},
+				errorContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					$("#messageBox").text("输入有误，请先更正。");
+					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+						error.appendTo(element.parent().parent());
+					} else {
+						error.insertAfter(element);
+					}
+				}
+			});	
+		});
+		function addRow(list, idx, tpl, row){
+			$(list).append(Mustache.render(tpl, {
+				idx: idx, delBtn: true, row: row
+			}));
+			$(list+idx).find("select").each(function(){
+				$(this).val($(this).attr("data-value"));
+			});
+			$(list+idx).find("input[type='checkbox'], input[type='radio']").each(function(){
+				var ss = $(this).attr("data-value").split(',');
+				for (var i=0; i<ss.length; i++){
+					if($(this).val() == ss[i]){
+						$(this).attr("checked","checked");
+					}
+				}
+			});	
+			
+		}
+		function delRow(obj, prefix){
+			var id = $(prefix+"_id");
+			var delFlag = $(prefix+"_delFlag");
+			if (id.val() == ""){
+				$(obj).parent().parent().remove();
+			}else if(delFlag.val() == "0"){
+				delFlag.val("1");
+				$(obj).html("&divide;").attr("title", "撤销删除");
+				$(obj).parent().parent().addClass("error");
+			}else if(delFlag.val() == "1"){
+				delFlag.val("0");
+				$(obj).html("&times;").attr("title", "删除");
+				$(obj).parent().parent().removeClass("error");
+			} 
+		}	
+		function shot(){
+			 $("#inputForm").attr('action',"${ctx}/vmchk/vmchk/form?id=${mchk.dwbh}");    //通过jquery为action属性赋值
+		     $("#inputForm").submit();    //提交ID为inputForm的表单
+		}
+		function findImg(){
+			 $("#inputForm").attr('action',"${ctx}/mchk/mchk/form");    //通过jquery为action属性赋值
+		     $("#inputForm").submit();    //提交ID为inputForm的表单
+		}
+		function localUpad(){
+			$("#inputForm").submit(); 
+		}
+		
+	</script>
+</head>
+<body>
+	<ul class="nav nav-tabs">
+		<li><a href="${ctx}/mchk/mchk/">客商列表</a></li>
+		<li class="active"><a href="${ctx}/mchk/mchk/form?id=${mchk.id}">客商<shiro:hasPermission name="mchk:mchk:edit">${not empty mchk.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="mchk:mchk:edit">查看</shiro:lacksPermission></a></li>
+	</ul>
+	<form:form id="inputForm" modelAttribute="mchk" action="${ctx}/mchk/mchk/localUpload" method="post" class="form-horizontal"  enctype="multipart/form-data">
+		<form:hidden path="id"/>
+		<sys:message content="${message}"/>	
+				<table id="contentTable" class="table table-striped table-bordered table-condensed">
+					<thead>
+						<th>单位编号</th>
+						<th>单位名称</th>
+						<th>助记码</th>
+						<th>送货地址</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td><input name="dwbh" id="dwbh" value="${vmchk.dwbh }" htmlEscape="false" maxlength="100" class="input-xlarge"/></td>
+							<td><input name="dwmch" id="dwmch" value="${vmchk.dwmch }" htmlEscape="false" maxlength="100" class="input-xlarge"/></td>
+							<td><input name="zjm" id="zjm" value="${vmchk.zjm }" htmlEscape="false" maxlength="100" class="input-xlarge"/></td>
+							<td><input name="dzhdh" id="dzhdh" value="${vmchk.dzhdh }" htmlEscape="false" maxlength="100" class="input-xlarge"/></td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="form-actions" style="padding-left:0;">
+					<label class="control-label">药品资质：</label>
+						<form:select path="drugType" class="input-medium">
+							<form:options items="${fns:getDictList('drug_qualification')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+						</form:select>
+					<input type="file" class="form-control-input" name="file" id="captureUrl"  value="" onchange ="localUpad();" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"/>
+					<input id="btnCancel" class="btn" type="button" value="拍摄" onclick="shot();"/>
+					<input id="btnCancel" class="btn" type="button" value="查询" onclick="findImg();"/>
+			<%-- <a href="${ctx}/vspkfk/vspkfk/form?id=${vspkfk.spbh}">拍摄</a> --%>
+				</div>
+				<ul class="clearfix img-list" id="mchkDesList">
+				</ul>
+				<script type="text/template" id="mchkDesTpl">//<!--
+						<li id="mchkDesList{{idx}}">
+							<a href="${ctxUpload}/{{row.imgurl}}" style="background-image:url(${ctxUpload}/{{row.imgurl}})">
+								<span class='close'>×</span>
+							</a>
+						</li>//-->
+				 </script>
+				 <script type="text/javascript">
+					 var mchkDesRowIdx = 0, mchkDesTpl = $("#mchkDesTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
+						$(document).ready(function() {
+							var data = ${fns:toJson(mchkDesList)};
+							for (var i=0; i<data.length; i++){
+								addRow('#mchkDesList', mchkDesRowIdx, mchkDesTpl, data[i]);
+								mchkDesRowIdx = mchkDesRowIdx + 1;
+							}
+						});
+				</script>
+		<div class="form-actions text-center" style="padding-left:0;">
+<%-- 			<shiro:hasPermission name="high:high:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+ --%>			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+		</div>
+	</form:form>
+	<script src="${ctxStatic}/imgResize/touchTouch.jquery.js"></script>
+	<script>
+		$(function(){
+	        // Initialize the gallery
+	        $('#mchkDesList a').touchTouch();
+	   });
+	</script>
+</body>
+</html>

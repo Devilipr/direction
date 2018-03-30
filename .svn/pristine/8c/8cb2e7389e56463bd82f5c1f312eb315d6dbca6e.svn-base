@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.liux.vpfckhz.dao.VpfckhzDao">
+    
+	<sql id="areaDetailColumns">
+		 a.danwbh AS "danwbh",
+		 a.rq AS "rq",
+		 a.djbh AS "djbh",
+		 a.dwbh AS "dwbh",
+		 replace(a.dwmch,'','') AS "dwmch",
+		 a.hsje AS "hsje"
+	</sql>
+	
+	<sql id="areaDetailJoins">
+	</sql>
+
+	<select id="getByDjbh" resultType="Vpfckhz">
+		SELECT  <include refid="areaDetailColumns"/>
+		FROM v_pfckhz a
+		WHERE djbh = #{djbh}
+	</select>
+
+	<select id="findList" resultType="Vpfckhz">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM v_pfckhz a
+		<include refid="areaDetailJoins"/>
+		<where>
+			<if test="beginOppDate != null and beginOppDate != ''">
+				AND a.rq &gt;= #{beginOppDate}
+			</if>
+			<if test="endOppDate != null and endOppDate != ''">
+				AND a.rq &lt;= #{endOppDate}
+			</if>
+			<if test="djbh != null and djbh != ''">
+				AND a.djbh = #{djbh}
+			</if>
+		</where>
+		order by a.rq desc
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="LxcxJhmx">
+		SELECT 
+			<include refid="areaDetailColumns"/>
+		FROM v_pfckhz a
+		<include refid="areaDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="delete">
+		DELETE FROM v_pfckhz
+		WHERE djbh = #{id}
+	</update>
+	
+</mapper>
