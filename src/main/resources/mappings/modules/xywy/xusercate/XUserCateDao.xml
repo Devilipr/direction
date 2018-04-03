@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xusercate.XUserCateDao">
+    
+	<sql id="xUserCateColumns">
+		a.user_cate_id AS "userCateId",
+		a.user_cate_name AS "userCateName",
+		a.user_cate_remark AS "userCateRemark",
+		a.user_cate_createtime AS "userCateCreatetime"
+	</sql>
+	
+	<sql id="xUserCateJoins">
+	</sql>
+    
+	<select id="get" resultType="XUserCate">
+		SELECT 
+			<include refid="xUserCateColumns"/>
+		FROM x_user_cate a
+		<include refid="xUserCateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XUserCate">
+		SELECT 
+			<include refid="xUserCateColumns"/>
+		FROM x_user_cate a
+		<include refid="xUserCateJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XUserCate">
+		SELECT 
+			<include refid="xUserCateColumns"/>
+		FROM x_user_cate a
+		<include refid="xUserCateJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_user_cate(
+			user_cate_id,
+			user_cate_name,
+			user_cate_remark,
+			user_cate_createtime
+		) VALUES (
+			#{userCateId},
+			#{userCateName},
+			#{userCateRemark},
+			#{userCateCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_user_cate SET 	
+			user_cate_id = #{userCateId},
+			user_cate_name = #{userCateName},
+			user_cate_remark = #{userCateRemark},
+			user_cate_createtime = #{userCateCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_user_cate
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

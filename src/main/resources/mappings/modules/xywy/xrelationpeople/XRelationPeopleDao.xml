@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xrelationpeople.XRelationPeopleDao">
+    
+	<sql id="xRelationPeopleColumns">
+		a.relation_people_id AS "relationPeopleId",
+		a.relation_people_userid AS "relationPeopleUserid",
+		a.relation_people_by_userid AS "relationPeopleByUserid",
+		a.relation_people_rel AS "relationPeopleRel",
+		a.relation_people_live AS "relationPeopleLive",
+		a.relation_people_address AS "relationPeopleAddress",
+		a.relation_people_createtime AS "relationPeopleCreatetime"
+	</sql>
+	
+	<sql id="xRelationPeopleJoins">
+	</sql>
+    
+	<select id="get" resultType="XRelationPeople">
+		SELECT 
+			<include refid="xRelationPeopleColumns"/>
+		FROM x_relation_people a
+		<include refid="xRelationPeopleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XRelationPeople">
+		SELECT 
+			<include refid="xRelationPeopleColumns"/>
+		FROM x_relation_people a
+		<include refid="xRelationPeopleJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XRelationPeople">
+		SELECT 
+			<include refid="xRelationPeopleColumns"/>
+		FROM x_relation_people a
+		<include refid="xRelationPeopleJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_relation_people(
+			relation_people_id,
+			relation_people_userid,
+			relation_people_by_userid,
+			relation_people_rel,
+			relation_people_live,
+			relation_people_address,
+			relation_people_createtime
+		) VALUES (
+			#{relationPeopleId},
+			#{relationPeopleUserid},
+			#{relationPeopleByUserid},
+			#{relationPeopleRel},
+			#{relationPeopleLive},
+			#{relationPeopleAddress},
+			#{relationPeopleCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_relation_people SET 	
+			relation_people_id = #{relationPeopleId},
+			relation_people_userid = #{relationPeopleUserid},
+			relation_people_by_userid = #{relationPeopleByUserid},
+			relation_people_rel = #{relationPeopleRel},
+			relation_people_live = #{relationPeopleLive},
+			relation_people_address = #{relationPeopleAddress},
+			relation_people_createtime = #{relationPeopleCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_relation_people
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

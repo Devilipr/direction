@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xheartrate.XHeartRateDao">
+    
+	<sql id="xHeartRateColumns">
+		a.heart_rate_id AS "heartRateId",
+		a.heart_rate_userid AS "heartRateUserid",
+		a.heart_rate_date AS "heartRateDate",
+		a.heart_rate_raw_data AS "heartRateRawData",
+		a.heart_rate_sleep_avg AS "heartRateSleepAvg",
+		a.heart_rate_allday_max AS "heartRateAlldayMax",
+		a.heart_rate_allday_min AS "heartRateAlldayMin",
+		a.heart_rate_allday_avg AS "heartRateAlldayAvg"
+	</sql>
+	
+	<sql id="xHeartRateJoins">
+	</sql>
+    
+	<select id="get" resultType="XHeartRate">
+		SELECT 
+			<include refid="xHeartRateColumns"/>
+		FROM x_heart_rate a
+		<include refid="xHeartRateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XHeartRate">
+		SELECT 
+			<include refid="xHeartRateColumns"/>
+		FROM x_heart_rate a
+		<include refid="xHeartRateJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XHeartRate">
+		SELECT 
+			<include refid="xHeartRateColumns"/>
+		FROM x_heart_rate a
+		<include refid="xHeartRateJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_heart_rate(
+			heart_rate_id,
+			heart_rate_userid,
+			heart_rate_date,
+			heart_rate_raw_data,
+			heart_rate_sleep_avg,
+			heart_rate_allday_max,
+			heart_rate_allday_min,
+			heart_rate_allday_avg
+		) VALUES (
+			#{heartRateId},
+			#{heartRateUserid},
+			#{heartRateDate},
+			#{heartRateRawData},
+			#{heartRateSleepAvg},
+			#{heartRateAlldayMax},
+			#{heartRateAlldayMin},
+			#{heartRateAlldayAvg}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_heart_rate SET 	
+			heart_rate_id = #{heartRateId},
+			heart_rate_userid = #{heartRateUserid},
+			heart_rate_date = #{heartRateDate},
+			heart_rate_raw_data = #{heartRateRawData},
+			heart_rate_sleep_avg = #{heartRateSleepAvg},
+			heart_rate_allday_max = #{heartRateAlldayMax},
+			heart_rate_allday_min = #{heartRateAlldayMin},
+			heart_rate_allday_avg = #{heartRateAlldayAvg}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_heart_rate
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

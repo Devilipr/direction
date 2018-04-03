@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xsensor.XSensorDao">
+    
+	<sql id="xSensorColumns">
+		a.sensor_id AS "sensorId",
+		a.sensor_hostid AS "sensorHostid",
+		a.sensor_address_code AS "sensorAddressCode",
+		a.sensor_sector_name AS "sensorSectorName",
+		a.sensor_sector_model AS "sensorSectorModel",
+		a.sensor_sector_code AS "sensorSectorCode"
+	</sql>
+	
+	<sql id="xSensorJoins">
+	</sql>
+    
+	<select id="get" resultType="XSensor">
+		SELECT 
+			<include refid="xSensorColumns"/>
+		FROM x_sensor a
+		<include refid="xSensorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XSensor">
+		SELECT 
+			<include refid="xSensorColumns"/>
+		FROM x_sensor a
+		<include refid="xSensorJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XSensor">
+		SELECT 
+			<include refid="xSensorColumns"/>
+		FROM x_sensor a
+		<include refid="xSensorJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_sensor(
+			sensor_id,
+			sensor_hostid,
+			sensor_address_code,
+			sensor_sector_name,
+			sensor_sector_model,
+			sensor_sector_code
+		) VALUES (
+			#{sensorId},
+			#{sensorHostid},
+			#{sensorAddressCode},
+			#{sensorSectorName},
+			#{sensorSectorModel},
+			#{sensorSectorCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_sensor SET 	
+			sensor_id = #{sensorId},
+			sensor_hostid = #{sensorHostid},
+			sensor_address_code = #{sensorAddressCode},
+			sensor_sector_name = #{sensorSectorName},
+			sensor_sector_model = #{sensorSectorModel},
+			sensor_sector_code = #{sensorSectorCode}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_sensor
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

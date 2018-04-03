@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xsleep.XSleepDao">
+    
+	<sql id="xSleepColumns">
+		a.sleep_id AS "sleepId",
+		a.sleep_userid AS "sleepUserid",
+		a.sleep_date AS "sleepDate",
+		a.sleep_total_minute AS "sleepTotalMinute",
+		a.sleep_deep_minute AS "sleepDeepMinute",
+		a.sleep_shallow_minute AS "sleepShallowMinute",
+		a.sleep_stayup_minute AS "sleepStayupMinute",
+		a.sleep_wake_count AS "sleepWakeCount",
+		a.sleep_target AS "sleepTarget",
+		a.sleep_percent AS "sleepPercent",
+		a.sleep_time_minute AS "sleepTimeMinute",
+		a.sleep_time_status AS "sleepTimeStatus"
+	</sql>
+	
+	<sql id="xSleepJoins">
+	</sql>
+    
+	<select id="get" resultType="XSleep">
+		SELECT 
+			<include refid="xSleepColumns"/>
+		FROM x_sleep a
+		<include refid="xSleepJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XSleep">
+		SELECT 
+			<include refid="xSleepColumns"/>
+		FROM x_sleep a
+		<include refid="xSleepJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XSleep">
+		SELECT 
+			<include refid="xSleepColumns"/>
+		FROM x_sleep a
+		<include refid="xSleepJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_sleep(
+			sleep_id,
+			sleep_userid,
+			sleep_date,
+			sleep_total_minute,
+			sleep_deep_minute,
+			sleep_shallow_minute,
+			sleep_stayup_minute,
+			sleep_wake_count,
+			sleep_target,
+			sleep_percent,
+			sleep_time_minute,
+			sleep_time_status
+		) VALUES (
+			#{sleepId},
+			#{sleepUserid},
+			#{sleepDate},
+			#{sleepTotalMinute},
+			#{sleepDeepMinute},
+			#{sleepShallowMinute},
+			#{sleepStayupMinute},
+			#{sleepWakeCount},
+			#{sleepTarget},
+			#{sleepPercent},
+			#{sleepTimeMinute},
+			#{sleepTimeStatus}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_sleep SET 	
+			sleep_id = #{sleepId},
+			sleep_userid = #{sleepUserid},
+			sleep_date = #{sleepDate},
+			sleep_total_minute = #{sleepTotalMinute},
+			sleep_deep_minute = #{sleepDeepMinute},
+			sleep_shallow_minute = #{sleepShallowMinute},
+			sleep_stayup_minute = #{sleepStayupMinute},
+			sleep_wake_count = #{sleepWakeCount},
+			sleep_target = #{sleepTarget},
+			sleep_percent = #{sleepPercent},
+			sleep_time_minute = #{sleepTimeMinute},
+			sleep_time_status = #{sleepTimeStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_sleep
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.wsdjl.dao.WsdjlDao">
+    
+	<sql id="wsdjlColumns">
+		a.hwbh AS "hwbh",
+		a.hwmc AS "hwmc",
+		a.wend AS "wend",
+		a.shid AS "shid",
+		a.shij AS "shij",
+		a.jqkbh AS "jqkbh",
+		a.cph AS "cph",
+		a.jgbs AS "jgbs",
+		a.sjc AS "sjc",
+		a.remark AS "remark",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_falg AS "delFalg",
+		a.id AS "id"
+	</sql>
+	
+	<sql id="wsdjlJoins">
+	</sql>
+    
+	<select id="get" resultType="Wsdjl">
+		SELECT 
+			<include refid="wsdjlColumns"/>
+		FROM dr_wsdjlsb a
+		<include refid="wsdjlJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Wsdjl">
+		SELECT 
+			<include refid="wsdjlColumns"/>
+		FROM dr_wsdjlsb a
+		<include refid="wsdjlJoins"/>
+		<where>
+			
+			<if test="beginShij != null and endShij != null and beginShij != '' and endShij != ''">
+				AND a.shij BETWEEN #{beginShij} AND #{endShij}
+			</if>
+			<if test="jgbs != null and jgbs != ''">
+				AND a.jgbs = #{jgbs}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Wsdjl">
+		SELECT 
+			<include refid="wsdjlColumns"/>
+		FROM dr_wsdjlsb a
+		<include refid="wsdjlJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO dr_wsdjlsb(
+			hwbh,
+			hwmc,
+			wend,
+			shid,
+			shij,
+			jqkbh,
+			cph,
+			jgbs,
+			sjc,
+			remark,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_falg,
+			id
+		) VALUES (
+			#{hwbh},
+			#{hwmc},
+			#{wend},
+			#{shid},
+			#{shij},
+			#{jqkbh},
+			#{cph},
+			#{jgbs},
+			#{sjc},
+			#{remark},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFalg},
+			#{id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dr_wsdjlsb SET 	
+			hwbh = #{hwbh},
+			hwmc = #{hwmc},
+			wend = #{wend},
+			shid = #{shid},
+			shij = #{shij},
+			jqkbh = #{jqkbh},
+			cph = #{cph},
+			jgbs = #{jgbs},
+			sjc = #{sjc},
+			remark = #{remark},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			del_falg = #{delFalg}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM dr_wsdjlsb
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

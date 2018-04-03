@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xalarmphone.XAlarmPhoneDao">
+    
+	<sql id="xAlarmPhoneColumns">
+		a.alarm_phone_id AS "alarmPhoneId",
+		a.alarm_phone_hostid AS "alarmPhoneHostid",
+		a.alarm_phone_num1 AS "alarmPhoneNum1",
+		a.alarm_phone_num1_tel AS "alarmPhoneNum1Tel",
+		a.alarm_phone_num1_msg AS "alarmPhoneNum1Msg",
+		a.alarm_phone_num2 AS "alarmPhoneNum2",
+		a.alarm_phone_num2_tel AS "alarmPhoneNum2Tel",
+		a.alarm_phone_num2_msg AS "alarmPhoneNum2Msg",
+		a.alarm_phone_num3 AS "alarmPhoneNum3",
+		a.alarm_phone_num3_tel AS "alarmPhoneNum3Tel",
+		a.alarm_phone_num3_msg AS "alarmPhoneNum3Msg",
+		a.alarm_phone_num4 AS "alarmPhoneNum4",
+		a.alarm_phone_num4_tel AS "alarmPhoneNum4Tel",
+		a.alarm_phone_num4_msg AS "alarmPhoneNum4Msg",
+		a.alarm_phone_num5 AS "alarmPhoneNum5",
+		a.alarm_phone_num5_tel AS "alarmPhoneNum5Tel",
+		a.alarm_phone_num5_msg AS "alarmPhoneNum5Msg"
+	</sql>
+	
+	<sql id="xAlarmPhoneJoins">
+	</sql>
+    
+	<select id="get" resultType="XAlarmPhone">
+		SELECT 
+			<include refid="xAlarmPhoneColumns"/>
+		FROM x_alarm_phone a
+		<include refid="xAlarmPhoneJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XAlarmPhone">
+		SELECT 
+			<include refid="xAlarmPhoneColumns"/>
+		FROM x_alarm_phone a
+		<include refid="xAlarmPhoneJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XAlarmPhone">
+		SELECT 
+			<include refid="xAlarmPhoneColumns"/>
+		FROM x_alarm_phone a
+		<include refid="xAlarmPhoneJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_alarm_phone(
+			alarm_phone_id,
+			alarm_phone_hostid,
+			alarm_phone_num1,
+			alarm_phone_num1_tel,
+			alarm_phone_num1_msg,
+			alarm_phone_num2,
+			alarm_phone_num2_tel,
+			alarm_phone_num2_msg,
+			alarm_phone_num3,
+			alarm_phone_num3_tel,
+			alarm_phone_num3_msg,
+			alarm_phone_num4,
+			alarm_phone_num4_tel,
+			alarm_phone_num4_msg,
+			alarm_phone_num5,
+			alarm_phone_num5_tel,
+			alarm_phone_num5_msg
+		) VALUES (
+			#{alarmPhoneId},
+			#{alarmPhoneHostid},
+			#{alarmPhoneNum1},
+			#{alarmPhoneNum1Tel},
+			#{alarmPhoneNum1Msg},
+			#{alarmPhoneNum2},
+			#{alarmPhoneNum2Tel},
+			#{alarmPhoneNum2Msg},
+			#{alarmPhoneNum3},
+			#{alarmPhoneNum3Tel},
+			#{alarmPhoneNum3Msg},
+			#{alarmPhoneNum4},
+			#{alarmPhoneNum4Tel},
+			#{alarmPhoneNum4Msg},
+			#{alarmPhoneNum5},
+			#{alarmPhoneNum5Tel},
+			#{alarmPhoneNum5Msg}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_alarm_phone SET 	
+			alarm_phone_id = #{alarmPhoneId},
+			alarm_phone_hostid = #{alarmPhoneHostid},
+			alarm_phone_num1 = #{alarmPhoneNum1},
+			alarm_phone_num1_tel = #{alarmPhoneNum1Tel},
+			alarm_phone_num1_msg = #{alarmPhoneNum1Msg},
+			alarm_phone_num2 = #{alarmPhoneNum2},
+			alarm_phone_num2_tel = #{alarmPhoneNum2Tel},
+			alarm_phone_num2_msg = #{alarmPhoneNum2Msg},
+			alarm_phone_num3 = #{alarmPhoneNum3},
+			alarm_phone_num3_tel = #{alarmPhoneNum3Tel},
+			alarm_phone_num3_msg = #{alarmPhoneNum3Msg},
+			alarm_phone_num4 = #{alarmPhoneNum4},
+			alarm_phone_num4_tel = #{alarmPhoneNum4Tel},
+			alarm_phone_num4_msg = #{alarmPhoneNum4Msg},
+			alarm_phone_num5 = #{alarmPhoneNum5},
+			alarm_phone_num5_tel = #{alarmPhoneNum5Tel},
+			alarm_phone_num5_msg = #{alarmPhoneNum5Msg}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_alarm_phone
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

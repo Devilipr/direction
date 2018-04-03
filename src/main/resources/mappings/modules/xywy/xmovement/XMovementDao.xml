@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xmovement.XMovementDao">
+    
+	<sql id="xMovementColumns">
+		a.movement_id AS "movementId",
+		a.movement_userid AS "movementUserid",
+		a.movement_date AS "movementDate",
+		a.movement_raw_data AS "movementRawData",
+		a.movement_calorie AS "movementCalorie",
+		a.movement_distance AS "movementDistance",
+		a.movement_steps AS "movementSteps",
+		a.movement_steps_target AS "movementStepsTarget"
+	</sql>
+	
+	<sql id="xMovementJoins">
+	</sql>
+    
+	<select id="get" resultType="XMovement">
+		SELECT 
+			<include refid="xMovementColumns"/>
+		FROM x_movement a
+		<include refid="xMovementJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XMovement">
+		SELECT 
+			<include refid="xMovementColumns"/>
+		FROM x_movement a
+		<include refid="xMovementJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XMovement">
+		SELECT 
+			<include refid="xMovementColumns"/>
+		FROM x_movement a
+		<include refid="xMovementJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_movement(
+			movement_id,
+			movement_userid,
+			movement_date,
+			movement_raw_data,
+			movement_calorie,
+			movement_distance,
+			movement_steps,
+			movement_steps_target
+		) VALUES (
+			#{movementId},
+			#{movementUserid},
+			#{movementDate},
+			#{movementRawData},
+			#{movementCalorie},
+			#{movementDistance},
+			#{movementSteps},
+			#{movementStepsTarget}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_movement SET 	
+			movement_id = #{movementId},
+			movement_userid = #{movementUserid},
+			movement_date = #{movementDate},
+			movement_raw_data = #{movementRawData},
+			movement_calorie = #{movementCalorie},
+			movement_distance = #{movementDistance},
+			movement_steps = #{movementSteps},
+			movement_steps_target = #{movementStepsTarget}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_movement
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

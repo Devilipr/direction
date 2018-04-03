@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xuserdetail.XUserDetailDao">
+    
+	<sql id="xUserDetailColumns">
+		a.user_detail_id AS "userDetailId",
+		a.user_detail_userid AS "userDetailUserid",
+		a.user_detail_marriage AS "userDetailMarriage",
+		a.user_detail_age AS "userDetailAge",
+		a.user_detail_telphone AS "userDetailTelphone",
+		a.user_detail_livestatus AS "userDetailLivestatus",
+		a.user_detail_service AS "userDetailService",
+		a.user_detail_economy AS "userDetailEconomy",
+		a.user_detail_wage AS "userDetailWage",
+		a.user_detail_disease AS "userDetailDisease",
+		a.user_detail_blood_type AS "userDetailBloodType",
+		a.user_detail_fail_status AS "userDetailFailStatus",
+		a.user_detail_disability_status AS "userDetailDisabilityStatus",
+		a.user_detail_healthcare AS "userDetailHealthcare",
+		a.user_detail_healthcare_code AS "userDetailHealthcareCode",
+		a.user_detail_culture AS "userDetailCulture",
+		a.user_detail_unit AS "userDetailUnit",
+		a.user_detail_jobs AS "userDetailJobs",
+		a.user_detail_specialty AS "userDetailSpecialty",
+		a.user_detail_hobby AS "userDetailHobby",
+		a.user_detail_remark AS "userDetailRemark"
+	</sql>
+	
+	<sql id="xUserDetailJoins">
+	</sql>
+    
+	<select id="get" resultType="XUserDetail">
+		SELECT 
+			<include refid="xUserDetailColumns"/>
+		FROM x_user_detail a
+		<include refid="xUserDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XUserDetail">
+		SELECT 
+			<include refid="xUserDetailColumns"/>
+		FROM x_user_detail a
+		<include refid="xUserDetailJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XUserDetail">
+		SELECT 
+			<include refid="xUserDetailColumns"/>
+		FROM x_user_detail a
+		<include refid="xUserDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_user_detail(
+			user_detail_id,
+			user_detail_userid,
+			user_detail_marriage,
+			user_detail_age,
+			user_detail_telphone,
+			user_detail_livestatus,
+			user_detail_service,
+			user_detail_economy,
+			user_detail_wage,
+			user_detail_disease,
+			user_detail_blood_type,
+			user_detail_fail_status,
+			user_detail_disability_status,
+			user_detail_healthcare,
+			user_detail_healthcare_code,
+			user_detail_culture,
+			user_detail_unit,
+			user_detail_jobs,
+			user_detail_specialty,
+			user_detail_hobby,
+			user_detail_remark
+		) VALUES (
+			#{userDetailId},
+			#{userDetailUserid},
+			#{userDetailMarriage},
+			#{userDetailAge},
+			#{userDetailTelphone},
+			#{userDetailLivestatus},
+			#{userDetailService},
+			#{userDetailEconomy},
+			#{userDetailWage},
+			#{userDetailDisease},
+			#{userDetailBloodType},
+			#{userDetailFailStatus},
+			#{userDetailDisabilityStatus},
+			#{userDetailHealthcare},
+			#{userDetailHealthcareCode},
+			#{userDetailCulture},
+			#{userDetailUnit},
+			#{userDetailJobs},
+			#{userDetailSpecialty},
+			#{userDetailHobby},
+			#{userDetailRemark}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_user_detail SET 	
+			user_detail_id = #{userDetailId},
+			user_detail_userid = #{userDetailUserid},
+			user_detail_marriage = #{userDetailMarriage},
+			user_detail_age = #{userDetailAge},
+			user_detail_telphone = #{userDetailTelphone},
+			user_detail_livestatus = #{userDetailLivestatus},
+			user_detail_service = #{userDetailService},
+			user_detail_economy = #{userDetailEconomy},
+			user_detail_wage = #{userDetailWage},
+			user_detail_disease = #{userDetailDisease},
+			user_detail_blood_type = #{userDetailBloodType},
+			user_detail_fail_status = #{userDetailFailStatus},
+			user_detail_disability_status = #{userDetailDisabilityStatus},
+			user_detail_healthcare = #{userDetailHealthcare},
+			user_detail_healthcare_code = #{userDetailHealthcareCode},
+			user_detail_culture = #{userDetailCulture},
+			user_detail_unit = #{userDetailUnit},
+			user_detail_jobs = #{userDetailJobs},
+			user_detail_specialty = #{userDetailSpecialty},
+			user_detail_hobby = #{userDetailHobby},
+			user_detail_remark = #{userDetailRemark}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_user_detail
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

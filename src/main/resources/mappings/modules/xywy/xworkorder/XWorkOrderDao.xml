@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xworkorder.XWorkOrderDao">
+    
+	<sql id="xWorkOrderColumns">
+		a.work_order_id AS "workOrderId",
+		a.work_order_num AS "workOrderNum",
+		a.work_order_devicenum AS "workOrderDevicenum",
+		a.work_order_userid AS "workOrderUserid",
+		a.work_order_username AS "workOrderUsername",
+		a.work_order_phone AS "workOrderPhone",
+		a.work_order_contactphone AS "workOrderContactphone",
+		a.work_order_servicetype AS "workOrderServicetype",
+		a.work_order_sos_log_id AS "workOrderSosLogId",
+		a.work_order_trigger_type AS "workOrderTriggerType",
+		a.work_order_address AS "workOrderAddress",
+		a.work_order_is_reladdress AS "workOrderIsReladdress",
+		a.work_order_degree AS "workOrderDegree",
+		a.work_order_description AS "workOrderDescription",
+		a.work_order_dealdetails AS "workOrderDealdetails",
+		a.work_order_status AS "workOrderStatus",
+		a.work_order_createtime AS "workOrderCreatetime",
+		a.work_order_adminuserid AS "workOrderAdminuserid",
+		a.work_order_adminrealname AS "workOrderAdminrealname",
+		a.work_order_adminuseriddo AS "workOrderAdminuseriddo",
+		a.work_order_adminrealnamedo AS "workOrderAdminrealnamedo",
+		a.work_order_updatetime AS "workOrderUpdatetime"
+	</sql>
+	
+	<sql id="xWorkOrderJoins">
+	</sql>
+    
+	<select id="get" resultType="XWorkOrder">
+		SELECT 
+			<include refid="xWorkOrderColumns"/>
+		FROM x_work_order a
+		<include refid="xWorkOrderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XWorkOrder">
+		SELECT 
+			<include refid="xWorkOrderColumns"/>
+		FROM x_work_order a
+		<include refid="xWorkOrderJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XWorkOrder">
+		SELECT 
+			<include refid="xWorkOrderColumns"/>
+		FROM x_work_order a
+		<include refid="xWorkOrderJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_work_order(
+			work_order_id,
+			work_order_num,
+			work_order_devicenum,
+			work_order_userid,
+			work_order_username,
+			work_order_phone,
+			work_order_contactphone,
+			work_order_servicetype,
+			work_order_sos_log_id,
+			work_order_trigger_type,
+			work_order_address,
+			work_order_is_reladdress,
+			work_order_degree,
+			work_order_description,
+			work_order_dealdetails,
+			work_order_status,
+			work_order_createtime,
+			work_order_adminuserid,
+			work_order_adminrealname,
+			work_order_adminuseriddo,
+			work_order_adminrealnamedo,
+			work_order_updatetime
+		) VALUES (
+			#{workOrderId},
+			#{workOrderNum},
+			#{workOrderDevicenum},
+			#{workOrderUserid},
+			#{workOrderUsername},
+			#{workOrderPhone},
+			#{workOrderContactphone},
+			#{workOrderServicetype},
+			#{workOrderSosLogId},
+			#{workOrderTriggerType},
+			#{workOrderAddress},
+			#{workOrderIsReladdress},
+			#{workOrderDegree},
+			#{workOrderDescription},
+			#{workOrderDealdetails},
+			#{workOrderStatus},
+			#{workOrderCreatetime},
+			#{workOrderAdminuserid},
+			#{workOrderAdminrealname},
+			#{workOrderAdminuseriddo},
+			#{workOrderAdminrealnamedo},
+			#{workOrderUpdatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_work_order SET 	
+			work_order_id = #{workOrderId},
+			work_order_num = #{workOrderNum},
+			work_order_devicenum = #{workOrderDevicenum},
+			work_order_userid = #{workOrderUserid},
+			work_order_username = #{workOrderUsername},
+			work_order_phone = #{workOrderPhone},
+			work_order_contactphone = #{workOrderContactphone},
+			work_order_servicetype = #{workOrderServicetype},
+			work_order_sos_log_id = #{workOrderSosLogId},
+			work_order_trigger_type = #{workOrderTriggerType},
+			work_order_address = #{workOrderAddress},
+			work_order_is_reladdress = #{workOrderIsReladdress},
+			work_order_degree = #{workOrderDegree},
+			work_order_description = #{workOrderDescription},
+			work_order_dealdetails = #{workOrderDealdetails},
+			work_order_status = #{workOrderStatus},
+			work_order_createtime = #{workOrderCreatetime},
+			work_order_adminuserid = #{workOrderAdminuserid},
+			work_order_adminrealname = #{workOrderAdminrealname},
+			work_order_adminuseriddo = #{workOrderAdminuseriddo},
+			work_order_adminrealnamedo = #{workOrderAdminrealnamedo},
+			work_order_updatetime = #{workOrderUpdatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_work_order
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xuserdisease.XUserDiseaseDao">
+    
+	<sql id="xUserDiseaseColumns">
+		a.user_disease_id AS "userDiseaseId",
+		a.user_disease_uid AS "userDiseaseUid",
+		a.user_disease_type AS "userDiseaseType",
+		a.user_disease_name AS "userDiseaseName",
+		a.user_disease_hospital AS "userDiseaseHospital",
+		a.user_disease_date AS "userDiseaseDate",
+		a.user_disease_status AS "userDiseaseStatus",
+		a.user_disease_remark AS "userDiseaseRemark",
+		a.user_disease_createtime AS "userDiseaseCreatetime"
+	</sql>
+	
+	<sql id="xUserDiseaseJoins">
+	</sql>
+    
+	<select id="get" resultType="XUserDisease">
+		SELECT 
+			<include refid="xUserDiseaseColumns"/>
+		FROM x_user_disease a
+		<include refid="xUserDiseaseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XUserDisease">
+		SELECT 
+			<include refid="xUserDiseaseColumns"/>
+		FROM x_user_disease a
+		<include refid="xUserDiseaseJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XUserDisease">
+		SELECT 
+			<include refid="xUserDiseaseColumns"/>
+		FROM x_user_disease a
+		<include refid="xUserDiseaseJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_user_disease(
+			user_disease_id,
+			user_disease_uid,
+			user_disease_type,
+			user_disease_name,
+			user_disease_hospital,
+			user_disease_date,
+			user_disease_status,
+			user_disease_remark,
+			user_disease_createtime
+		) VALUES (
+			#{userDiseaseId},
+			#{userDiseaseUid},
+			#{userDiseaseType},
+			#{userDiseaseName},
+			#{userDiseaseHospital},
+			#{userDiseaseDate},
+			#{userDiseaseStatus},
+			#{userDiseaseRemark},
+			#{userDiseaseCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_user_disease SET 	
+			user_disease_id = #{userDiseaseId},
+			user_disease_uid = #{userDiseaseUid},
+			user_disease_type = #{userDiseaseType},
+			user_disease_name = #{userDiseaseName},
+			user_disease_hospital = #{userDiseaseHospital},
+			user_disease_date = #{userDiseaseDate},
+			user_disease_status = #{userDiseaseStatus},
+			user_disease_remark = #{userDiseaseRemark},
+			user_disease_createtime = #{userDiseaseCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_user_disease
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

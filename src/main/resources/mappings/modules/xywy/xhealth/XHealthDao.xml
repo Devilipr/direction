@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xhealth.XHealthDao">
+    
+	<sql id="xHealthColumns">
+		a.health_id AS "healthId",
+		a.health_userid AS "healthUserid",
+		a.health_date AS "healthDate",
+		a.health_heart_rate AS "healthHeartRate",
+		a.health_blood_pressure_high AS "healthBloodPressureHigh",
+		a.health_blood_pressure_low AS "healthBloodPressureLow",
+		a.health_hrv_status AS "healthHrvStatus",
+		a.health_ecg_raw_data AS "healthEcgRawData",
+		a.health_ppg_raw_data AS "healthPpgRawData",
+		a.health_score_total AS "healthScoreTotal",
+		a.health_score_fatigue AS "healthScoreFatigue",
+		a.health_score_mind AS "healthScoreMind",
+		a.health_score_body AS "healthScoreBody",
+		a.health_score_heart AS "healthScoreHeart"
+	</sql>
+	
+	<sql id="xHealthJoins">
+	</sql>
+    
+	<select id="get" resultType="XHealth">
+		SELECT 
+			<include refid="xHealthColumns"/>
+		FROM x_health a
+		<include refid="xHealthJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XHealth">
+		SELECT 
+			<include refid="xHealthColumns"/>
+		FROM x_health a
+		<include refid="xHealthJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XHealth">
+		SELECT 
+			<include refid="xHealthColumns"/>
+		FROM x_health a
+		<include refid="xHealthJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_health(
+			health_id,
+			health_userid,
+			health_date,
+			health_heart_rate,
+			health_blood_pressure_high,
+			health_blood_pressure_low,
+			health_hrv_status,
+			health_ecg_raw_data,
+			health_ppg_raw_data,
+			health_score_total,
+			health_score_fatigue,
+			health_score_mind,
+			health_score_body,
+			health_score_heart
+		) VALUES (
+			#{healthId},
+			#{healthUserid},
+			#{healthDate},
+			#{healthHeartRate},
+			#{healthBloodPressureHigh},
+			#{healthBloodPressureLow},
+			#{healthHrvStatus},
+			#{healthEcgRawData},
+			#{healthPpgRawData},
+			#{healthScoreTotal},
+			#{healthScoreFatigue},
+			#{healthScoreMind},
+			#{healthScoreBody},
+			#{healthScoreHeart}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_health SET 	
+			health_id = #{healthId},
+			health_userid = #{healthUserid},
+			health_date = #{healthDate},
+			health_heart_rate = #{healthHeartRate},
+			health_blood_pressure_high = #{healthBloodPressureHigh},
+			health_blood_pressure_low = #{healthBloodPressureLow},
+			health_hrv_status = #{healthHrvStatus},
+			health_ecg_raw_data = #{healthEcgRawData},
+			health_ppg_raw_data = #{healthPpgRawData},
+			health_score_total = #{healthScoreTotal},
+			health_score_fatigue = #{healthScoreFatigue},
+			health_score_mind = #{healthScoreMind},
+			health_score_body = #{healthScoreBody},
+			health_score_heart = #{healthScoreHeart}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_health
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

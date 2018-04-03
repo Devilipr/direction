@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xuserlocation.XUserLocationDao">
+    
+	<sql id="xUserLocationColumns">
+		a.user_location_id AS "userLocationId",
+		a.user_location_userid AS "userLocationUserid",
+		a.user_location_lat AS "userLocationLat",
+		a.user_location_lng AS "userLocationLng",
+		a.user_location_createtime AS "userLocationCreatetime"
+	</sql>
+	
+	<sql id="xUserLocationJoins">
+	</sql>
+    
+	<select id="get" resultType="XUserLocation">
+		SELECT 
+			<include refid="xUserLocationColumns"/>
+		FROM x_user_location a
+		<include refid="xUserLocationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XUserLocation">
+		SELECT 
+			<include refid="xUserLocationColumns"/>
+		FROM x_user_location a
+		<include refid="xUserLocationJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XUserLocation">
+		SELECT 
+			<include refid="xUserLocationColumns"/>
+		FROM x_user_location a
+		<include refid="xUserLocationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_user_location(
+			user_location_id,
+			user_location_userid,
+			user_location_lat,
+			user_location_lng,
+			user_location_createtime
+		) VALUES (
+			#{userLocationId},
+			#{userLocationUserid},
+			#{userLocationLat},
+			#{userLocationLng},
+			#{userLocationCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_user_location SET 	
+			user_location_id = #{userLocationId},
+			user_location_userid = #{userLocationUserid},
+			user_location_lat = #{userLocationLat},
+			user_location_lng = #{userLocationLng},
+			user_location_createtime = #{userLocationCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_user_location
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

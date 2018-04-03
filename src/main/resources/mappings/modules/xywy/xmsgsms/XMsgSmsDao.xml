@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xmsgsms.XMsgSmsDao">
+    
+	<sql id="xMsgSmsColumns">
+		a.msg_sms_id AS "msgSmsId",
+		a.msg_sms_content AS "msgSmsContent",
+		a.msg_sms_type AS "msgSmsType",
+		a.msg_sms_userid AS "msgSmsUserid",
+		a.msg_sms_createtime AS "msgSmsCreatetime"
+	</sql>
+	
+	<sql id="xMsgSmsJoins">
+	</sql>
+    
+	<select id="get" resultType="XMsgSms">
+		SELECT 
+			<include refid="xMsgSmsColumns"/>
+		FROM x_msg_sms a
+		<include refid="xMsgSmsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XMsgSms">
+		SELECT 
+			<include refid="xMsgSmsColumns"/>
+		FROM x_msg_sms a
+		<include refid="xMsgSmsJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XMsgSms">
+		SELECT 
+			<include refid="xMsgSmsColumns"/>
+		FROM x_msg_sms a
+		<include refid="xMsgSmsJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_msg_sms(
+			msg_sms_id,
+			msg_sms_content,
+			msg_sms_type,
+			msg_sms_userid,
+			msg_sms_createtime
+		) VALUES (
+			#{msgSmsId},
+			#{msgSmsContent},
+			#{msgSmsType},
+			#{msgSmsUserid},
+			#{msgSmsCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_msg_sms SET 	
+			msg_sms_id = #{msgSmsId},
+			msg_sms_content = #{msgSmsContent},
+			msg_sms_type = #{msgSmsType},
+			msg_sms_userid = #{msgSmsUserid},
+			msg_sms_createtime = #{msgSmsCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_msg_sms
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

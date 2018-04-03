@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xuserhealth.XUserHealthDao">
+    
+	<sql id="xUserHealthColumns">
+		a.user_health_id AS "userHealthId",
+		a.user_health_userid AS "userHealthUserid",
+		a.user_health_score_total AS "userHealthScoreTotal",
+		a.user_health_score_fatigue AS "userHealthScoreFatigue",
+		a.user_health_score_mind AS "userHealthScoreMind",
+		a.user_health_score_body AS "userHealthScoreBody",
+		a.user_health_score_heart AS "userHealthScoreHeart",
+		a.user_health_sleep_total AS "userHealthSleepTotal",
+		a.user_health_sleep_target AS "userHealthSleepTarget",
+		a.user_health_heart_rate_ppg AS "userHealthHeartRatePpg",
+		a.user_health_heart_rate_ecg AS "userHealthHeartRateEcg",
+		a.user_health_blood_pressure_high AS "userHealthBloodPressureHigh",
+		a.user_health_blood_pressure_low AS "userHealthBloodPressureLow",
+		a.user_health_hrv_status AS "userHealthHrvStatus"
+	</sql>
+	
+	<sql id="xUserHealthJoins">
+	</sql>
+    
+	<select id="get" resultType="XUserHealth">
+		SELECT 
+			<include refid="xUserHealthColumns"/>
+		FROM x_user_health a
+		<include refid="xUserHealthJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XUserHealth">
+		SELECT 
+			<include refid="xUserHealthColumns"/>
+		FROM x_user_health a
+		<include refid="xUserHealthJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XUserHealth">
+		SELECT 
+			<include refid="xUserHealthColumns"/>
+		FROM x_user_health a
+		<include refid="xUserHealthJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_user_health(
+			user_health_id,
+			user_health_userid,
+			user_health_score_total,
+			user_health_score_fatigue,
+			user_health_score_mind,
+			user_health_score_body,
+			user_health_score_heart,
+			user_health_sleep_total,
+			user_health_sleep_target,
+			user_health_heart_rate_ppg,
+			user_health_heart_rate_ecg,
+			user_health_blood_pressure_high,
+			user_health_blood_pressure_low,
+			user_health_hrv_status
+		) VALUES (
+			#{userHealthId},
+			#{userHealthUserid},
+			#{userHealthScoreTotal},
+			#{userHealthScoreFatigue},
+			#{userHealthScoreMind},
+			#{userHealthScoreBody},
+			#{userHealthScoreHeart},
+			#{userHealthSleepTotal},
+			#{userHealthSleepTarget},
+			#{userHealthHeartRatePpg},
+			#{userHealthHeartRateEcg},
+			#{userHealthBloodPressureHigh},
+			#{userHealthBloodPressureLow},
+			#{userHealthHrvStatus}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_user_health SET 	
+			user_health_id = #{userHealthId},
+			user_health_userid = #{userHealthUserid},
+			user_health_score_total = #{userHealthScoreTotal},
+			user_health_score_fatigue = #{userHealthScoreFatigue},
+			user_health_score_mind = #{userHealthScoreMind},
+			user_health_score_body = #{userHealthScoreBody},
+			user_health_score_heart = #{userHealthScoreHeart},
+			user_health_sleep_total = #{userHealthSleepTotal},
+			user_health_sleep_target = #{userHealthSleepTarget},
+			user_health_heart_rate_ppg = #{userHealthHeartRatePpg},
+			user_health_heart_rate_ecg = #{userHealthHeartRateEcg},
+			user_health_blood_pressure_high = #{userHealthBloodPressureHigh},
+			user_health_blood_pressure_low = #{userHealthBloodPressureLow},
+			user_health_hrv_status = #{userHealthHrvStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_user_health
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

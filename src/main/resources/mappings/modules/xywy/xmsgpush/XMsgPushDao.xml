@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xmsgpush.XMsgPushDao">
+    
+	<sql id="xMsgPushColumns">
+		a.push_msg_id AS "pushMsgId",
+		a.push_msg_content AS "pushMsgContent",
+		a.push_msg_type AS "pushMsgType",
+		a.push_msg_userid AS "pushMsgUserid",
+		a.push_msg_createtime AS "pushMsgCreatetime"
+	</sql>
+	
+	<sql id="xMsgPushJoins">
+	</sql>
+    
+	<select id="get" resultType="XMsgPush">
+		SELECT 
+			<include refid="xMsgPushColumns"/>
+		FROM x_msg_push a
+		<include refid="xMsgPushJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XMsgPush">
+		SELECT 
+			<include refid="xMsgPushColumns"/>
+		FROM x_msg_push a
+		<include refid="xMsgPushJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XMsgPush">
+		SELECT 
+			<include refid="xMsgPushColumns"/>
+		FROM x_msg_push a
+		<include refid="xMsgPushJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_msg_push(
+			push_msg_id,
+			push_msg_content,
+			push_msg_type,
+			push_msg_userid,
+			push_msg_createtime
+		) VALUES (
+			#{pushMsgId},
+			#{pushMsgContent},
+			#{pushMsgType},
+			#{pushMsgUserid},
+			#{pushMsgCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_msg_push SET 	
+			push_msg_id = #{pushMsgId},
+			push_msg_content = #{pushMsgContent},
+			push_msg_type = #{pushMsgType},
+			push_msg_userid = #{pushMsgUserid},
+			push_msg_createtime = #{pushMsgCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_msg_push
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

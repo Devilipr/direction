@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xbanner.XBannerDao">
+    
+	<sql id="xBannerColumns">
+		a.banner_id AS "bannerId",
+		a.banner_cateid AS "bannerCateid",
+		a.banner_title AS "bannerTitle",
+		a.banner_url AS "bannerUrl",
+		a.banner_img AS "bannerImg",
+		a.banner_sort AS "bannerSort",
+		a.banner_display AS "bannerDisplay",
+		a.banner_createtime AS "bannerCreatetime"
+	</sql>
+	
+	<sql id="xBannerJoins">
+	</sql>
+    
+	<select id="get" resultType="XBanner">
+		SELECT 
+			<include refid="xBannerColumns"/>
+		FROM x_banner a
+		<include refid="xBannerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XBanner">
+		SELECT 
+			<include refid="xBannerColumns"/>
+		FROM x_banner a
+		<include refid="xBannerJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XBanner">
+		SELECT 
+			<include refid="xBannerColumns"/>
+		FROM x_banner a
+		<include refid="xBannerJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_banner(
+			banner_id,
+			banner_cateid,
+			banner_title,
+			banner_url,
+			banner_img,
+			banner_sort,
+			banner_display,
+			banner_createtime
+		) VALUES (
+			#{bannerId},
+			#{bannerCateid},
+			#{bannerTitle},
+			#{bannerUrl},
+			#{bannerImg},
+			#{bannerSort},
+			#{bannerDisplay},
+			#{bannerCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_banner SET 	
+			banner_id = #{bannerId},
+			banner_cateid = #{bannerCateid},
+			banner_title = #{bannerTitle},
+			banner_url = #{bannerUrl},
+			banner_img = #{bannerImg},
+			banner_sort = #{bannerSort},
+			banner_display = #{bannerDisplay},
+			banner_createtime = #{bannerCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_banner
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

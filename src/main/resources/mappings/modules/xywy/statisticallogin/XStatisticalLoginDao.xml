@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.statisticallogin.XStatisticalLoginDao">
+    
+	<sql id="xStatisticalLoginColumns">
+		a.statistical_login_id AS "statisticalLoginId",
+		a.statistical_login_time AS "statisticalLoginTime",
+		a.statistical_login_total AS "statisticalLoginTotal"
+	</sql>
+	
+	<sql id="xStatisticalLoginJoins">
+	</sql>
+    
+	<select id="get" resultType="XStatisticalLogin">
+		SELECT 
+			<include refid="xStatisticalLoginColumns"/>
+		FROM x_statistical_login a
+		<include refid="xStatisticalLoginJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XStatisticalLogin">
+		SELECT 
+			<include refid="xStatisticalLoginColumns"/>
+		FROM x_statistical_login a
+		<include refid="xStatisticalLoginJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XStatisticalLogin">
+		SELECT 
+			<include refid="xStatisticalLoginColumns"/>
+		FROM x_statistical_login a
+		<include refid="xStatisticalLoginJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_statistical_login(
+			statistical_login_id,
+			statistical_login_time,
+			statistical_login_total
+		) VALUES (
+			#{statisticalLoginId},
+			#{statisticalLoginTime},
+			#{statisticalLoginTotal}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_statistical_login SET 	
+			statistical_login_id = #{statisticalLoginId},
+			statistical_login_time = #{statisticalLoginTime},
+			statistical_login_total = #{statisticalLoginTotal}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_statistical_login
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xyuser.XXyuserDao">
+    
+	<sql id="xXyuserColumns">
+		a.userid AS "userid",
+		a.user_phone AS "userPhone",
+		a.password AS "password",
+		a.username AS "username",
+		a.user_nickname AS "userNickname",
+		a.user_avatar AS "userAvatar",
+		a.user_national AS "userNational",
+		a.user_cateid AS "userCateid",
+		a.user_idcard AS "user.id",
+		a.user_height AS "userHeight",
+		a.user_weight AS "userWeight",
+		a.user_sex AS "userSex",
+		a.user_birthday AS "userBirthday",
+		a.user_email AS "userEmail",
+		a.user_province AS "userProvince",
+		a.user_city AS "userCity",
+		a.user_area AS "userArea",
+		a.user_detail_city AS "userDetailCity",
+		a.user_detail_address AS "userDetailAddress",
+		a.accesstoken AS "accesstoken",
+		a.user_regtime AS "userRegtime",
+		a.user_lasttime AS "userLasttime",
+		a.user_display AS "userDisplay",
+		a.user_movement_target AS "userMovementTarget",
+		a.user_sleep_target AS "userSleepTarget",
+		a.user_blood_pressure_high AS "userBloodPressureHigh",
+		a.user_blood_pressure_low AS "userBloodPressureLow",
+		a.user_heart_rate AS "userHeartRate",
+		u9.namecard AS "user.namecard"
+	</sql>
+	
+	<sql id="xXyuserJoins">
+		LEFT JOIN sys_user u9 ON u9.id = a.user_idcard
+	</sql>
+    
+	<select id="get" resultType="XXyuser">
+		SELECT 
+			<include refid="xXyuserColumns"/>
+		FROM x_xyuser a
+		<include refid="xXyuserJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XXyuser">
+		SELECT 
+			<include refid="xXyuserColumns"/>
+		FROM x_xyuser a
+		<include refid="xXyuserJoins"/>
+		<where>
+			
+			<if test="userPhone != null and userPhone != ''">
+				AND a.user_phone = #{userPhone}
+			</if>
+			<if test="username != null and username != ''">
+				AND a.username LIKE 
+					<if test="dbName == 'oracle'">'%'||#{username}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{username}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{username},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XXyuser">
+		SELECT 
+			<include refid="xXyuserColumns"/>
+		FROM x_xyuser a
+		<include refid="xXyuserJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_xyuser(
+			userid,
+			user_phone,
+			password,
+			username,
+			user_nickname,
+			user_avatar,
+			user_national,
+			user_cateid,
+			user_idcard,
+			user_height,
+			user_weight,
+			user_sex,
+			user_birthday,
+			user_email,
+			user_province,
+			user_city,
+			user_area,
+			user_detail_city,
+			user_detail_address,
+			accesstoken,
+			user_regtime,
+			user_lasttime,
+			user_display,
+			user_movement_target,
+			user_sleep_target,
+			user_blood_pressure_high,
+			user_blood_pressure_low,
+			user_heart_rate
+		) VALUES (
+			#{userid},
+			#{userPhone},
+			#{password},
+			#{username},
+			#{userNickname},
+			#{userAvatar},
+			#{userNational},
+			#{userCateid},
+			#{user.id},
+			#{userHeight},
+			#{userWeight},
+			#{userSex},
+			#{userBirthday},
+			#{userEmail},
+			#{userProvince},
+			#{userCity},
+			#{userArea},
+			#{userDetailCity},
+			#{userDetailAddress},
+			#{accesstoken},
+			#{userRegtime},
+			#{userLasttime},
+			#{userDisplay},
+			#{userMovementTarget},
+			#{userSleepTarget},
+			#{userBloodPressureHigh},
+			#{userBloodPressureLow},
+			#{userHeartRate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_xyuser SET 	
+			userid = #{userid},
+			user_phone = #{userPhone},
+			password = #{password},
+			username = #{username},
+			user_nickname = #{userNickname},
+			user_avatar = #{userAvatar},
+			user_national = #{userNational},
+			user_cateid = #{userCateid},
+			user_idcard = #{user.id},
+			user_height = #{userHeight},
+			user_weight = #{userWeight},
+			user_sex = #{userSex},
+			user_birthday = #{userBirthday},
+			user_email = #{userEmail},
+			user_province = #{userProvince},
+			user_city = #{userCity},
+			user_area = #{userArea},
+			user_detail_city = #{userDetailCity},
+			user_detail_address = #{userDetailAddress},
+			accesstoken = #{accesstoken},
+			user_regtime = #{userRegtime},
+			user_lasttime = #{userLasttime},
+			user_display = #{userDisplay},
+			user_movement_target = #{userMovementTarget},
+			user_sleep_target = #{userSleepTarget},
+			user_blood_pressure_high = #{userBloodPressureHigh},
+			user_blood_pressure_low = #{userBloodPressureLow},
+			user_heart_rate = #{userHeartRate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_xyuser
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

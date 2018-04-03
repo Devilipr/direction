@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xuserhealthinfo.XUserHealthInfoDao">
+    
+	<sql id="xUserHealthInfoColumns">
+		a.user_health_info_id AS "userHealthInfoId",
+		a.user_health_info_userid AS "userHealthInfoUserid",
+		a.user_health_info_zilinengli AS "userHealthInfoZilinengli",
+		a.user_health_info_renzhinengli AS "userHealthInfoRenzhinengli",
+		a.user_health_info_shentimailv AS "userHealthInfoShentimailv",
+		a.user_health_info_shentitiwen AS "userHealthInfoShentitiwen",
+		a.user_health_info_shengao AS "userHealthInfoShengao",
+		a.user_health_info_tizhong AS "userHealthInfoTizhong",
+		a.user_health_info_yaowei AS "userHealthInfoYaowei",
+		a.user_health_info_tunwei AS "userHealthInfoTunwei",
+		a.user_health_info_huxipinlv AS "userHealthInfoHuxipinlv",
+		a.user_health_info_tizhizhishu AS "userHealthInfoTizhizhishu",
+		a.user_health_info_zuocexueya AS "userHealthInfoZuocexueya",
+		a.user_health_info_youcexueya AS "userHealthInfoYoucexueya",
+		a.user_health_info_yinshixiguan AS "userHealthInfoYinshixiguan",
+		a.user_health_info_duanlianpinlv AS "userHealthInfoDuanlianpinlv",
+		a.user_health_info_xiyanqingkuang AS "userHealthInfoXiyanqingkuang",
+		a.user_health_info_yinjiuqingkuang AS "userHealthInfoYinjiuqingkuang",
+		a.user_health_info_congyeshijian AS "userHealthInfoCongyeshijian",
+		a.user_health_info_shifouzaizhi AS "userHealthInfoShifouzaizhi",
+		a.user_health_info_zhiyegongzhong AS "userHealthInfoZhiyegongzhong",
+		a.user_health_info_zhiyebingqingkuang AS "userHealthInfoZhiyebingqingkuang",
+		a.user_health_info_fenchenfanghucuoshi AS "userHealthInfoFenchenfanghucuoshi",
+		a.user_health_info_fangshefanghucuoshi AS "userHealthInfoFangshefanghucuoshi",
+		a.user_health_info_wuliufanghucuoshi AS "userHealthInfoWuliufanghucuoshi",
+		a.user_health_info_huaxuefanghucuoshi AS "userHealthInfoHuaxuefanghucuoshi",
+		a.user_health_info_kouchun AS "userHealthInfoKouchun",
+		a.user_health_info_chilie AS "userHealthInfoChilie",
+		a.user_health_info_yanbu AS "userHealthInfoYanbu",
+		a.user_health_info_tingli AS "userHealthInfoTingli",
+		a.user_health_info_zuoyanshili AS "userHealthInfoZuoyanshili",
+		a.user_health_info_youyanshili AS "userHealthInfoYouyanshili",
+		a.user_health_info_jiaozhengzuoyan AS "userHealthInfoJiaozhengzuoyan",
+		a.user_health_info_jiaozhengyouyan AS "userHealthInfoJiaozhengyouyan",
+		a.user_health_info_pifu AS "userHealthInfoPifu",
+		a.user_health_info_kongmo AS "userHealthInfoKongmo",
+		a.user_health_info_linbajie AS "userHealthInfoLinbajie",
+		a.user_health_info_tongzhuangxiong AS "userHealthInfoTongzhuangxiong",
+		a.user_health_info_luoyin AS "userHealthInfoLuoyin",
+		a.user_health_info_xinlv AS "userHealthInfoXinlv",
+		a.user_health_info_xinlvv AS "userHealthInfoXinlvv",
+		a.user_health_info_zayin AS "userHealthInfoZayin",
+		a.user_health_info_xiongbuyatong AS "userHealthInfoXiongbuyatong",
+		a.user_health_info_fububaokuai AS "userHealthInfoFububaokuai",
+		a.user_health_info_pida AS "userHealthInfoPida",
+		a.user_health_info_ganda AS "userHealthInfoGanda",
+		a.user_health_info_fubuyidongzhuoyin AS "userHealthInfoFubuyidongzhuoyin",
+		a.user_health_info_xiazhishuizhong AS "userHealthInfoXiazhishuizhong",
+		a.user_health_info_zubeidongmai AS "userHealthInfoZubeidongmai",
+		a.user_health_info_gangmen AS "userHealthInfoGangmen",
+		a.user_health_info_ruxian AS "userHealthInfoRuxian",
+		a.user_health_info_gongjing AS "userHealthInfoGongjing",
+		a.user_health_info_gongti AS "userHealthInfoGongti",
+		a.user_health_info_waiyin AS "userHealthInfoWaiyin",
+		a.user_health_info_yindao AS "userHealthInfoYindao",
+		a.user_health_info_fujian AS "userHealthInfoFujian",
+		a.user_health_info_penqiang AS "userHealthInfoPenqiang",
+		a.user_health_info_qitabeizhu AS "userHealthInfoQitabeizhu"
+	</sql>
+	
+	<sql id="xUserHealthInfoJoins">
+	</sql>
+    
+	<select id="get" resultType="XUserHealthInfo">
+		SELECT 
+			<include refid="xUserHealthInfoColumns"/>
+		FROM x_user_health_info a
+		<include refid="xUserHealthInfoJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XUserHealthInfo">
+		SELECT 
+			<include refid="xUserHealthInfoColumns"/>
+		FROM x_user_health_info a
+		<include refid="xUserHealthInfoJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XUserHealthInfo">
+		SELECT 
+			<include refid="xUserHealthInfoColumns"/>
+		FROM x_user_health_info a
+		<include refid="xUserHealthInfoJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_user_health_info(
+			user_health_info_id,
+			user_health_info_userid,
+			user_health_info_zilinengli,
+			user_health_info_renzhinengli,
+			user_health_info_shentimailv,
+			user_health_info_shentitiwen,
+			user_health_info_shengao,
+			user_health_info_tizhong,
+			user_health_info_yaowei,
+			user_health_info_tunwei,
+			user_health_info_huxipinlv,
+			user_health_info_tizhizhishu,
+			user_health_info_zuocexueya,
+			user_health_info_youcexueya,
+			user_health_info_yinshixiguan,
+			user_health_info_duanlianpinlv,
+			user_health_info_xiyanqingkuang,
+			user_health_info_yinjiuqingkuang,
+			user_health_info_congyeshijian,
+			user_health_info_shifouzaizhi,
+			user_health_info_zhiyegongzhong,
+			user_health_info_zhiyebingqingkuang,
+			user_health_info_fenchenfanghucuoshi,
+			user_health_info_fangshefanghucuoshi,
+			user_health_info_wuliufanghucuoshi,
+			user_health_info_huaxuefanghucuoshi,
+			user_health_info_kouchun,
+			user_health_info_chilie,
+			user_health_info_yanbu,
+			user_health_info_tingli,
+			user_health_info_zuoyanshili,
+			user_health_info_youyanshili,
+			user_health_info_jiaozhengzuoyan,
+			user_health_info_jiaozhengyouyan,
+			user_health_info_pifu,
+			user_health_info_kongmo,
+			user_health_info_linbajie,
+			user_health_info_tongzhuangxiong,
+			user_health_info_luoyin,
+			user_health_info_xinlv,
+			user_health_info_xinlvv,
+			user_health_info_zayin,
+			user_health_info_xiongbuyatong,
+			user_health_info_fububaokuai,
+			user_health_info_pida,
+			user_health_info_ganda,
+			user_health_info_fubuyidongzhuoyin,
+			user_health_info_xiazhishuizhong,
+			user_health_info_zubeidongmai,
+			user_health_info_gangmen,
+			user_health_info_ruxian,
+			user_health_info_gongjing,
+			user_health_info_gongti,
+			user_health_info_waiyin,
+			user_health_info_yindao,
+			user_health_info_fujian,
+			user_health_info_penqiang,
+			user_health_info_qitabeizhu
+		) VALUES (
+			#{userHealthInfoId},
+			#{userHealthInfoUserid},
+			#{userHealthInfoZilinengli},
+			#{userHealthInfoRenzhinengli},
+			#{userHealthInfoShentimailv},
+			#{userHealthInfoShentitiwen},
+			#{userHealthInfoShengao},
+			#{userHealthInfoTizhong},
+			#{userHealthInfoYaowei},
+			#{userHealthInfoTunwei},
+			#{userHealthInfoHuxipinlv},
+			#{userHealthInfoTizhizhishu},
+			#{userHealthInfoZuocexueya},
+			#{userHealthInfoYoucexueya},
+			#{userHealthInfoYinshixiguan},
+			#{userHealthInfoDuanlianpinlv},
+			#{userHealthInfoXiyanqingkuang},
+			#{userHealthInfoYinjiuqingkuang},
+			#{userHealthInfoCongyeshijian},
+			#{userHealthInfoShifouzaizhi},
+			#{userHealthInfoZhiyegongzhong},
+			#{userHealthInfoZhiyebingqingkuang},
+			#{userHealthInfoFenchenfanghucuoshi},
+			#{userHealthInfoFangshefanghucuoshi},
+			#{userHealthInfoWuliufanghucuoshi},
+			#{userHealthInfoHuaxuefanghucuoshi},
+			#{userHealthInfoKouchun},
+			#{userHealthInfoChilie},
+			#{userHealthInfoYanbu},
+			#{userHealthInfoTingli},
+			#{userHealthInfoZuoyanshili},
+			#{userHealthInfoYouyanshili},
+			#{userHealthInfoJiaozhengzuoyan},
+			#{userHealthInfoJiaozhengyouyan},
+			#{userHealthInfoPifu},
+			#{userHealthInfoKongmo},
+			#{userHealthInfoLinbajie},
+			#{userHealthInfoTongzhuangxiong},
+			#{userHealthInfoLuoyin},
+			#{userHealthInfoXinlv},
+			#{userHealthInfoXinlvv},
+			#{userHealthInfoZayin},
+			#{userHealthInfoXiongbuyatong},
+			#{userHealthInfoFububaokuai},
+			#{userHealthInfoPida},
+			#{userHealthInfoGanda},
+			#{userHealthInfoFubuyidongzhuoyin},
+			#{userHealthInfoXiazhishuizhong},
+			#{userHealthInfoZubeidongmai},
+			#{userHealthInfoGangmen},
+			#{userHealthInfoRuxian},
+			#{userHealthInfoGongjing},
+			#{userHealthInfoGongti},
+			#{userHealthInfoWaiyin},
+			#{userHealthInfoYindao},
+			#{userHealthInfoFujian},
+			#{userHealthInfoPenqiang},
+			#{userHealthInfoQitabeizhu}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_user_health_info SET 	
+			user_health_info_id = #{userHealthInfoId},
+			user_health_info_userid = #{userHealthInfoUserid},
+			user_health_info_zilinengli = #{userHealthInfoZilinengli},
+			user_health_info_renzhinengli = #{userHealthInfoRenzhinengli},
+			user_health_info_shentimailv = #{userHealthInfoShentimailv},
+			user_health_info_shentitiwen = #{userHealthInfoShentitiwen},
+			user_health_info_shengao = #{userHealthInfoShengao},
+			user_health_info_tizhong = #{userHealthInfoTizhong},
+			user_health_info_yaowei = #{userHealthInfoYaowei},
+			user_health_info_tunwei = #{userHealthInfoTunwei},
+			user_health_info_huxipinlv = #{userHealthInfoHuxipinlv},
+			user_health_info_tizhizhishu = #{userHealthInfoTizhizhishu},
+			user_health_info_zuocexueya = #{userHealthInfoZuocexueya},
+			user_health_info_youcexueya = #{userHealthInfoYoucexueya},
+			user_health_info_yinshixiguan = #{userHealthInfoYinshixiguan},
+			user_health_info_duanlianpinlv = #{userHealthInfoDuanlianpinlv},
+			user_health_info_xiyanqingkuang = #{userHealthInfoXiyanqingkuang},
+			user_health_info_yinjiuqingkuang = #{userHealthInfoYinjiuqingkuang},
+			user_health_info_congyeshijian = #{userHealthInfoCongyeshijian},
+			user_health_info_shifouzaizhi = #{userHealthInfoShifouzaizhi},
+			user_health_info_zhiyegongzhong = #{userHealthInfoZhiyegongzhong},
+			user_health_info_zhiyebingqingkuang = #{userHealthInfoZhiyebingqingkuang},
+			user_health_info_fenchenfanghucuoshi = #{userHealthInfoFenchenfanghucuoshi},
+			user_health_info_fangshefanghucuoshi = #{userHealthInfoFangshefanghucuoshi},
+			user_health_info_wuliufanghucuoshi = #{userHealthInfoWuliufanghucuoshi},
+			user_health_info_huaxuefanghucuoshi = #{userHealthInfoHuaxuefanghucuoshi},
+			user_health_info_kouchun = #{userHealthInfoKouchun},
+			user_health_info_chilie = #{userHealthInfoChilie},
+			user_health_info_yanbu = #{userHealthInfoYanbu},
+			user_health_info_tingli = #{userHealthInfoTingli},
+			user_health_info_zuoyanshili = #{userHealthInfoZuoyanshili},
+			user_health_info_youyanshili = #{userHealthInfoYouyanshili},
+			user_health_info_jiaozhengzuoyan = #{userHealthInfoJiaozhengzuoyan},
+			user_health_info_jiaozhengyouyan = #{userHealthInfoJiaozhengyouyan},
+			user_health_info_pifu = #{userHealthInfoPifu},
+			user_health_info_kongmo = #{userHealthInfoKongmo},
+			user_health_info_linbajie = #{userHealthInfoLinbajie},
+			user_health_info_tongzhuangxiong = #{userHealthInfoTongzhuangxiong},
+			user_health_info_luoyin = #{userHealthInfoLuoyin},
+			user_health_info_xinlv = #{userHealthInfoXinlv},
+			user_health_info_xinlvv = #{userHealthInfoXinlvv},
+			user_health_info_zayin = #{userHealthInfoZayin},
+			user_health_info_xiongbuyatong = #{userHealthInfoXiongbuyatong},
+			user_health_info_fububaokuai = #{userHealthInfoFububaokuai},
+			user_health_info_pida = #{userHealthInfoPida},
+			user_health_info_ganda = #{userHealthInfoGanda},
+			user_health_info_fubuyidongzhuoyin = #{userHealthInfoFubuyidongzhuoyin},
+			user_health_info_xiazhishuizhong = #{userHealthInfoXiazhishuizhong},
+			user_health_info_zubeidongmai = #{userHealthInfoZubeidongmai},
+			user_health_info_gangmen = #{userHealthInfoGangmen},
+			user_health_info_ruxian = #{userHealthInfoRuxian},
+			user_health_info_gongjing = #{userHealthInfoGongjing},
+			user_health_info_gongti = #{userHealthInfoGongti},
+			user_health_info_waiyin = #{userHealthInfoWaiyin},
+			user_health_info_yindao = #{userHealthInfoYindao},
+			user_health_info_fujian = #{userHealthInfoFujian},
+			user_health_info_penqiang = #{userHealthInfoPenqiang},
+			user_health_info_qitabeizhu = #{userHealthInfoQitabeizhu}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_user_health_info
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

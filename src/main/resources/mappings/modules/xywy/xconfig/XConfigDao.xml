@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xconfig.XConfigDao">
+    
+	<sql id="xConfigColumns">
+		a.config_id AS "configId",
+		a.config_alarm_tel AS "configAlarmTel"
+	</sql>
+	
+	<sql id="xConfigJoins">
+	</sql>
+    
+	<select id="get" resultType="XConfig">
+		SELECT 
+			<include refid="xConfigColumns"/>
+		FROM x_config a
+		<include refid="xConfigJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XConfig">
+		SELECT 
+			<include refid="xConfigColumns"/>
+		FROM x_config a
+		<include refid="xConfigJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XConfig">
+		SELECT 
+			<include refid="xConfigColumns"/>
+		FROM x_config a
+		<include refid="xConfigJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_config(
+			config_id,
+			config_alarm_tel
+		) VALUES (
+			#{configId},
+			#{configAlarmTel}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_config SET 	
+			config_id = #{configId},
+			config_alarm_tel = #{configAlarmTel}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_config
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

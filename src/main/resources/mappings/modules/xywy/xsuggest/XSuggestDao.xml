@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xsuggest.XSuggestDao">
+    
+	<sql id="xSuggestColumns">
+		a.suggest_id AS "suggestId",
+		a.suggest_userid AS "suggestUserid",
+		a.suggest_type AS "suggestType",
+		a.suggest_content AS "suggestContent",
+		a.suggest_img AS "suggestImg",
+		a.suggest_createtime AS "suggestCreatetime",
+		a.suggest_adminuserid AS "suggestAdminuserid",
+		a.suggest_update AS "suggestUpdate",
+		a.suggest_reply_content AS "suggestReplyContent",
+		a.suggest_status AS "suggestStatus"
+	</sql>
+	
+	<sql id="xSuggestJoins">
+	</sql>
+    
+	<select id="get" resultType="XSuggest">
+		SELECT 
+			<include refid="xSuggestColumns"/>
+		FROM x_suggest a
+		<include refid="xSuggestJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XSuggest">
+		SELECT 
+			<include refid="xSuggestColumns"/>
+		FROM x_suggest a
+		<include refid="xSuggestJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XSuggest">
+		SELECT 
+			<include refid="xSuggestColumns"/>
+		FROM x_suggest a
+		<include refid="xSuggestJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_suggest(
+			suggest_id,
+			suggest_userid,
+			suggest_type,
+			suggest_content,
+			suggest_img,
+			suggest_createtime,
+			suggest_adminuserid,
+			suggest_update,
+			suggest_reply_content,
+			suggest_status
+		) VALUES (
+			#{suggestId},
+			#{suggestUserid},
+			#{suggestType},
+			#{suggestContent},
+			#{suggestImg},
+			#{suggestCreatetime},
+			#{suggestAdminuserid},
+			#{suggestUpdate},
+			#{suggestReplyContent},
+			#{suggestStatus}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_suggest SET 	
+			suggest_id = #{suggestId},
+			suggest_userid = #{suggestUserid},
+			suggest_type = #{suggestType},
+			suggest_content = #{suggestContent},
+			suggest_img = #{suggestImg},
+			suggest_createtime = #{suggestCreatetime},
+			suggest_adminuserid = #{suggestAdminuserid},
+			suggest_update = #{suggestUpdate},
+			suggest_reply_content = #{suggestReplyContent},
+			suggest_status = #{suggestStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_suggest
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

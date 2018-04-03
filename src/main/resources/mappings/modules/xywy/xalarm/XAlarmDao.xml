@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xalarm.XAlarmDao">
+    
+	<sql id="xAlarmColumns">
+		a.alarm_id AS "alarmId",
+		a.alarm_userid AS "alarmUserid",
+		a.alarm_hostid AS "alarmHostid",
+		a.alarm_gsm_power AS "alarmGsmPower",
+		a.alarm_parts_count AS "alarmPartsCount",
+		a.alarm_remote_control_count AS "alarmRemoteControlCount",
+		a.alarm_voltage AS "alarmVoltage",
+		a.alarm_status_electric AS "alarmStatusElectric",
+		a.alarm_status_battery AS "alarmStatusBattery",
+		a.alarm_status_custody AS "alarmStatusCustody",
+		a.alarm_status_activity AS "alarmStatusActivity",
+		a.alarm_status_sos AS "alarmStatusSos",
+		a.alarm_status_current AS "alarmStatusCurrent",
+		a.alarm_nobody_timeset AS "alarmNobodyTimeset"
+	</sql>
+	
+	<sql id="xAlarmJoins">
+	</sql>
+    
+	<select id="get" resultType="XAlarm">
+		SELECT 
+			<include refid="xAlarmColumns"/>
+		FROM x_alarm a
+		<include refid="xAlarmJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XAlarm">
+		SELECT 
+			<include refid="xAlarmColumns"/>
+		FROM x_alarm a
+		<include refid="xAlarmJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XAlarm">
+		SELECT 
+			<include refid="xAlarmColumns"/>
+		FROM x_alarm a
+		<include refid="xAlarmJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_alarm(
+			alarm_id,
+			alarm_userid,
+			alarm_hostid,
+			alarm_gsm_power,
+			alarm_parts_count,
+			alarm_remote_control_count,
+			alarm_voltage,
+			alarm_status_electric,
+			alarm_status_battery,
+			alarm_status_custody,
+			alarm_status_activity,
+			alarm_status_sos,
+			alarm_status_current,
+			alarm_nobody_timeset
+		) VALUES (
+			#{alarmId},
+			#{alarmUserid},
+			#{alarmHostid},
+			#{alarmGsmPower},
+			#{alarmPartsCount},
+			#{alarmRemoteControlCount},
+			#{alarmVoltage},
+			#{alarmStatusElectric},
+			#{alarmStatusBattery},
+			#{alarmStatusCustody},
+			#{alarmStatusActivity},
+			#{alarmStatusSos},
+			#{alarmStatusCurrent},
+			#{alarmNobodyTimeset}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_alarm SET 	
+			alarm_id = #{alarmId},
+			alarm_userid = #{alarmUserid},
+			alarm_hostid = #{alarmHostid},
+			alarm_gsm_power = #{alarmGsmPower},
+			alarm_parts_count = #{alarmPartsCount},
+			alarm_remote_control_count = #{alarmRemoteControlCount},
+			alarm_voltage = #{alarmVoltage},
+			alarm_status_electric = #{alarmStatusElectric},
+			alarm_status_battery = #{alarmStatusBattery},
+			alarm_status_custody = #{alarmStatusCustody},
+			alarm_status_activity = #{alarmStatusActivity},
+			alarm_status_sos = #{alarmStatusSos},
+			alarm_status_current = #{alarmStatusCurrent},
+			alarm_nobody_timeset = #{alarmNobodyTimeset}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_alarm
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xversion.XVersionDao">
+    
+	<sql id="xVersionColumns">
+		a.version_id AS "versionId",
+		a.version_type AS "versionType",
+		a.version_name AS "versionName",
+		a.version_code AS "versionCode",
+		a.version_details AS "versionDetails",
+		a.version_url AS "versionUrl",
+		a.version_must AS "versionMust",
+		a.version_createtime AS "versionCreatetime"
+	</sql>
+	
+	<sql id="xVersionJoins">
+	</sql>
+    
+	<select id="get" resultType="XVersion">
+		SELECT 
+			<include refid="xVersionColumns"/>
+		FROM x_version a
+		<include refid="xVersionJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XVersion">
+		SELECT 
+			<include refid="xVersionColumns"/>
+		FROM x_version a
+		<include refid="xVersionJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XVersion">
+		SELECT 
+			<include refid="xVersionColumns"/>
+		FROM x_version a
+		<include refid="xVersionJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_version(
+			version_id,
+			version_type,
+			version_name,
+			version_code,
+			version_details,
+			version_url,
+			version_must,
+			version_createtime
+		) VALUES (
+			#{versionId},
+			#{versionType},
+			#{versionName},
+			#{versionCode},
+			#{versionDetails},
+			#{versionUrl},
+			#{versionMust},
+			#{versionCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_version SET 	
+			version_id = #{versionId},
+			version_type = #{versionType},
+			version_name = #{versionName},
+			version_code = #{versionCode},
+			version_details = #{versionDetails},
+			version_url = #{versionUrl},
+			version_must = #{versionMust},
+			version_createtime = #{versionCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_version
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

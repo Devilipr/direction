@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xcity.XCityDao">
+    
+	<sql id="xCityColumns">
+		a.city_id AS "cityId",
+		a.city_pid AS "cityPid",
+		a.city_district AS "cityDistrict",
+		a.city_level AS "cityLevel"
+	</sql>
+	
+	<sql id="xCityJoins">
+	</sql>
+    
+	<select id="get" resultType="XCity">
+		SELECT 
+			<include refid="xCityColumns"/>
+		FROM x_city a
+		<include refid="xCityJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XCity">
+		SELECT 
+			<include refid="xCityColumns"/>
+		FROM x_city a
+		<include refid="xCityJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XCity">
+		SELECT 
+			<include refid="xCityColumns"/>
+		FROM x_city a
+		<include refid="xCityJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_city(
+			city_id,
+			city_pid,
+			city_district,
+			city_level
+		) VALUES (
+			#{cityId},
+			#{cityPid},
+			#{cityDistrict},
+			#{cityLevel}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_city SET 	
+			city_id = #{cityId},
+			city_pid = #{cityPid},
+			city_district = #{cityDistrict},
+			city_level = #{cityLevel}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_city
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

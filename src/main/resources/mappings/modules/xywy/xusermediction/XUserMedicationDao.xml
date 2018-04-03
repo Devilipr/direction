@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xusermediction.XUserMedicationDao">
+    
+	<sql id="xUserMedicationColumns">
+		a.user_medication_id AS "userMedicationId",
+		a.user_medication_uid AS "userMedicationUid",
+		a.user_medication_name AS "userMedicationName",
+		a.user_medication_longtime AS "userMedicationLongtime",
+		a.user_medication_method AS "userMedicationMethod",
+		a.user_medication_dose AS "userMedicationDose",
+		a.user_medication_efficacy AS "userMedicationEfficacy",
+		a.user_medication_createtime AS "userMedicationCreatetime"
+	</sql>
+	
+	<sql id="xUserMedicationJoins">
+	</sql>
+    
+	<select id="get" resultType="XUserMedication">
+		SELECT 
+			<include refid="xUserMedicationColumns"/>
+		FROM x_user_medication a
+		<include refid="xUserMedicationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XUserMedication">
+		SELECT 
+			<include refid="xUserMedicationColumns"/>
+		FROM x_user_medication a
+		<include refid="xUserMedicationJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XUserMedication">
+		SELECT 
+			<include refid="xUserMedicationColumns"/>
+		FROM x_user_medication a
+		<include refid="xUserMedicationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_user_medication(
+			user_medication_id,
+			user_medication_uid,
+			user_medication_name,
+			user_medication_longtime,
+			user_medication_method,
+			user_medication_dose,
+			user_medication_efficacy,
+			user_medication_createtime
+		) VALUES (
+			#{userMedicationId},
+			#{userMedicationUid},
+			#{userMedicationName},
+			#{userMedicationLongtime},
+			#{userMedicationMethod},
+			#{userMedicationDose},
+			#{userMedicationEfficacy},
+			#{userMedicationCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_user_medication SET 	
+			user_medication_id = #{userMedicationId},
+			user_medication_uid = #{userMedicationUid},
+			user_medication_name = #{userMedicationName},
+			user_medication_longtime = #{userMedicationLongtime},
+			user_medication_method = #{userMedicationMethod},
+			user_medication_dose = #{userMedicationDose},
+			user_medication_efficacy = #{userMedicationEfficacy},
+			user_medication_createtime = #{userMedicationCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_user_medication
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

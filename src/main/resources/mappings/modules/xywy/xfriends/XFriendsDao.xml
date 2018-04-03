@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xfriends.XFriendsDao">
+    
+	<sql id="xFriendsColumns">
+		a.friends_id AS "friendsId",
+		a.friends_userid AS "friendsUserid",
+		a.friends_friendid AS "friendsFriendid",
+		a.friends_status AS "friendsStatus",
+		a.friends_createtime AS "friendsCreatetime"
+	</sql>
+	
+	<sql id="xFriendsJoins">
+	</sql>
+    
+	<select id="get" resultType="XFriends">
+		SELECT 
+			<include refid="xFriendsColumns"/>
+		FROM x_friends a
+		<include refid="xFriendsJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XFriends">
+		SELECT 
+			<include refid="xFriendsColumns"/>
+		FROM x_friends a
+		<include refid="xFriendsJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XFriends">
+		SELECT 
+			<include refid="xFriendsColumns"/>
+		FROM x_friends a
+		<include refid="xFriendsJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_friends(
+			friends_id,
+			friends_userid,
+			friends_friendid,
+			friends_status,
+			friends_createtime
+		) VALUES (
+			#{friendsId},
+			#{friendsUserid},
+			#{friendsFriendid},
+			#{friendsStatus},
+			#{friendsCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_friends SET 	
+			friends_id = #{friendsId},
+			friends_userid = #{friendsUserid},
+			friends_friendid = #{friendsFriendid},
+			friends_status = #{friendsStatus},
+			friends_createtime = #{friendsCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_friends
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

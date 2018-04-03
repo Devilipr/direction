@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xhelpdoc.XHelpdocDao">
+    
+	<sql id="xHelpdocColumns">
+		a.helpdoc_id AS "helpdocId",
+		a.helpdoc_tag AS "helpdocTag",
+		a.helpdoc_url AS "helpdocUrl"
+	</sql>
+	
+	<sql id="xHelpdocJoins">
+	</sql>
+    
+	<select id="get" resultType="XHelpdoc">
+		SELECT 
+			<include refid="xHelpdocColumns"/>
+		FROM x_helpdoc a
+		<include refid="xHelpdocJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XHelpdoc">
+		SELECT 
+			<include refid="xHelpdocColumns"/>
+		FROM x_helpdoc a
+		<include refid="xHelpdocJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XHelpdoc">
+		SELECT 
+			<include refid="xHelpdocColumns"/>
+		FROM x_helpdoc a
+		<include refid="xHelpdocJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_helpdoc(
+			helpdoc_id,
+			helpdoc_tag,
+			helpdoc_url
+		) VALUES (
+			#{helpdocId},
+			#{helpdocTag},
+			#{helpdocUrl}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_helpdoc SET 	
+			helpdoc_id = #{helpdocId},
+			helpdoc_tag = #{helpdocTag},
+			helpdoc_url = #{helpdocUrl}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_helpdoc
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

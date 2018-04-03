@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xalarmlog.XAlarmLogDao">
+    
+	<sql id="xAlarmLogColumns">
+		a.alarm_log_id AS "alarmLogId",
+		a.alarm_log_hostid AS "alarmLogHostid",
+		a.alarm_log_event AS "alarmLogEvent",
+		a.alarm_log_event_param1 AS "alarmLogEventParam1",
+		a.alarm_log_event_param2 AS "alarmLogEventParam2",
+		a.alarm_log_createtime AS "alarmLogCreatetime"
+	</sql>
+	
+	<sql id="xAlarmLogJoins">
+	</sql>
+    
+	<select id="get" resultType="XAlarmLog">
+		SELECT 
+			<include refid="xAlarmLogColumns"/>
+		FROM x_alarm_log a
+		<include refid="xAlarmLogJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XAlarmLog">
+		SELECT 
+			<include refid="xAlarmLogColumns"/>
+		FROM x_alarm_log a
+		<include refid="xAlarmLogJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XAlarmLog">
+		SELECT 
+			<include refid="xAlarmLogColumns"/>
+		FROM x_alarm_log a
+		<include refid="xAlarmLogJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_alarm_log(
+			alarm_log_id,
+			alarm_log_hostid,
+			alarm_log_event,
+			alarm_log_event_param1,
+			alarm_log_event_param2,
+			alarm_log_createtime
+		) VALUES (
+			#{alarmLogId},
+			#{alarmLogHostid},
+			#{alarmLogEvent},
+			#{alarmLogEventParam1},
+			#{alarmLogEventParam2},
+			#{alarmLogCreatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_alarm_log SET 	
+			alarm_log_id = #{alarmLogId},
+			alarm_log_hostid = #{alarmLogHostid},
+			alarm_log_event = #{alarmLogEvent},
+			alarm_log_event_param1 = #{alarmLogEventParam1},
+			alarm_log_event_param2 = #{alarmLogEventParam2},
+			alarm_log_createtime = #{alarmLogCreatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_alarm_log
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

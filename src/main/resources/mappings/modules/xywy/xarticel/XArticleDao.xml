@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.xywy.dao.xarticel.XArticleDao">
+    
+	<sql id="xArticleColumns">
+		a.article_id AS "articleId",
+		a.article_title AS "articleTitle",
+		a.article_description AS "articleDescription",
+		a.article_content AS "articleContent",
+		a.article_sort AS "articleSort",
+		a.article_createtime AS "articleCreatetime",
+		a.article_updatetime AS "articleUpdatetime"
+	</sql>
+	
+	<sql id="xArticleJoins">
+	</sql>
+    
+	<select id="get" resultType="XArticle">
+		SELECT 
+			<include refid="xArticleColumns"/>
+		FROM x_article a
+		<include refid="xArticleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="XArticle">
+		SELECT 
+			<include refid="xArticleColumns"/>
+		FROM x_article a
+		<include refid="xArticleJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="XArticle">
+		SELECT 
+			<include refid="xArticleColumns"/>
+		FROM x_article a
+		<include refid="xArticleJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO x_article(
+			article_id,
+			article_title,
+			article_description,
+			article_content,
+			article_sort,
+			article_createtime,
+			article_updatetime
+		) VALUES (
+			#{articleId},
+			#{articleTitle},
+			#{articleDescription},
+			#{articleContent},
+			#{articleSort},
+			#{articleCreatetime},
+			#{articleUpdatetime}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE x_article SET 	
+			article_id = #{articleId},
+			article_title = #{articleTitle},
+			article_description = #{articleDescription},
+			article_content = #{articleContent},
+			article_sort = #{articleSort},
+			article_createtime = #{articleCreatetime},
+			article_updatetime = #{articleUpdatetime}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM x_article
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
