@@ -14,7 +14,7 @@ import java.util.HashMap;
 public class Response implements Serializable {
     private static final long serialVersionUID = -3226060294501599199L;
 
-    private int code;
+    private int status;
 
     private String message = "";
 
@@ -27,18 +27,18 @@ public class Response implements Serializable {
     }
 
     private Response(ResponseStatus responseStatus) {
-        this.code = responseStatus.value();
+        this.status = responseStatus.value();
         this.message = responseStatus.message();
     }
 
     private Response(int code, String message) {
-        this.code = code;
+        this.status = code;
         this.message = message;
     }
 
     public static Response success() {
         Response response = new Response(ResponseStatus.Success);
-        response.code = ResponseStatus.Success.value();
+        response.status = ResponseStatus.Success.value();
         response.message = ResponseStatus.Success.message();
         return response;
     }
@@ -49,7 +49,7 @@ public class Response implements Serializable {
         return response;
     }
     public Response successList(final Object data){
-        this.code = ResponseStatus.Success.value();
+        this.status = ResponseStatus.Success.value();
         this.message = ResponseStatus.Success.message();
         this.data = new HashMap<String,Object>(){
             private static final long serialVersionUID = 8257534655516628778L;
@@ -78,7 +78,7 @@ public class Response implements Serializable {
 
     public static Response failure(String message) {
         Response response = new Response();
-        response.code = ResponseStatus.ServerInternalError.value();
+        response.status = ResponseStatus.ServerInternalError.value();
         response.message = message;
         return response;
     }
@@ -89,25 +89,25 @@ public class Response implements Serializable {
 
     public static Response badRequest(String message){
         Response response = new Response();
-        response.code = ResponseStatus.BadRequest.value();
+        response.status = ResponseStatus.BadRequest.value();
         response.message = message;
         return response;
     }
 
     public static Response badRequest(String message,Object data){
         Response response = new Response();
-        response.code = ResponseStatus.BadRequest.value();
+        response.status = ResponseStatus.BadRequest.value();
         response.message = message;
         response.data = data;
         return response;
     }
 
-    public int getCode() {
-        return code;
+    public int getStatus() {
+        return status;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getMessages() {

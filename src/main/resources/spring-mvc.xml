@@ -17,7 +17,7 @@
 
 	<!-- 解决跨域访问 -->
 	<mvc:cors>
-		<mvc:mapping path="/wap/**"/>
+		<mvc:mapping path="/api/**"/>
 	</mvc:cors>
 	<!-- 默认的注解映射的支持，org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping -->
 	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
